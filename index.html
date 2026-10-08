@@ -243,6 +243,38 @@ body.fit .topbar{display:none!important}
 }
 .menu .fineprint{margin-top:22px; font-size:12px; color:var(--ink-soft)}
 
+/* ---------- high scores ---------- */
+.scoreslink{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%;
+  margin-top:14px; font:inherit; text-align:left; cursor:pointer;
+  background:var(--surface); color:var(--ink); border:1px solid var(--line);
+  border-radius:12px; padding:13px 15px; box-shadow:var(--shadow);
+}
+.scoreslink:hover{border-color:var(--amber)}
+.scoreslink:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
+.scoreslink b{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-size:15px; font-weight:600; letter-spacing:-.015em}
+.scoreslink span{font-size:12.5px; color:var(--ink-soft)}
+.scoreslink .go{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--amber); flex:0 0 auto}
+
+.board{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--surface); box-shadow:var(--shadow)}
+.row{display:flex; align-items:center; gap:13px; padding:14px 15px; border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .pip{width:10px; height:34px; border-radius:99px; flex:0 0 auto}
+.row .who{flex:1 1 auto; min-width:0}
+.row .who b{display:block; font-family:"Bricolage Grotesque",system-ui,sans-serif;
+  font-size:15px; font-weight:600; letter-spacing:-.015em}
+.row .who span{display:block; font-size:12px; color:var(--ink-soft); margin-top:2px}
+.row .num{text-align:right; flex:0 0 auto}
+.row .num b{display:block; font-family:"Bricolage Grotesque",system-ui,sans-serif;
+  font-size:23px; font-weight:800; letter-spacing:-.03em; font-variant-numeric:tabular-nums; line-height:1}
+.row .num span{display:block; font-family:"JetBrains Mono",monospace; font-size:10px;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:3px}
+.row.empty .who b,.row.empty .num b{color:var(--ink-soft)}
+.row.empty .pip{opacity:.3}
+.board-foot{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:14px}
+.board-foot .warn{font-size:12px; color:var(--ink-soft)}
+
 /* Astro's playfield is its own sky */
 #aStage{background:#0a0f1e}
 </style>
@@ -391,7 +423,25 @@ body.fit .topbar{display:none!important}
         </span>
       </button>
     </div>
-    <p class="fineprint">Both games remember their own settings and best score on this device.</p>
+    <button class="scoreslink" type="button" id="scoresLink">
+      <span class="pipless"><b>High scores</b><br><span>Your best run in each of the five.</span></span>
+      <span class="go">View &rarr;</span>
+    </button>
+    <p class="fineprint">Every game remembers its own settings and best score on this device.</p>
+  </div>
+</section>
+
+<section id="screen-scores" hidden>
+  <div class="wrap">
+    <div class="masthead">
+      <h1>High scores</h1>
+      <p class="tagline">Best run in each game, on this device.</p>
+    </div>
+    <div class="board" id="scoreBoard"></div>
+    <div class="board-foot">
+      <button class="act" id="scoresReset">Reset all scores</button>
+      <span class="warn" id="scoresWarn">Scores live in this browser only &mdash; each device keeps its own.</span>
+    </div>
   </div>
 </section>
 
@@ -845,9 +895,100 @@ window.ARCADE = (function(){
     if(current && games[current].unmount) games[current].unmount();
     current = null;
     order.forEach(function(k){ el("game-" + k).hidden = true; });
+    el("screen-scores").hidden = true;
     el("menu").hidden = false;
     el("topbar").hidden = true;
   }
+
+  /* ---------- high scores ----------
+     Each game already owns its own best in localStorage; this reads those
+     rather than keeping a second copy that could disagree with the HUD.
+     Only the play counts are new. */
+  var BOARD = [
+    {id:"rally",   name:"Rally",       pip:"#e2543c", key:"rally.best",   unit:"points",
+     detail:function(){ var b=num("rally.boards");
+       return b ? b + (b===1?" board":" boards") + " cleared" : "no boards cleared yet"; }},
+    {id:"astro",   name:"Astro Smash", pip:"#f2a13f", key:"astro.best",   unit:"points",
+     detail:function(){ var w=num("astro.wave"); return w>1 ? "reached wave "+w : "wave 1"; }},
+    {id:"snake",   name:"Snake",       pip:"#5fd39a", key:"snake.best",   unit:"points",
+     detail:function(){ var b=num("snake.best")/10;
+       return b ? b + (b===1?" bite":" bites") : "no bites yet"; }},
+    {id:"drift",   name:"Drift",       pip:"#6fe3d2", key:"drift.best",   unit:"points",
+     detail:function(){ return "survival plus orbs"; }},
+    {id:"battery", name:"Battery",     pip:"#7fd4ff", key:"battery.best", unit:"points",
+     detail:function(){ var w=num("battery.wave"); return w>1 ? "reached wave "+w : "wave 1"; }}
+  ];
+
+  function num(k){ try { return parseInt(localStorage.getItem(k) || "0", 10) || 0; } catch(e){ return 0; } }
+  function plays(){
+    try { return JSON.parse(localStorage.getItem("arcade.plays") || "{}") || {}; }
+    catch(e){ return {}; }
+  }
+  function note(id){
+    try {
+      var p = plays();
+      p[id] = {n:((p[id] && p[id].n) || 0) + 1, last:Date.now()};
+      localStorage.setItem("arcade.plays", JSON.stringify(p));
+    } catch(e){}
+  }
+  function ago(ts){
+    if(!ts) return "";
+    var m = Math.floor((Date.now() - ts) / 60000);
+    if(m < 1) return "just now";
+    if(m < 60) return m + "m ago";
+    var h = Math.floor(m / 60);
+    if(h < 24) return h + "h ago";
+    var d = Math.floor(h / 24);
+    return d === 1 ? "yesterday" : d + "d ago";
+  }
+
+  function renderBoard(){
+    var host = el("scoreBoard"), p = plays();
+    host.innerHTML = "";
+    var ranked = BOARD.slice().sort(function(a, b){ return num(b.key) - num(a.key); });
+    ranked.forEach(function(gm){
+      var best = num(gm.key), pl = p[gm.id] || {};
+      var row = document.createElement("div");
+      row.className = "row" + (best ? "" : " empty");
+
+      var pip = document.createElement("span");
+      pip.className = "pip"; pip.style.background = gm.pip;
+
+      var who = document.createElement("span");
+      who.className = "who";
+      var nm = document.createElement("b"); nm.textContent = gm.name;
+      var sub = document.createElement("span");
+      sub.textContent = best
+        ? gm.detail() + (pl.n ? " \u00b7 " + pl.n + (pl.n===1?" run":" runs") + " \u00b7 " + ago(pl.last) : "")
+        : "not played yet";
+      who.appendChild(nm); who.appendChild(sub);
+
+      var n = document.createElement("span");
+      n.className = "num";
+      var v = document.createElement("b"); v.textContent = best ? best.toLocaleString() : "\u2014";
+      var u = document.createElement("span"); u.textContent = best ? gm.unit : "";
+      n.appendChild(v); n.appendChild(u);
+
+      row.appendChild(pip); row.appendChild(who); row.appendChild(n);
+      row.addEventListener("click", function(){ open(gm.id); });
+      row.style.cursor = "pointer";
+      host.appendChild(row);
+    });
+  }
+
+  function scores(){
+    if(current && games[current].unmount) games[current].unmount();
+    current = null;
+    order.forEach(function(k){ el("game-" + k).hidden = true; });
+    el("menu").hidden = true;
+    el("screen-scores").hidden = false;
+    el("topbar").hidden = false;
+    armed = false;
+    el("scoresReset").textContent = "Reset all scores";
+    renderBoard();
+  }
+
+  var armed = false;
 
   function boot(saved){
     if(booted) return;
@@ -860,6 +1001,22 @@ window.ARCADE = (function(){
       btn.addEventListener("click", function(){ open(btn.dataset.game); });
     });
     el("backBtn").addEventListener("click", home);
+    el("scoresLink").addEventListener("click", scores);
+    el("scoresReset").addEventListener("click", function(){
+      if(!armed){                       /* two taps, so a stray one cannot wipe the lot */
+        armed = true;
+        el("scoresReset").textContent = "Tap again to erase";
+        return;
+      }
+      try {
+        ["rally.best","rally.boards","astro.best","astro.wave","snake.best",
+         "drift.best","battery.best","battery.wave","arcade.plays"]
+          .forEach(function(k){ localStorage.removeItem(k); });
+      } catch(e){}
+      armed = false;
+      el("scoresReset").textContent = "Reset all scores";
+      renderBoard();
+    });
     if(window.claude && window.claude.hot){
       window.claude.hot.snapshot(function(){
         var out = {open: current};
@@ -870,7 +1027,8 @@ window.ARCADE = (function(){
     if(saved.open && games[saved.open]) open(saved.open); else home();
   }
 
-  return {register: register, open: open, home: home, boot: boot};
+  return {register: register, open: open, home: home, boot: boot,
+          scores: scores, note: note};
 })();
 </script>
 
@@ -1178,6 +1336,7 @@ window.ARCADE = (function(){
 
   function gameOver(){
     g.phase = "over";
+    ARCADE.note("rally");
     saveRecord();
     syncHUD();
   }
@@ -1928,6 +2087,7 @@ window.ARCADE = (function(){
 
   function gameOver(){
     g.phase = "over";
+    ARCADE.note("astro");
     var changed = false;
     if(g.score > rec.score){ rec.score = g.score; changed = true; }
     if(g.wave  > rec.wave ){ rec.wave  = g.wave;  changed = true; }
@@ -2416,6 +2576,7 @@ window.ARCADE = (function(){
 
   function die(){
     g.phase = "over";
+    ARCADE.note("snake");
     shake = RM ? 0 : 3;
     var c = cell();
     spark((g.body[0].x + 0.5) * c, (g.body[0].y + 0.5) * c, 20, PAL.body);
@@ -2789,6 +2950,7 @@ window.ARCADE = (function(){
 
   function over(){
     g.phase = "over";
+    ARCADE.note("drift");
     var sc = Math.floor(g.score);
     if(sc > rec){ rec = sc; try { localStorage.setItem("drift.best", String(rec)); } catch(e){} syncRecord(); }
     syncHUD();
@@ -3126,6 +3288,7 @@ window.ARCADE = (function(){
 
   function over(){
     g.phase = "over";
+    ARCADE.note("battery");
     var ch=false;
     if(g.score > rec.score){ rec.score = g.score; ch=true; }
     if(g.wave > rec.wave){ rec.wave = g.wave; ch=true; }

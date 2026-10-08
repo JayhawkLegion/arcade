@@ -64,6 +64,16 @@ so pressure concentrates as you lose ground. Your only limit is how many blasts 
 
 Tunable: fall speed, blast radius, concurrent blasts, base count.
 
+## High scores
+
+A screen off the menu ranks your best run in every game, with the run count and when you last
+played. It reads each game's own `localStorage` record rather than keeping a second copy, so it
+can never disagree with the in-game HUD; only the play counts (`arcade.plays`) are new. Resetting
+takes two taps.
+
+This is deliberately **not** a shared leaderboard. The site is static, so there is no server to
+hold one — scores live in the browser that set them, and each device keeps its own.
+
 ## Running it
 
 Open `index.html` directly in a browser. That's it.
