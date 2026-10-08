@@ -67,10 +67,30 @@ Any static host works too — GitHub Pages, Netlify, an S3 bucket — since ther
   on a tall phone.
 - Reduced-motion preferences are respected: trails, particles and screen shake switch off.
 
+## The published copy
+
+`index.html` is canonical. A copy also lives as a Claude Artifact, which supplies its own
+`<!doctype>`, `<head>` and base reset and expects page content on its own -- so it needs the
+document shell stripped. That is a build step, never a hand edit:
+
+```
+python tools/build-artifact.py           # -> dist/artifact.html
+python tools/build-artifact.py --check   # fails if dist/ is stale
+```
+
+`dist/artifact.html` is committed so the repo always records exactly what was published, and
+`--check` catches the two drifting apart. Everything outside the `host-shell` markers in
+`index.html` is copied byte for byte, so the only difference between the two files is the
+shell the host provides.
+
+Edit `index.html`, rebuild, publish `dist/artifact.html`. Never the other way round.
+
 ## Layout
 
 ```
-index.html    both games, the menu shell, and all styles
+index.html                 both games, the menu shell, and all styles
+tools/build-artifact.py    strips the document shell for the Artifact host
+dist/artifact.html         generated; the exact bytes last published
 ```
 
 The two games are independent modules behind a small `ARCADE.register(id, {boot, mount,

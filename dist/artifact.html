@@ -1,20 +1,3 @@
-<!doctype html>
-<html lang="en">
-<head>
-<!-- host-shell:start — the Artifact host supplies these itself, so
-     tools/build-artifact.py strips everything between these markers. -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>
-:root{
-  color-scheme:light dark;
-  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
-}
-body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;background:#faf9f7}
-img{max-width:100%}
-[hidden]{display:none!important}
-</style>
-<!-- host-shell:end -->
 <title>Rally &amp; Astro</title>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&display=swap">
@@ -228,8 +211,7 @@ body.fit .topbar{display:none!important}
 /* Astro's playfield is its own sky */
 #aStage{background:#0a0f1e}
 </style>
-</head>
-<body>
+
 <header class="topbar" id="topbar" hidden>
   <button class="back" id="backBtn" type="button">&larr; Games</button>
   <span class="mark">Rally &amp; Astro</span>
@@ -1960,5 +1942,3 @@ window.ARCADE = (function(){
   else ARCADE.boot((hot && hot.data) || {});
 })();
 </script>
-</body>
-</html>
