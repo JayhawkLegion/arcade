@@ -67,6 +67,28 @@ Any static host works too — GitHub Pages, Netlify, an S3 bucket — since ther
   on a tall phone.
 - Reduced-motion preferences are respected: trails, particles and screen shake switch off.
 
+## Installing it
+
+`manifest.webmanifest` plus `sw.js` make this installable: add to home screen and it opens
+fullscreen with no browser chrome, and plays with no network at all. The worker is
+stale-while-revalidate, so the game opens from cache instantly and a change lands on the
+*next* launch.
+
+**It needs a secure context.** Browsers only allow service workers over HTTPS, or on
+`localhost`. Served from a plain `http://192.168.x.x` LAN address the registration quietly
+does nothing -- the game still runs perfectly, just with no offline support and no install
+prompt. To actually install it, use any HTTPS static host (Netlify, Cloudflare Pages, GitHub
+Pages) or `localhost` on the machine itself.
+
+Bump `VERSION` in `sw.js` only when you want to force every client to drop its cache;
+ordinary edits are picked up by revalidation.
+
+Icons are generated and committed:
+
+```
+python tools/make-icons.py
+```
+
 ## The published copy
 
 `index.html` is canonical. A copy also lives as a Claude Artifact, which supplies its own
@@ -89,7 +111,11 @@ Edit `index.html`, rebuild, publish `dist/artifact.html`. Never the other way ro
 
 ```
 index.html                 both games, the menu shell, and all styles
-tools/build-artifact.py    strips the document shell for the Artifact host
+manifest.webmanifest       PWA metadata
+sw.js                      offline cache; stale-while-revalidate
+icons/                     generated app icons, including maskable
+tools/make-icons.py        redraws icons/
+tools/build-artifact.py    strips the self-hosted block for the Artifact host
 dist/artifact.html         generated; the exact bytes last published
 ```
 

@@ -19,7 +19,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "index.html")
 OUT = os.path.join(ROOT, "dist", "artifact.html")
 
-SHELL = re.compile(r"<!-- host-shell:start.*?host-shell:end -->\s*", re.S)
+SHELL = re.compile(r"<!-- self-hosted:start.*?self-hosted:end -->\s*", re.S)
 
 
 def build(src_text):
@@ -28,13 +28,17 @@ def build(src_text):
 
     head, n = SHELL.subn("", head)
     if n != 1:
-        sys.exit("expected exactly one host-shell block, found %d" % n)
+        sys.exit("expected exactly one self-hosted block, found %d" % n)
 
     out = head.strip() + "\n\n" + body.strip() + "\n"
 
     for tag in ("<!doctype", "<html", "</html>", "<head>", "</head>", "<body>", "</body>"):
         if tag in out.lower():
             sys.exit("document tag %r survived into the artifact copy" % tag)
+    # self-hosted-only wiring must not reach the host, where it would 404
+    for leak in ("serviceWorker", "manifest.webmanifest", "apple-touch-icon"):
+        if leak in out:
+            sys.exit("self-hosted-only %r survived into the artifact copy" % leak)
     if "<title>" not in out:
         sys.exit("the artifact copy lost its <title>")
     return out
