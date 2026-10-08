@@ -256,7 +256,7 @@ body.fit .topbar{display:none!important}
 <section id="menu">
   <div class="wrap menu">
     <h1>Rally &amp; Astro</h1>
-    <p class="lede">Two small arcade games built to run on a phone. Pick one &mdash; the menu steps aside while you play.</p>
+    <p class="lede">Five small arcade games built to run on a phone. Pick one &mdash; the menu steps aside while you play.</p>
     <div class="cards">
       <button class="gamecard" type="button" data-game="rally">
         <svg class="art" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paddle, ball and coloured bricks">
@@ -310,6 +310,84 @@ body.fit .topbar{display:none!important}
           <h2>Astro Smash</h2>
           <p>Rocks fall at angles and split when hit. Shoot what pays, dodge what doesn't.</p>
           <span class="tag">Cannon &middot; asteroids &middot; lives</span>
+        </span>
+      </button>
+
+      <button class="gamecard" type="button" data-game="snake">
+        <svg class="art" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A snake curling toward food">
+          <rect width="160" height="100" fill="#0b1a12"/>
+          <g fill="#12291d">
+            <rect x="20" y="10" width="16" height="16"/><rect x="52" y="10" width="16" height="16"/>
+            <rect x="84" y="10" width="16" height="16"/><rect x="116" y="10" width="16" height="16"/>
+            <rect x="36" y="26" width="16" height="16"/><rect x="68" y="26" width="16" height="16"/>
+            <rect x="100" y="26" width="16" height="16"/><rect x="20" y="42" width="16" height="16"/>
+            <rect x="52" y="42" width="16" height="16"/><rect x="84" y="42" width="16" height="16"/>
+            <rect x="116" y="42" width="16" height="16"/><rect x="36" y="58" width="16" height="16"/>
+            <rect x="68" y="58" width="16" height="16"/><rect x="100" y="58" width="16" height="16"/>
+          </g>
+          <g>
+            <rect x="38" y="60" width="13" height="13" rx="4" fill="#36a877"/>
+            <rect x="54" y="60" width="13" height="13" rx="4" fill="#4cbd88"/>
+            <rect x="70" y="60" width="13" height="13" rx="4" fill="#5fd39a"/>
+            <rect x="70" y="44" width="13" height="13" rx="4" fill="#5fd39a"/>
+            <rect x="70" y="28" width="13" height="13" rx="4" fill="#8ae5bc"/>
+            <rect x="86" y="28" width="13" height="13" rx="4" fill="#c8f7e0"/>
+          </g>
+          <circle cx="124" cy="34" r="6" fill="#ffd166"/>
+          <circle cx="122" cy="32" r="2.4" fill="#fff3d0"/>
+        </svg>
+        <span class="meta">
+          <h2>Snake</h2>
+          <p>Swipe to turn, eat to grow, and get quicker with every bite. Walls or wrap, your call.</p>
+          <span class="tag">Grid &middot; swipe &middot; growth</span>
+        </span>
+      </button>
+      <button class="gamecard" type="button" data-game="drift">
+        <svg class="art" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A craft weaving between hazards toward a gold orb">
+          <rect width="160" height="100" fill="#071a1e"/>
+          <g fill="#ffffff">
+            <circle cx="26" cy="16" r="1" opacity=".5"/><circle cx="92" cy="12" r=".9" opacity=".4"/>
+            <circle cx="140" cy="26" r="1.1" opacity=".5"/><circle cx="46" cy="78" r=".9" opacity=".35"/>
+            <circle cx="120" cy="82" r="1" opacity=".45"/>
+          </g>
+          <polygon points="36,26 46,22 52,31 45,39 35,36" fill="#c2567a" stroke="#ffb3cd" stroke-width="0.8"/>
+          <polygon points="112,58 123,55 128,64 120,71 110,68" fill="#c2567a" stroke="#ffb3cd" stroke-width="0.8"/>
+          <polygon points="66,74 74,72 78,79 72,84 64,81" fill="#c2567a" stroke="#ffb3cd" stroke-width="0.8"/>
+          <circle cx="118" cy="24" r="6" fill="#ffd166"/><circle cx="118" cy="24" r="2.5" fill="#fff3d0"/>
+          <circle cx="76" cy="48" r="8" fill="#6fe3d2"/><circle cx="76" cy="48" r="3.4" fill="#e8fffb"/>
+        </svg>
+        <span class="meta">
+          <h2>Drift</h2>
+          <p>Your craft follows your finger anywhere on the field. Collect the gold, survive the pink.</p>
+          <span class="tag">Free movement &middot; collect</span>
+        </span>
+      </button>
+      <button class="gamecard" type="button" data-game="battery">
+        <svg class="art" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Warheads falling onto bases with a blast overhead">
+          <rect width="160" height="100" fill="#120a18"/>
+          <g fill="#ffffff">
+            <circle cx="20" cy="14" r="1" opacity=".45"/><circle cx="66" cy="10" r=".9" opacity=".4"/>
+            <circle cx="132" cy="20" r="1" opacity=".5"/><circle cx="100" cy="40" r=".8" opacity=".3"/>
+          </g>
+          <g stroke="rgba(255,107,74,.45)" stroke-width="1.4" fill="none">
+            <path d="M30 0 L52 54"/><path d="M128 0 L104 48"/><path d="M80 0 L82 30"/>
+          </g>
+          <circle cx="52" cy="54" r="2.6" fill="#ff6b4a"/>
+          <circle cx="104" cy="48" r="2.6" fill="#ff6b4a"/>
+          <circle cx="82" cy="30" r="2.6" fill="#ff6b4a"/>
+          <circle cx="68" cy="44" r="18" fill="#ffe08a" opacity=".34"/>
+          <circle cx="68" cy="44" r="6.5" fill="#fffdf4" opacity=".9"/>
+          <rect y="84" width="160" height="16" fill="#2a1630"/>
+          <g fill="#7fd4ff">
+            <polygon points="20,84 24,77 32,77 36,84"/><polygon points="60,84 64,77 72,77 76,84"/>
+            <polygon points="124,84 128,77 136,77 140,84"/>
+          </g>
+          <rect x="92" y="82.5" width="16" height="1.8" fill="#3a3f52"/>
+        </svg>
+        <span class="meta">
+          <h2>Battery</h2>
+          <p>Tap the sky to detonate. Each kill chains a smaller blast, so one shot can clear a volley.</p>
+          <span class="tag">Tap to aim &middot; chain &middot; defend</span>
         </span>
       </button>
     </div>
@@ -529,6 +607,221 @@ body.fit .topbar{display:none!important}
   </div>
 </div>
 </section>
+
+<section id="game-snake" hidden>
+<div class="wrap">
+  <div class="masthead">
+    <h1>Snake</h1>
+    <p class="tagline">Swipe to turn. Don&rsquo;t bite yourself.</p>
+  </div>
+
+  <div class="stagewrap">
+    <div class="stage" id="sStage">
+      <canvas id="sCv"></canvas>
+      <div class="hud"><div><span class="lbl">Score</span><span class="score" id="sScore">0</span></div><div class="right"><div><span class="lbl">Length</span><span class="stat" id="sLen">3</span></div><div><span class="lbl">Best</span><span class="stat gold" id="sBest">0</span></div></div></div>
+      <button class="fitexit" id="sFitExit" type="button" hidden>Exit full screen</button>
+      <div class="overlay" id="sOverlay"><div class="card" id="sCard"></div></div>
+    </div>
+  </div>
+
+  <section class="console">
+    <div class="console-head">
+      <h2>Settings</h2>
+      <div class="readout"><span>length <b id="soLen">3</b></span><span>steps/s <b id="soTick">7.0</b></span><span>grid <b id="soGrid">14x21</b></span></div>
+    </div>
+    <div class="knobs">
+      <div class="knob">
+        <label for="sSpeed"><span class="name">Speed</span><span class="val" id="vSSpeed">7</span></label>
+        <input type="range" id="sSpeed" min="3" max="16" step="1" value="7">
+        <p class="note">Steps per second at length 3. It climbs as you grow, whatever you set here.</p>
+      </div>
+      <div class="knob">
+        <label for="sCols"><span class="name">Grid</span><span class="val" id="vSCols">14x21</span></label>
+        <input type="range" id="sCols" min="8" max="24" step="1" value="14">
+        <p class="note">Columns across; rows follow to keep the cells square.</p>
+      </div>
+      <div class="knob">
+        <div class="head"><span class="name">Edges</span><span class="val" id="vSWrap">walls</span></div>
+        <div class="seg" id="segWrap" role="group" aria-label="Edge behaviour">
+          <button type="button" data-wrap="0" aria-pressed="true">Walls</button>
+          <button type="button" data-wrap="1" aria-pressed="false">Wrap</button>
+        </div>
+        <p class="note">Walls kill on contact. Wrap carries you out one side and in the other.</p>
+      </div>
+      <div class="knob">
+        <div class="head"><span class="name">Record</span><span class="val" id="vSRec">&mdash;</span></div>
+        <p class="note">Each bite is worth 10.</p>
+      </div>
+ </div>
+    <div class="foot">
+      <button class="act" id="sFitBtn">Fit screen</button>
+      <button class="act" id="sReset">Reset settings</button>
+      <button class="act" id="sClear">Clear record</button>
+      <span class="keys">&larr; &uarr; &darr; &rarr; or W A S D &middot; swipe on the board</span>
+    </div>
+  </section>
+
+  <div class="howto">
+    <div>
+      <h3>Why you cannot reverse</h3>
+      <p>A turn straight back into your own neck is rejected rather than fatal &mdash; otherwise a mistimed swipe would end the run with no way to react.</p>
+    </div>
+    <div>
+      <h3>The tail is not in the way</h3>
+      <p>The cell your tail is leaving this step is free to move into, so following your own tail round is safe. Only growing changes that.</p>
+    </div>
+    <div>
+      <h3>Speed is length</h3>
+      <p>Every segment shortens the tick a little, so the difficulty curve is something you build yourself by playing well.</p>
+    </div>
+ </div>
+</div>
+</section>
+
+<section id="game-drift" hidden>
+<div class="wrap">
+  <div class="masthead">
+    <h1>Drift</h1>
+    <p class="tagline">Follow your finger. Collect the gold.</p>
+  </div>
+
+  <div class="stagewrap">
+    <div class="stage" id="dStage">
+      <canvas id="dCv"></canvas>
+      <div class="hud"><div><span class="lbl">Score</span><span class="score" id="dScore">0</span></div><div class="right"><div><span class="lbl">Lives</span><span class="stat" id="dLives">3</span></div><div><span class="lbl">Orbs</span><span class="stat" id="dOrbs">0</span></div><div><span class="lbl">Best</span><span class="stat gold" id="dBest">0</span></div></div></div>
+      <button class="fitexit" id="dFitExit" type="button" hidden>Exit full screen</button>
+      <div class="overlay" id="dOverlay"><div class="card" id="dCard"></div></div>
+    </div>
+  </div>
+
+  <section class="console">
+    <div class="console-head">
+      <h2>Settings</h2>
+      <div class="readout"><span>hazards <b id="doHaz">0</b></span><span>orbs <b id="doOrb">0</b></span><span>alive <b id="doTime">0s</b></span></div>
+    </div>
+    <div class="knobs">
+      <div class="knob">
+        <label for="dSpeed"><span class="name">Hazard speed</span><span class="val" id="vDSpeed">26</span></label>
+        <input type="range" id="dSpeed" min="12" max="50" step="1" value="26">
+        <p class="note">How fast the pink rocks cross the field.</p>
+      </div>
+      <div class="knob">
+        <label for="dCount"><span class="name">Hazards</span><span class="val" id="vDCount">6</span></label>
+        <input type="range" id="dCount" min="2" max="16" step="1" value="6">
+        <p class="note">How many are kept in play. One more joins every 150 points.</p>
+      </div>
+      <div class="knob">
+        <label for="dOrbRate"><span class="name">Orb every</span><span class="val" id="vDOrb">1.2s</span></label>
+        <input type="range" id="dOrbRate" min="4" max="40" step="1" value="12">
+        <p class="note">How often gold appears, up to four on screen.</p>
+      </div>
+      <div class="knob">
+        <label for="dLivesK"><span class="name">Lives</span><span class="val" id="vDLives">3</span></label>
+        <input type="range" id="dLivesK" min="1" max="5" step="1" value="3">
+        <p class="note">Applies to your next game.</p>
+      </div>
+      <div class="knob">
+        <div class="head"><span class="name">Record</span><span class="val" id="vDRec">&mdash;</span></div>
+        <p class="note">Orbs pay 25. Staying alive pays 6 a second.</p>
+      </div>
+ </div>
+    <div class="foot">
+      <button class="act" id="dFitBtn">Fit screen</button>
+      <button class="act" id="dReset">Reset settings</button>
+      <button class="act" id="dClear">Clear record</button>
+      <span class="keys">&larr; &uarr; &darr; &rarr; or W A S D &middot; drag anywhere</span>
+    </div>
+  </section>
+
+  <div class="howto">
+    <div>
+      <h3>Two ways to score</h3>
+      <p>Surviving ticks along on its own, so a cautious run still scores. Chasing gold pays far better and is how you get hit.</p>
+    </div>
+    <div>
+      <h3>Hazards aim across</h3>
+      <p>Each rock enters from an edge aimed loosely at the far side, so they cross the middle instead of grazing a corner where you would never meet them.</p>
+    </div>
+    <div>
+      <h3>Orbs expire</h3>
+      <p>Gold blinks before it goes. A far one late in its life is usually a trap worth refusing.</p>
+    </div>
+ </div>
+</div>
+</section>
+
+<section id="game-battery" hidden>
+<div class="wrap">
+  <div class="masthead">
+    <h1>Battery</h1>
+    <p class="tagline">Tap the sky. Hold the line.</p>
+  </div>
+
+  <div class="stagewrap">
+    <div class="stage" id="mStage">
+      <canvas id="mCv"></canvas>
+      <div class="hud"><div><span class="lbl">Score</span><span class="score" id="mScore">0</span></div><div class="right"><div><span class="lbl">Bases</span><span class="stat" id="mBases">5</span></div><div><span class="lbl">Wave</span><span class="stat" id="mWave">1</span></div><div><span class="lbl">Best</span><span class="stat gold" id="mBest">0</span></div></div></div>
+      <button class="fitexit" id="mFitExit" type="button" hidden>Exit full screen</button>
+      <div class="overlay" id="mOverlay"><div class="card" id="mCard"></div></div>
+    </div>
+  </div>
+
+  <section class="console">
+    <div class="console-head">
+      <h2>Settings</h2>
+      <div class="readout"><span>incoming <b id="moIn">0</b></span><span>blasts <b id="moBlast">0/3</b></span><span>fall <b id="moFall">16</b></span></div>
+    </div>
+    <div class="knobs">
+      <div class="knob">
+        <label for="mSpeed"><span class="name">Fall speed</span><span class="val" id="vMSpeed">16</span></label>
+        <input type="range" id="mSpeed" min="8" max="34" step="1" value="16">
+        <p class="note">Base descent. Each wave adds 12%.</p>
+      </div>
+      <div class="knob">
+        <label for="mRadius"><span class="name">Blast radius</span><span class="val" id="vMRadius">11</span></label>
+        <input type="range" id="mRadius" min="5" max="20" step="1" value="11">
+        <p class="note">Size of your detonation. Chained blasts are a little smaller.</p>
+      </div>
+      <div class="knob">
+        <label for="mAmmo"><span class="name">Blasts at once</span><span class="val" id="vMAmmo">3</span></label>
+        <input type="range" id="mAmmo" min="1" max="8" step="1" value="3">
+        <p class="note">Your only real limit &mdash; there is no ammo count, just how many can be live together.</p>
+      </div>
+      <div class="knob">
+        <label for="mBasesK"><span class="name">Bases</span><span class="val" id="vMBases">5</span></label>
+        <input type="range" id="mBasesK" min="2" max="8" step="1" value="5">
+        <p class="note">Lose them all and the run ends. Applies to your next game.</p>
+      </div>
+      <div class="knob">
+        <div class="head"><span class="name">Record</span><span class="val" id="vMRec">&mdash;</span></div>
+        <p class="note" id="mRecNote">No runs yet.</p>
+      </div>
+ </div>
+    <div class="foot">
+      <button class="act" id="mFitBtn">Fit screen</button>
+      <button class="act" id="mReset">Reset settings</button>
+      <button class="act" id="mClear">Clear record</button>
+      <span class="keys">Tap anywhere above the ground &middot; Space to start</span>
+    </div>
+  </section>
+
+  <div class="howto">
+    <div>
+      <h3>Chains are the game</h3>
+      <p>Every warhead you kill detonates in turn. Aim where the next one will be, not where this one is, and a single tap can take a whole volley.</p>
+    </div>
+    <div>
+      <h3>Blasts breathe</h3>
+      <p>A detonation grows, holds, then collapses over about a second. Firing early into empty sky wastes the slot; the limit is how many are live at once.</p>
+    </div>
+    <div>
+      <h3>Warheads pick a target</h3>
+      <p>Each one aims at a base that is still standing, so the pressure concentrates as you lose ground rather than spreading thinner.</p>
+    </div>
+ </div>
+</div>
+</section>
+
 
 <script>
 window.ARCADE = (function(){
@@ -1964,6 +2257,1064 @@ window.ARCADE = (function(){
       live = false;
       keyLeft = keyRight = keyFire = false;
       if(g) g.firing = false;
+      if(raf){ cancelAnimationFrame(raf); raf = null; }
+      if(document.body.classList.contains("fit")) setFit(false);
+    }
+  });
+})();
+</script>
+
+<script>
+/* ====================================================================== */
+/* Snake                                                                  */
+/* ====================================================================== */
+(function(){
+  "use strict";
+  var W = 100, H = 150;
+  var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var stage = document.getElementById("sStage");
+  var cv = document.getElementById("sCv");
+  var ctx = cv.getContext("2d");
+  var overlay = document.getElementById("sOverlay");
+  var card = document.getElementById("sCard");
+
+  var PAL = {
+    bg:"#0b1a12", grid:"#12291d", wall:"#1d4530",
+    body:"#5fd39a", head:"#c8f7e0", tail:"#36a877",
+    food:"#ffd166", foodCore:"#fff3d0", spark:"#9fe8c6"
+  };
+
+  var DEFAULTS = {speed:7, cols:14, wrap:0};
+  var cfg = {speed:7, cols:14, wrap:0};
+
+  var g = null, rec = 0;
+  var raf = null, lastT = 0, live = false, shake = 0;
+
+  try { rec = parseInt(localStorage.getItem("snake.best") || "0", 10) || 0; } catch(e){}
+
+  function rows(){ return Math.round(cfg.cols * 1.5); }
+  function cell(){ return W / cfg.cols; }
+
+  function newGame(){
+    var c = cfg.cols, r = rows();
+    var st = {
+      phase:"ready", cols:c, rows:r, score:0,
+      body:[{x:(c/2)|0, y:(r/2)|0}, {x:((c/2)|0) - 1, y:(r/2)|0}, {x:((c/2)|0) - 2, y:(r/2)|0}],
+      dir:{x:1, y:0}, nextDir:{x:1, y:0}, grow:0,
+      tickCd:0, food:null, sparks:[], step:0
+    };
+    placeFood(st);
+    return st;
+  }
+  function placeFood(st){
+    for(var tries = 0; tries < 400; tries++){
+      var f = {x:(Math.random() * st.cols) | 0, y:(Math.random() * st.rows) | 0};
+      var clash = false;
+      for(var i = 0; i < st.body.length; i++){
+        if(st.body[i].x === f.x && st.body[i].y === f.y){ clash = true; break; }
+      }
+      if(!clash){ st.food = f; return; }
+    }
+    st.food = null;                       /* board full: you win by filling it */
+  }
+  function tickEvery(){
+    /* a little quicker as it grows, so a long snake still feels urgent */
+    return 1 / Math.min(cfg.speed + g.body.length * 0.07, cfg.speed * 2.4);
+  }
+  function spark(x, y, n, col){
+    if(RM) return;
+    for(var i = 0; i < n; i++){
+      var a = Math.random() * Math.PI * 2, s = 10 + Math.random() * 30;
+      g.sparks.push({x:x, y:y, vx:Math.cos(a)*s, vy:Math.sin(a)*s,
+                     life:0.3 + Math.random()*0.3, age:0, c:col});
+    }
+  }
+
+  function turn(dx, dy){
+    if(!g) return;
+    if(g.phase === "ready" || g.phase === "over"){ start(); return; }
+    /* ignore a reversal into your own neck */
+    if(dx === -g.dir.x && dy === -g.dir.y) return;
+    g.nextDir = {x:dx, y:dy};
+  }
+  function start(){
+    if(g.phase === "over") g = newGame();
+    g.phase = "playing";
+    syncHUD();
+  }
+
+  var downAt = null;
+  stage.addEventListener("pointerdown", function(e){
+    e.preventDefault();
+    try { stage.setPointerCapture(e.pointerId); } catch(err){}
+    downAt = {x:e.clientX, y:e.clientY};
+    if(g.phase !== "playing") start();
+  });
+  stage.addEventListener("pointerup", function(e){
+    if(!downAt) return;
+    var dx = e.clientX - downAt.x, dy = e.clientY - downAt.y;
+    downAt = null;
+    if(Math.abs(dx) < 12 && Math.abs(dy) < 12) return;     /* a tap, not a swipe */
+    if(Math.abs(dx) > Math.abs(dy)) turn(dx > 0 ? 1 : -1, 0);
+    else turn(0, dy > 0 ? 1 : -1);
+  });
+  window.addEventListener("keydown", function(e){
+    if(!live) return;
+    var k = e.key;
+    if(k === "ArrowLeft"  || k === "a" || k === "A"){ turn(-1, 0); e.preventDefault(); }
+    if(k === "ArrowRight" || k === "d" || k === "D"){ turn( 1, 0); e.preventDefault(); }
+    if(k === "ArrowUp"    || k === "w" || k === "W"){ turn(0, -1); e.preventDefault(); }
+    if(k === "ArrowDown"  || k === "s" || k === "S"){ turn(0,  1); e.preventDefault(); }
+    if(k === " " || k === "Enter"){ e.preventDefault(); if(g.phase !== "playing") start(); }
+    if(k === "Escape" && document.body.classList.contains("fit")) setFit(false);
+  });
+
+  function step(dt){
+    for(var s = g.sparks.length - 1; s >= 0; s--){
+      var sp = g.sparks[s];
+      sp.age += dt;
+      if(sp.age >= sp.life){ g.sparks.splice(s, 1); continue; }
+      sp.x += sp.vx * dt; sp.y += sp.vy * dt;
+    }
+    if(g.phase !== "playing") return;
+
+    g.tickCd -= dt;
+    if(g.tickCd > 0) return;
+    g.tickCd = tickEvery();
+    g.dir = g.nextDir;
+    g.step++;
+
+    var head = g.body[0];
+    var nx = head.x + g.dir.x, ny = head.y + g.dir.y;
+
+    if(cfg.wrap){
+      if(nx < 0) nx = g.cols - 1; else if(nx >= g.cols) nx = 0;
+      if(ny < 0) ny = g.rows - 1; else if(ny >= g.rows) ny = 0;
+    } else if(nx < 0 || ny < 0 || nx >= g.cols || ny >= g.rows){
+      return die();
+    }
+
+    /* the tail cell frees up this tick unless we are growing into it */
+    var limit = g.grow > 0 ? g.body.length : g.body.length - 1;
+    for(var i = 0; i < limit; i++){
+      if(g.body[i].x === nx && g.body[i].y === ny) return die();
+    }
+
+    g.body.unshift({x:nx, y:ny});
+    if(g.grow > 0) g.grow--; else g.body.pop();
+
+    if(g.food && nx === g.food.x && ny === g.food.y){
+      g.grow += 2;
+      g.score += 10;
+      var c = cell();
+      spark((nx + 0.5) * c, (ny + 0.5) * c, 10, PAL.food);
+      placeFood(g);
+      syncHUD();
+    }
+  }
+
+  function die(){
+    g.phase = "over";
+    shake = RM ? 0 : 3;
+    var c = cell();
+    spark((g.body[0].x + 0.5) * c, (g.body[0].y + 0.5) * c, 20, PAL.body);
+    if(g.score > rec){
+      rec = g.score;
+      try { localStorage.setItem("snake.best", String(rec)); } catch(e){}
+      syncRecord();
+    }
+    syncHUD();
+  }
+
+  function sizeStage(){
+    var fit = document.body.classList.contains("fit");
+    var host = stage.parentElement;
+    var availH = fit ? host.clientHeight : Math.min(window.innerHeight * 0.64, 620);
+    var capW = fit ? host.clientWidth : Math.min(host.clientWidth, 430);
+    var w = Math.min(capW, availH * (W / H));
+    var h = w * (H / W);
+    stage.style.width = Math.round(w) + "px";
+    stage.style.height = Math.round(h) + "px";
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr * w / W, 0, 0, dpr * w / W, 0, 0);
+  }
+
+  function rr(x, y, w, h, r){
+    r = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r);
+    ctx.arcTo(x, y, x+w, y, r);
+    ctx.closePath();
+  }
+
+  function paint(){
+    var ox = 0, oy = 0;
+    if(shake > 0.01){ ox = (Math.random()-.5)*shake; oy = (Math.random()-.5)*shake; }
+    ctx.save(); ctx.translate(ox, oy);
+
+    ctx.fillStyle = PAL.bg; ctx.fillRect(-4, -4, W+8, H+8);
+    var c = cell();
+
+    ctx.fillStyle = PAL.grid;
+    for(var y = 0; y < g.rows; y++){
+      for(var x = 0; x < g.cols; x++){
+        if((x + y) % 2) ctx.fillRect(x*c, y*c, c, c);
+      }
+    }
+    if(!cfg.wrap){
+      ctx.strokeStyle = PAL.wall; ctx.lineWidth = 1.4;
+      ctx.strokeRect(0.7, 0.7, W - 1.4, g.rows * c - 1.4);
+    }
+
+    if(g.food){
+      var fx = (g.food.x + 0.5) * c, fy = (g.food.y + 0.5) * c;
+      ctx.fillStyle = PAL.food;
+      ctx.beginPath(); ctx.arc(fx, fy, c * 0.33, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = PAL.foodCore;
+      ctx.beginPath(); ctx.arc(fx - c*0.08, fy - c*0.08, c * 0.13, 0, Math.PI*2); ctx.fill();
+    }
+
+    for(var i = g.body.length - 1; i >= 0; i--){
+      var seg = g.body[i];
+      var k = 1 - i / Math.max(1, g.body.length);
+      ctx.fillStyle = i === 0 ? PAL.head : (k > 0.45 ? PAL.body : PAL.tail);
+      var pad = c * (i === 0 ? 0.06 : 0.12);
+      rr(seg.x*c + pad, seg.y*c + pad, c - pad*2, c - pad*2, c*0.28);
+      ctx.fill();
+    }
+
+    for(var s = 0; s < g.sparks.length; s++){
+      var sp = g.sparks[s];
+      ctx.globalAlpha = Math.max(0, 1 - sp.age/sp.life) * .9;
+      ctx.fillStyle = sp.c;
+      ctx.fillRect(sp.x - .5, sp.y - .5, 1.1, 1.1);
+    }
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
+
+  function syncHUD(){
+    document.getElementById("sScore").textContent = g.score;
+    document.getElementById("sLen").textContent = g.body.length;
+    document.getElementById("sBest").textContent = rec;
+    if(g.phase === "ready"){
+      overlay.hidden = false;
+      card.innerHTML = '<h2>Eat and grow</h2>' +
+        '<p>Swipe to turn, or use the arrow keys. You get quicker the longer you get.</p>' +
+        '<span class="cue">Tap to start</span>';
+    } else if(g.phase === "over"){
+      overlay.hidden = false;
+      card.innerHTML = '<p class="huge">' + g.score + '</p>' +
+        '<h2>' + (g.score >= rec && g.score > 0 ? "New best" : "Length " + g.body.length) + '</h2>' +
+        '<p>Length ' + g.body.length + ' &middot; best ' + rec + '.</p>' +
+        '<span class="cue">Tap to play again</span>';
+    } else overlay.hidden = true;
+  }
+  function syncReadout(){
+    document.getElementById("soLen").textContent = g.body.length;
+    document.getElementById("soTick").textContent = (1 / tickEvery()).toFixed(1);
+    document.getElementById("soGrid").textContent = g.cols + "x" + g.rows;
+  }
+  function syncRecord(){
+    document.getElementById("vSRec").textContent = rec ? rec + " pts" : "—";
+  }
+
+  function rebuildIfIdle(){ if(g.phase !== "playing"){ g = newGame(); syncHUD(); syncReadout(); } }
+  function bind(id, valId, key, fmt, after){
+    var el = document.getElementById(id), out = document.getElementById(valId);
+    el.addEventListener("input", function(){
+      cfg[key] = parseInt(el.value, 10);
+      out.textContent = fmt ? fmt(cfg[key]) : cfg[key];
+      if(after) after();
+      syncReadout();
+    });
+  }
+  bind("sSpeed", "vSSpeed", "speed");
+  bind("sCols", "vSCols", "cols", function(v){ return v + "x" + Math.round(v*1.5); }, rebuildIfIdle);
+
+  var segWrap = document.getElementById("segWrap");
+  function setWrap(v){
+    cfg.wrap = v;
+    Array.prototype.forEach.call(segWrap.querySelectorAll("button"), function(b){
+      b.setAttribute("aria-pressed", String((b.dataset.wrap === "1") === !!v));
+    });
+    document.getElementById("vSWrap").textContent = v ? "wrap" : "walls";
+  }
+  segWrap.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(b) setWrap(b.dataset.wrap === "1" ? 1 : 0);
+  });
+
+  document.getElementById("sReset").addEventListener("click", function(){
+    cfg = {speed:DEFAULTS.speed, cols:DEFAULTS.cols, wrap:DEFAULTS.wrap};
+    applyCfg(); setWrap(cfg.wrap); rebuildIfIdle();
+  });
+  document.getElementById("sClear").addEventListener("click", function(){
+    rec = 0; try { localStorage.removeItem("snake.best"); } catch(e){}
+    syncRecord(); syncHUD();
+  });
+  function applyCfg(){
+    document.getElementById("sSpeed").value = cfg.speed;
+    document.getElementById("vSSpeed").textContent = cfg.speed;
+    document.getElementById("sCols").value = cfg.cols;
+    document.getElementById("vSCols").textContent = cfg.cols + "x" + Math.round(cfg.cols*1.5);
+  }
+
+  var fitBtn = document.getElementById("sFitBtn"), fitExit = document.getElementById("sFitExit");
+  function setFit(on){
+    document.body.classList.toggle("fit", on);
+    fitExit.hidden = !on;
+    fitBtn.textContent = on ? "Exit full screen" : "Fit screen";
+    sizeStage();
+  }
+  fitBtn.addEventListener("click", function(){ setFit(!document.body.classList.contains("fit")); });
+  fitExit.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+  fitExit.addEventListener("click", function(e){ e.stopPropagation(); setFit(false); });
+
+  var rf = 0;
+  function frame(t){
+    if(!lastT) lastT = t;
+    var dt = Math.min((t - lastT) / 1000, 0.05); lastT = t;
+    step(dt);
+    shake = Math.max(0, shake - dt * 7);
+    paint();
+    /* the HUD length must refresh every frame, not only when you eat:
+       growth lands on the ticks after the bite, so an eat-only update
+       would always report a length two segments out of date */
+    if(++rf % 6 === 0){ syncReadout(); if(g.phase === "playing") syncHUD(); }
+    raf = requestAnimationFrame(frame);
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(!live) return;
+    if(raf){ cancelAnimationFrame(raf); raf = null; }
+    if(!document.hidden){ lastT = 0; raf = requestAnimationFrame(frame); }
+  });
+  window.addEventListener("resize", function(){ if(live) sizeStage(); });
+
+  function boot(saved){
+    if(saved && saved.cfg) cfg = saved.cfg;
+    if(saved && typeof saved.rec === "number" && saved.rec > rec) rec = saved.rec;
+    applyCfg(); setWrap(cfg.wrap);
+    g = newGame();
+    syncHUD(); syncReadout(); syncRecord();
+  }
+  ARCADE.register("snake", {
+    boot: boot,
+    snapshot: function(){ return {cfg:cfg, rec:rec}; },
+    mount: function(){
+      live = true; sizeStage();
+      if(raf) cancelAnimationFrame(raf);
+      lastT = 0; raf = requestAnimationFrame(frame);
+    },
+    unmount: function(){
+      live = false; downAt = null;
+      if(raf){ cancelAnimationFrame(raf); raf = null; }
+      if(document.body.classList.contains("fit")) setFit(false);
+    }
+  });
+})();
+
+/* ====================================================================== */
+/* Drift — free movement                                                  */
+/* ====================================================================== */
+(function(){
+  "use strict";
+  var W = 100, H = 150;
+  var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var stage = document.getElementById("dStage");
+  var cv = document.getElementById("dCv");
+  var ctx = cv.getContext("2d");
+  var overlay = document.getElementById("dOverlay");
+  var card = document.getElementById("dCard");
+
+  var PAL = {
+    bg:"#071a1e", grid:"#0d2b31", edge:"#15454e",
+    ship:"#6fe3d2", shipCore:"#e8fffb", hurt:"#e2543c",
+    rock:"#c2567a", rockCore:"#ffb3cd",
+    orb:"#ffd166", orbCore:"#fff3d0"
+  };
+
+  var DEFAULTS = {speed:26, count:6, orbs:12, lives:3};
+  var cfg = {speed:26, count:6, orbs:12, lives:3};
+
+  var g = null, rec = 0;
+  var raf = null, lastT = 0, live = false, shake = 0, flash = 0;
+  var stars = [];
+  for(var i = 0; i < 44; i++) stars.push({x:Math.random()*W, y:Math.random()*H, r:.2+Math.random()*.4, a:.1+Math.random()*.4});
+
+  try { rec = parseInt(localStorage.getItem("drift.best") || "0", 10) || 0; } catch(e){}
+
+  var SHIP_R = 3.0, ORB_R = 2.4;
+
+  function newGame(){
+    return {
+      phase:"ready", score:0, lives:cfg.lives, picked:0,
+      p:{x:W/2, y:H*0.72}, target:null,
+      rocks:[], orbs:[], sparks:[], inv:0, orbCd:1, elapsed:0
+    };
+  }
+  function hazardCount(){ return cfg.count + Math.floor(g.score / 150); }
+
+  function addRock(){
+    var r = 2.6 + Math.random() * 3.4;
+    var edge = (Math.random() * 4) | 0;
+    var x = edge === 0 ? -r : edge === 1 ? W + r : Math.random() * W;
+    var y = edge === 2 ? -r : edge === 3 ? H + r : Math.random() * H;
+    /* aim loosely across the field so it actually crosses play */
+    var tx = 20 + Math.random() * 60, ty = 20 + Math.random() * 110;
+    var d = Math.hypot(tx - x, ty - y) || 1;
+    var sp = cfg.speed * (0.7 + Math.random() * 0.6);
+    g.rocks.push({x:x, y:y, r:r, vx:(tx-x)/d*sp, vy:(ty-y)/d*sp,
+                  rot:Math.random()*6.28, rotV:(Math.random()*2-1)*2});
+  }
+  function addOrb(){
+    g.orbs.push({x:8 + Math.random()*(W-16), y:12 + Math.random()*(H-30), age:0, life:7 + Math.random()*4});
+  }
+  function spark(x, y, n, c){
+    if(RM) return;
+    for(var i = 0; i < n; i++){
+      var a = Math.random()*Math.PI*2, s = 12 + Math.random()*38;
+      g.sparks.push({x:x, y:y, vx:Math.cos(a)*s, vy:Math.sin(a)*s, life:.3+Math.random()*.3, age:0, c:c});
+    }
+  }
+
+  function ptW(e){
+    var r = cv.getBoundingClientRect();
+    if(!r.width || !r.height) return null;
+    return {x:(e.clientX - r.left)/r.width*W, y:(e.clientY - r.top)/r.height*H};
+  }
+  function primary(){
+    if(g.phase === "ready" || g.phase === "over"){
+      if(g.phase === "over") g = newGame();
+      g.phase = "playing"; syncHUD(); return true;
+    }
+    return false;
+  }
+  stage.addEventListener("pointerdown", function(e){
+    e.preventDefault();
+    try { stage.setPointerCapture(e.pointerId); } catch(err){}
+    var p = ptW(e); if(p) g.target = p;
+    primary();
+  });
+  stage.addEventListener("pointermove", function(e){
+    if(!(e.pressure > 0 || e.buttons || e.pointerType === "mouse")) return;
+    var p = ptW(e); if(p) g.target = p;
+  });
+  var kl=false, kr=false, ku=false, kd=false;
+  window.addEventListener("keydown", function(e){
+    if(!live) return;
+    var k = e.key;
+    if(k==="ArrowLeft"||k==="a"||k==="A"){ kl=true; e.preventDefault(); }
+    if(k==="ArrowRight"||k==="d"||k==="D"){ kr=true; e.preventDefault(); }
+    if(k==="ArrowUp"||k==="w"||k==="W"){ ku=true; e.preventDefault(); }
+    if(k==="ArrowDown"||k==="s"||k==="S"){ kd=true; e.preventDefault(); }
+    if(k===" "||k==="Enter"){ e.preventDefault(); primary(); }
+    if(k==="Escape" && document.body.classList.contains("fit")) setFit(false);
+  });
+  window.addEventListener("keyup", function(e){
+    if(!live) return;
+    var k = e.key;
+    if(k==="ArrowLeft"||k==="a"||k==="A") kl=false;
+    if(k==="ArrowRight"||k==="d"||k==="D") kr=false;
+    if(k==="ArrowUp"||k==="w"||k==="W") ku=false;
+    if(k==="ArrowDown"||k==="s"||k==="S") kd=false;
+  });
+
+  function step(dt){
+    for(var s = g.sparks.length-1; s>=0; s--){
+      var sp = g.sparks[s]; sp.age += dt;
+      if(sp.age >= sp.life){ g.sparks.splice(s,1); continue; }
+      sp.x += sp.vx*dt; sp.y += sp.vy*dt;
+    }
+    if(g.phase !== "playing") return;
+    g.elapsed += dt;
+    if(g.inv > 0) g.inv -= dt;
+
+    /* keyboard overrides the pointer target */
+    if(kl||kr||ku||kd){
+      g.target = null;
+      var mx = (kr?1:0) - (kl?1:0), my = (kd?1:0) - (ku?1:0);
+      var len = Math.hypot(mx, my) || 1;            /* no free speed on diagonals */
+      g.p.x += mx / len * 95 * dt;
+      g.p.y += my / len * 95 * dt;
+    } else if(g.target){
+      var dx = g.target.x - g.p.x, dy = g.target.y - g.p.y;
+      var d = Math.hypot(dx, dy);
+      if(d > 0.4){
+        var stepLen = Math.min(d, 118 * dt);
+        g.p.x += dx/d*stepLen; g.p.y += dy/d*stepLen;
+      }
+    }
+    g.p.x = Math.max(SHIP_R, Math.min(W-SHIP_R, g.p.x));
+    g.p.y = Math.max(SHIP_R, Math.min(H-SHIP_R, g.p.y));
+
+    while(g.rocks.length < hazardCount()) addRock();
+
+    g.orbCd -= dt;
+    if(g.orbCd <= 0 && g.orbs.length < 4){ addOrb(); g.orbCd = cfg.orbs / 10; }
+
+    for(var o = g.orbs.length-1; o>=0; o--){
+      var ob = g.orbs[o];
+      ob.age += dt;
+      if(ob.age >= ob.life){ g.orbs.splice(o,1); continue; }
+      if(Math.hypot(ob.x-g.p.x, ob.y-g.p.y) <= ORB_R + SHIP_R){
+        g.orbs.splice(o,1); g.score += 25; g.picked++;
+        spark(ob.x, ob.y, 12, PAL.orb); flash = Math.max(flash,.6); syncHUD();
+      }
+    }
+
+    for(var r = g.rocks.length-1; r>=0; r--){
+      var rk = g.rocks[r];
+      rk.x += rk.vx*dt; rk.y += rk.vy*dt; rk.rot += rk.rotV*dt;
+      if(rk.x < -rk.r-8 || rk.x > W+rk.r+8 || rk.y < -rk.r-8 || rk.y > H+rk.r+8){
+        g.rocks.splice(r,1); continue;
+      }
+      if(g.inv <= 0 && Math.hypot(rk.x-g.p.x, rk.y-g.p.y) <= rk.r + SHIP_R){
+        g.rocks.splice(r,1);
+        g.lives--; g.inv = 1.8; shake = RM?0:3.6; flash = 1;
+        spark(g.p.x, g.p.y, 20, PAL.hurt);
+        if(g.lives <= 0) return over();
+        syncHUD();
+      }
+    }
+    /* surviving pays, slowly */
+    g.score += dt * 6;
+  }
+
+  function over(){
+    g.phase = "over";
+    var sc = Math.floor(g.score);
+    if(sc > rec){ rec = sc; try { localStorage.setItem("drift.best", String(rec)); } catch(e){} syncRecord(); }
+    syncHUD();
+  }
+
+  function sizeStage(){
+    var fit = document.body.classList.contains("fit");
+    var host = stage.parentElement;
+    var availH = fit ? host.clientHeight : Math.min(window.innerHeight*0.64, 620);
+    var capW = fit ? host.clientWidth : Math.min(host.clientWidth, 430);
+    var w = Math.min(capW, availH*(W/H)), h = w*(H/W);
+    stage.style.width = Math.round(w)+"px"; stage.style.height = Math.round(h)+"px";
+    var dpr = Math.min(window.devicePixelRatio||1, 2);
+    cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+    ctx.setTransform(dpr*w/W, 0, 0, dpr*w/W, 0, 0);
+  }
+
+  function paint(){
+    var ox=0, oy=0;
+    if(shake > .01){ ox=(Math.random()-.5)*shake; oy=(Math.random()-.5)*shake; }
+    ctx.save(); ctx.translate(ox, oy);
+    ctx.fillStyle = PAL.bg; ctx.fillRect(-4,-4,W+8,H+8);
+
+    for(var s=0;s<stars.length;s++){
+      var st=stars[s]; ctx.globalAlpha=st.a; ctx.fillStyle="#fff";
+      ctx.fillRect(st.x, st.y, st.r, st.r);
+    }
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = PAL.edge; ctx.lineWidth = 1.2;
+    ctx.strokeRect(0.6, 0.6, W-1.2, H-1.2);
+
+    for(var o=0;o<g.orbs.length;o++){
+      var ob=g.orbs[o];
+      var fade = ob.age > ob.life-1.6 ? (0.35 + 0.65*Math.abs(Math.sin(ob.age*9))) : 1;
+      ctx.globalAlpha = fade;
+      ctx.fillStyle = PAL.orb;
+      ctx.beginPath(); ctx.arc(ob.x, ob.y, ORB_R, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = PAL.orbCore;
+      ctx.beginPath(); ctx.arc(ob.x, ob.y, ORB_R*0.42, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    for(var r=0;r<g.rocks.length;r++){
+      var rk=g.rocks[r];
+      ctx.save(); ctx.translate(rk.x, rk.y); ctx.rotate(rk.rot);
+      ctx.fillStyle = PAL.rock;
+      ctx.beginPath();
+      for(var i=0;i<6;i++){
+        var a=i/6*Math.PI*2, rr=rk.r*(i%2?0.78:1);
+        if(i===0) ctx.moveTo(Math.cos(a)*rr, Math.sin(a)*rr);
+        else ctx.lineTo(Math.cos(a)*rr, Math.sin(a)*rr);
+      }
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = PAL.rockCore; ctx.lineWidth = .4; ctx.stroke();
+      ctx.restore();
+    }
+
+    for(var k=0;k<g.sparks.length;k++){
+      var sp=g.sparks[k];
+      ctx.globalAlpha = Math.max(0,1-sp.age/sp.life)*.9;
+      ctx.fillStyle = sp.c; ctx.fillRect(sp.x-.5, sp.y-.5, 1.1, 1.1);
+    }
+    ctx.globalAlpha = 1;
+
+    if(!(g.inv > 0 && Math.floor(g.inv*13)%2===0)){
+      if(flash > .05){
+        ctx.globalAlpha = flash*.3; ctx.fillStyle = PAL.ship;
+        ctx.beginPath(); ctx.arc(g.p.x, g.p.y, SHIP_R*2.6, 0, Math.PI*2); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+      ctx.fillStyle = g.inv > 0 ? PAL.hurt : PAL.ship;
+      ctx.beginPath(); ctx.arc(g.p.x, g.p.y, SHIP_R, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = PAL.shipCore;
+      ctx.beginPath(); ctx.arc(g.p.x, g.p.y, SHIP_R*0.42, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function syncHUD(){
+    document.getElementById("dScore").textContent = Math.floor(g.score);
+    document.getElementById("dLives").textContent = Math.max(0, g.lives);
+    document.getElementById("dOrbs").textContent = g.picked;
+    document.getElementById("dBest").textContent = rec;
+    if(g.phase === "ready"){
+      overlay.hidden = false;
+      card.innerHTML = '<h2>Keep moving</h2>' +
+        '<p>Drag anywhere and the craft follows your finger. Collect the gold, survive the pink. Staying alive scores on its own.</p>' +
+        '<span class="cue">Tap to start</span>';
+    } else if(g.phase === "over"){
+      overlay.hidden = false;
+      var sc = Math.floor(g.score);
+      card.innerHTML = '<p class="huge">' + sc + '</p>' +
+        '<h2>' + (sc >= rec && sc > 0 ? "New best" : "Survived " + g.elapsed.toFixed(0) + "s") + '</h2>' +
+        '<p>' + g.picked + ' collected in ' + g.elapsed.toFixed(0) + 's &middot; best ' + rec + '.</p>' +
+        '<span class="cue">Tap to play again</span>';
+    } else overlay.hidden = true;
+  }
+  function syncReadout(){
+    document.getElementById("doHaz").textContent = g.rocks.length;
+    document.getElementById("doOrb").textContent = g.orbs.length;
+    document.getElementById("doTime").textContent = g.elapsed.toFixed(0) + "s";
+  }
+  function syncRecord(){ document.getElementById("vDRec").textContent = rec ? rec + " pts" : "—"; }
+
+  function bind(id, valId, key, fmt){
+    var el = document.getElementById(id), out = document.getElementById(valId);
+    el.addEventListener("input", function(){
+      cfg[key] = parseInt(el.value, 10);
+      out.textContent = fmt ? fmt(cfg[key]) : cfg[key];
+      if(key === "lives" && g.phase !== "playing"){ g.lives = cfg.lives; syncHUD(); }
+      syncReadout();
+    });
+  }
+  bind("dSpeed","vDSpeed","speed");
+  bind("dCount","vDCount","count");
+  bind("dOrbRate","vDOrb","orbs", function(v){ return (v/10).toFixed(1)+"s"; });
+  bind("dLivesK","vDLives","lives");
+  function applyCfg(){
+    document.getElementById("dSpeed").value = cfg.speed;   document.getElementById("vDSpeed").textContent = cfg.speed;
+    document.getElementById("dCount").value = cfg.count;   document.getElementById("vDCount").textContent = cfg.count;
+    document.getElementById("dOrbRate").value = cfg.orbs;  document.getElementById("vDOrb").textContent = (cfg.orbs/10).toFixed(1)+"s";
+    document.getElementById("dLivesK").value = cfg.lives;  document.getElementById("vDLives").textContent = cfg.lives;
+  }
+  document.getElementById("dReset").addEventListener("click", function(){
+    cfg = {speed:DEFAULTS.speed, count:DEFAULTS.count, orbs:DEFAULTS.orbs, lives:DEFAULTS.lives};
+    applyCfg(); if(g.phase !== "playing"){ g.lives = cfg.lives; syncHUD(); }
+  });
+  document.getElementById("dClear").addEventListener("click", function(){
+    rec = 0; try { localStorage.removeItem("drift.best"); } catch(e){}
+    syncRecord(); syncHUD();
+  });
+
+  var fitBtn = document.getElementById("dFitBtn"), fitExit = document.getElementById("dFitExit");
+  function setFit(on){
+    document.body.classList.toggle("fit", on);
+    fitExit.hidden = !on;
+    fitBtn.textContent = on ? "Exit full screen" : "Fit screen";
+    sizeStage();
+  }
+  fitBtn.addEventListener("click", function(){ setFit(!document.body.classList.contains("fit")); });
+  fitExit.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+  fitExit.addEventListener("click", function(e){ e.stopPropagation(); setFit(false); });
+
+  var rf = 0;
+  function frame(t){
+    if(!lastT) lastT = t;
+    var dt = Math.min((t-lastT)/1000, .04); lastT = t;
+    step(dt);
+    flash = Math.max(0, flash - dt*4); shake = Math.max(0, shake - dt*7);
+    paint();
+    if(++rf % 5 === 0){ syncReadout(); if(g.phase === "playing") syncHUD(); }
+    raf = requestAnimationFrame(frame);
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(!live) return;
+    if(raf){ cancelAnimationFrame(raf); raf = null; }
+    if(!document.hidden){ lastT = 0; raf = requestAnimationFrame(frame); }
+  });
+  window.addEventListener("resize", function(){ if(live) sizeStage(); });
+
+  function boot(saved){
+    if(saved && saved.cfg) cfg = saved.cfg;
+    if(saved && typeof saved.rec === "number" && saved.rec > rec) rec = saved.rec;
+    applyCfg(); g = newGame();
+    syncHUD(); syncReadout(); syncRecord();
+  }
+  ARCADE.register("drift", {
+    boot: boot,
+    snapshot: function(){ return {cfg:cfg, rec:rec}; },
+    mount: function(){
+      live = true; sizeStage();
+      if(raf) cancelAnimationFrame(raf);
+      lastT = 0; raf = requestAnimationFrame(frame);
+    },
+    unmount: function(){
+      live = false; kl=kr=ku=kd=false;
+      if(raf){ cancelAnimationFrame(raf); raf = null; }
+      if(document.body.classList.contains("fit")) setFit(false);
+    }
+  });
+})();
+
+/* ====================================================================== */
+/* Battery — missile defence                                              */
+/* ====================================================================== */
+(function(){
+  "use strict";
+  var W = 100, H = 150;
+  var GROUND = 141;
+  var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var stage = document.getElementById("mStage");
+  var cv = document.getElementById("mCv");
+  var ctx = cv.getContext("2d");
+  var overlay = document.getElementById("mOverlay");
+  var card = document.getElementById("mCard");
+
+  var PAL = {
+    bg:"#120a18", ground:"#2a1630", groundLit:"#46214f",
+    base:"#7fd4ff", baseCore:"#e4f6ff", baseDead:"#3a3f52",
+    head:"#ff6b4a", trail:"rgba(255,107,74,.45)",
+    blast:"#ffe08a", blastCore:"#fffdf4"
+  };
+
+  var DEFAULTS = {speed:16, radius:11, ammo:3, bases:5};
+  var cfg = {speed:16, radius:11, ammo:3, bases:5};
+
+  var g = null, rec = {score:0, wave:1};
+  var raf = null, lastT = 0, live = false, shake = 0, flash = 0;
+  var stars = [];
+  for(var i = 0; i < 40; i++) stars.push({x:Math.random()*W, y:Math.random()*(GROUND-6), r:.2+Math.random()*.4, a:.1+Math.random()*.45});
+
+  try {
+    rec.score = parseInt(localStorage.getItem("battery.best") || "0", 10) || 0;
+    rec.wave  = parseInt(localStorage.getItem("battery.wave") || "1", 10) || 1;
+  } catch(e){}
+
+  function newGame(){
+    var bases = [];
+    for(var i = 0; i < cfg.bases; i++){
+      bases.push({x:(i + 0.5) * (W / cfg.bases), alive:true});
+    }
+    return {
+      phase:"ready", score:0, wave:1, bases:bases,
+      heads:[], blasts:[], sparks:[], spawnCd:1.2, killed:0
+    };
+  }
+  function fallSpeed(){ return cfg.speed * (1 + (g.wave-1) * 0.12); }
+  function spawnEvery(){ return Math.max(0.35, 1.5 - (g.wave-1) * 0.1); }
+  function livingBases(){ var n=0; for(var i=0;i<g.bases.length;i++) if(g.bases[i].alive) n++; return n; }
+
+  function addHead(){
+    var alive = g.bases.filter(function(b){ return b.alive; });
+    if(!alive.length) return;
+    var t = alive[(Math.random()*alive.length)|0];
+    var x = Math.random() * W;
+    var tx = t.x + (Math.random()*2-1) * 4;
+    var sp = fallSpeed() * (0.8 + Math.random()*0.45);
+    var d = Math.hypot(tx - x, GROUND + 4);
+    g.heads.push({x:x, y:-3, ox:x, oy:-3, vx:(tx-x)/d*sp, vy:(GROUND+4)/d*sp});
+  }
+  function spark(x,y,n,c){
+    if(RM) return;
+    for(var i=0;i<n;i++){
+      var a=Math.random()*Math.PI*2, s=14+Math.random()*44;
+      g.sparks.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.32+Math.random()*.3,age:0,c:c});
+    }
+  }
+  function detonate(x, y, chained){
+    g.blasts.push({x:x, y:y, t:0, max:cfg.radius * (chained ? 0.72 : 1)});
+    if(!chained) flash = Math.max(flash, .55);
+  }
+
+  function ptW(e){
+    var r = cv.getBoundingClientRect();
+    if(!r.width || !r.height) return null;
+    return {x:(e.clientX-r.left)/r.width*W, y:(e.clientY-r.top)/r.height*H};
+  }
+  function primary(){
+    if(g.phase === "ready" || g.phase === "over"){
+      if(g.phase === "over") g = newGame();
+      g.phase = "playing"; syncHUD(); return true;
+    }
+    return false;
+  }
+  stage.addEventListener("pointerdown", function(e){
+    e.preventDefault();
+    try { stage.setPointerCapture(e.pointerId); } catch(err){}
+    if(primary()) return;
+    var p = ptW(e);
+    if(p && g.blasts.length < cfg.ammo && p.y < GROUND) detonate(p.x, p.y, false);
+  });
+  window.addEventListener("keydown", function(e){
+    if(!live) return;
+    if(e.key === " " || e.key === "Enter"){ e.preventDefault(); primary(); }
+    if(e.key === "Escape" && document.body.classList.contains("fit")) setFit(false);
+  });
+
+  function step(dt){
+    for(var s=g.sparks.length-1;s>=0;s--){
+      var sp=g.sparks[s]; sp.age+=dt;
+      if(sp.age>=sp.life){ g.sparks.splice(s,1); continue; }
+      sp.x+=sp.vx*dt; sp.y+=sp.vy*dt; sp.vy+=30*dt;
+    }
+    if(g.phase !== "playing") return;
+
+    g.spawnCd -= dt;
+    if(g.spawnCd <= 0){ addHead(); g.spawnCd = spawnEvery(); }
+
+    for(var b=g.blasts.length-1;b>=0;b--){
+      var bl=g.blasts[b];
+      bl.t += dt;
+      if(bl.t > 0.9){ g.blasts.splice(b,1); }
+    }
+
+    for(var h=g.heads.length-1;h>=0;h--){
+      var hd=g.heads[h];
+      hd.x += hd.vx*dt; hd.y += hd.vy*dt;
+
+      var hit = false;
+      for(var k=0;k<g.blasts.length;k++){
+        var bz=g.blasts[k], rad=blastRadius(bz);
+        if(Math.hypot(hd.x-bz.x, hd.y-bz.y) <= rad){
+          g.heads.splice(h,1);
+          g.score += 15; g.killed++;
+          spark(hd.x, hd.y, 12, PAL.blast);
+          detonate(hd.x, hd.y, true);       /* chains */
+          var w = 1 + Math.floor(g.killed / 12);
+          if(w > g.wave) g.wave = w;
+          syncHUD(); hit = true; break;
+        }
+      }
+      if(hit) continue;
+
+      if(hd.y >= GROUND){
+        g.heads.splice(h,1);
+        var best=null, bd=1e9;
+        for(var i=0;i<g.bases.length;i++){
+          var ba=g.bases[i]; if(!ba.alive) continue;
+          var d=Math.abs(ba.x-hd.x); if(d<bd){ bd=d; best=ba; }
+        }
+        spark(hd.x, GROUND, 18, PAL.head);
+        shake = RM?0:4; flash = 1;
+        if(best && bd < W/cfg.bases*0.75){ best.alive = false; }
+        if(livingBases() === 0) return over();
+        syncHUD();
+      }
+    }
+  }
+  function blastRadius(bz){
+    /* grows fast, lingers, then collapses */
+    var k = bz.t / 0.9;
+    return bz.max * Math.sin(Math.min(1, k) * Math.PI) ;
+  }
+
+  function over(){
+    g.phase = "over";
+    var ch=false;
+    if(g.score > rec.score){ rec.score = g.score; ch=true; }
+    if(g.wave > rec.wave){ rec.wave = g.wave; ch=true; }
+    if(ch){
+      try { localStorage.setItem("battery.best", String(rec.score));
+            localStorage.setItem("battery.wave", String(rec.wave)); } catch(e){}
+      syncRecord();
+    }
+    syncHUD();
+  }
+
+  function sizeStage(){
+    var fit = document.body.classList.contains("fit");
+    var host = stage.parentElement;
+    var availH = fit ? host.clientHeight : Math.min(window.innerHeight*0.64, 620);
+    var capW = fit ? host.clientWidth : Math.min(host.clientWidth, 430);
+    var w = Math.min(capW, availH*(W/H)), h = w*(H/W);
+    stage.style.width = Math.round(w)+"px"; stage.style.height = Math.round(h)+"px";
+    var dpr = Math.min(window.devicePixelRatio||1, 2);
+    cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+    ctx.setTransform(dpr*w/W, 0, 0, dpr*w/W, 0, 0);
+  }
+
+  function paint(){
+    var ox=0, oy=0;
+    if(shake>.01){ ox=(Math.random()-.5)*shake; oy=(Math.random()-.5)*shake; }
+    ctx.save(); ctx.translate(ox, oy);
+    ctx.fillStyle = PAL.bg; ctx.fillRect(-4,-4,W+8,H+8);
+
+    for(var s=0;s<stars.length;s++){
+      var st=stars[s]; ctx.globalAlpha=st.a; ctx.fillStyle="#fff";
+      ctx.fillRect(st.x, st.y, st.r, st.r);
+    }
+    ctx.globalAlpha=1;
+
+    ctx.fillStyle = flash > .05 ? PAL.groundLit : PAL.ground;
+    ctx.fillRect(0, GROUND, W, H-GROUND);
+
+    for(var i=0;i<g.bases.length;i++){
+      var b=g.bases[i], bw=W/g.bases.length*0.44;
+      if(b.alive){
+        ctx.fillStyle = PAL.base;
+        ctx.beginPath();
+        ctx.moveTo(b.x-bw/2, GROUND); ctx.lineTo(b.x-bw*0.3, GROUND-4.4);
+        ctx.lineTo(b.x+bw*0.3, GROUND-4.4); ctx.lineTo(b.x+bw/2, GROUND);
+        ctx.closePath(); ctx.fill();
+        ctx.fillStyle = PAL.baseCore;
+        ctx.fillRect(b.x-bw*0.16, GROUND-3.2, bw*0.32, 1.5);
+      } else {
+        ctx.fillStyle = PAL.baseDead;
+        ctx.fillRect(b.x-bw/2, GROUND-1.3, bw, 1.3);
+      }
+    }
+
+    ctx.strokeStyle = PAL.trail; ctx.lineWidth = .55;
+    for(var h=0;h<g.heads.length;h++){
+      var hd=g.heads[h];
+      ctx.beginPath(); ctx.moveTo(hd.ox, hd.oy); ctx.lineTo(hd.x, hd.y); ctx.stroke();
+      ctx.fillStyle = PAL.head;
+      ctx.beginPath(); ctx.arc(hd.x, hd.y, 1.5, 0, Math.PI*2); ctx.fill();
+    }
+
+    for(var k=0;k<g.blasts.length;k++){
+      var bz=g.blasts[k], r=blastRadius(bz);
+      if(r <= 0) continue;
+      ctx.globalAlpha = .34;
+      ctx.fillStyle = PAL.blast;
+      ctx.beginPath(); ctx.arc(bz.x, bz.y, r, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = .9;
+      ctx.fillStyle = PAL.blastCore;
+      ctx.beginPath(); ctx.arc(bz.x, bz.y, r*0.34, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    for(var q=0;q<g.sparks.length;q++){
+      var sp=g.sparks[q];
+      ctx.globalAlpha = Math.max(0,1-sp.age/sp.life)*.9;
+      ctx.fillStyle = sp.c; ctx.fillRect(sp.x-.5, sp.y-.5, 1.1, 1.1);
+    }
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
+
+  function syncHUD(){
+    document.getElementById("mScore").textContent = g.score;
+    document.getElementById("mBases").textContent = livingBases();
+    document.getElementById("mWave").textContent = g.wave;
+    document.getElementById("mBest").textContent = rec.score;
+    if(g.phase === "ready"){
+      overlay.hidden = false;
+      card.innerHTML = '<h2>Hold the line</h2>' +
+        '<p>Tap the sky to detonate. Every kill sets off a smaller blast, so a good first shot can clear a whole volley.</p>' +
+        '<span class="cue">Tap to start</span>';
+    } else if(g.phase === "over"){
+      overlay.hidden = false;
+      card.innerHTML = '<p class="huge">' + g.score + '</p>' +
+        '<h2>' + (g.score >= rec.score && g.score > 0 ? "New best" : "Wave " + g.wave) + '</h2>' +
+        '<p>All bases lost on wave ' + g.wave + ' &middot; ' + g.killed + ' shot down. Best ' + rec.score + '.</p>' +
+        '<span class="cue">Tap to play again</span>';
+    } else overlay.hidden = true;
+  }
+  function syncReadout(){
+    document.getElementById("moIn").textContent = g.heads.length;
+    document.getElementById("moBlast").textContent = g.blasts.length + "/" + cfg.ammo;
+    document.getElementById("moFall").textContent = fallSpeed().toFixed(0);
+  }
+  function syncRecord(){
+    document.getElementById("vMRec").textContent = rec.score ? rec.score + " pts" : "—";
+    document.getElementById("mRecNote").textContent = rec.score
+      ? "Best " + rec.score + " points, reached wave " + rec.wave + "."
+      : "No runs yet.";
+  }
+
+  function bind(id, valId, key){
+    var el = document.getElementById(id), out = document.getElementById(valId);
+    el.addEventListener("input", function(){
+      cfg[key] = parseInt(el.value, 10);
+      out.textContent = cfg[key];
+      if(key === "bases" && g.phase !== "playing"){ g = newGame(); syncHUD(); }
+      syncReadout();
+    });
+  }
+  bind("mSpeed","vMSpeed","speed");
+  bind("mRadius","vMRadius","radius");
+  bind("mAmmo","vMAmmo","ammo");
+  bind("mBasesK","vMBases","bases");
+  function applyCfg(){
+    document.getElementById("mSpeed").value = cfg.speed;   document.getElementById("vMSpeed").textContent = cfg.speed;
+    document.getElementById("mRadius").value = cfg.radius; document.getElementById("vMRadius").textContent = cfg.radius;
+    document.getElementById("mAmmo").value = cfg.ammo;     document.getElementById("vMAmmo").textContent = cfg.ammo;
+    document.getElementById("mBasesK").value = cfg.bases;  document.getElementById("vMBases").textContent = cfg.bases;
+  }
+  document.getElementById("mReset").addEventListener("click", function(){
+    cfg = {speed:DEFAULTS.speed, radius:DEFAULTS.radius, ammo:DEFAULTS.ammo, bases:DEFAULTS.bases};
+    applyCfg(); if(g.phase !== "playing"){ g = newGame(); syncHUD(); } syncReadout();
+  });
+  document.getElementById("mClear").addEventListener("click", function(){
+    rec = {score:0, wave:1};
+    try { localStorage.removeItem("battery.best"); localStorage.removeItem("battery.wave"); } catch(e){}
+    syncRecord(); syncHUD();
+  });
+
+  var fitBtn = document.getElementById("mFitBtn"), fitExit = document.getElementById("mFitExit");
+  function setFit(on){
+    document.body.classList.toggle("fit", on);
+    fitExit.hidden = !on;
+    fitBtn.textContent = on ? "Exit full screen" : "Fit screen";
+    sizeStage();
+  }
+  fitBtn.addEventListener("click", function(){ setFit(!document.body.classList.contains("fit")); });
+  fitExit.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+  fitExit.addEventListener("click", function(e){ e.stopPropagation(); setFit(false); });
+
+  var rf = 0;
+  function frame(t){
+    if(!lastT) lastT = t;
+    var dt = Math.min((t-lastT)/1000, .04); lastT = t;
+    step(dt);
+    flash = Math.max(0, flash - dt*4); shake = Math.max(0, shake - dt*7);
+    paint();
+    if(++rf % 5 === 0) syncReadout();
+    raf = requestAnimationFrame(frame);
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(!live) return;
+    if(raf){ cancelAnimationFrame(raf); raf = null; }
+    if(!document.hidden){ lastT = 0; raf = requestAnimationFrame(frame); }
+  });
+  window.addEventListener("resize", function(){ if(live) sizeStage(); });
+
+  function boot(saved){
+    if(saved && saved.cfg) cfg = saved.cfg;
+    if(saved && saved.rec){
+      if(saved.rec.score > rec.score) rec.score = saved.rec.score;
+      if(saved.rec.wave  > rec.wave ) rec.wave  = saved.rec.wave;
+    }
+    applyCfg(); g = newGame();
+    syncHUD(); syncReadout(); syncRecord();
+  }
+  ARCADE.register("battery", {
+    boot: boot,
+    snapshot: function(){ return {cfg:cfg, rec:rec}; },
+    mount: function(){
+      live = true; sizeStage();
+      if(raf) cancelAnimationFrame(raf);
+      lastT = 0; raf = requestAnimationFrame(frame);
+    },
+    unmount: function(){
+      live = false;
       if(raf){ cancelAnimationFrame(raf); raf = null; }
       if(document.body.classList.contains("fit")) setFit(false);
     }

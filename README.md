@@ -1,6 +1,6 @@
 # Rally &amp; Astro
 
-Two small arcade games that run in a browser, built to be played with one thumb on a phone.
+Five small arcade games that run in a browser, built to be played with one thumb on a phone.
 
 Everything lives in **one self-contained `index.html`** — no build step, no package manager,
 no dependencies. The only thing fetched from the network is a Google Fonts stylesheet, and
@@ -8,7 +8,7 @@ the games play fine without it in fallback fonts.
 
 ## The games
 
-A menu offers both; picking one hides the menu and shows a slim `← Games` bar.
+A menu offers all five; picking one hides the menu and shows a slim `← Games` bar.
 
 ### Rally
 
@@ -39,6 +39,30 @@ A cannon on the bottom rail against falling rock.
   full cycle earns a life, so the backdrop doubles as the bonus-life clock.
 
 Tunable: fall speed, spawn rate, fire rate, lives, spinner frequency, bonus-life interval.
+
+### Snake
+
+Grid movement, swipe or arrow to turn, eat to grow. Reversing into your own neck is rejected
+rather than fatal, and the cell your tail is vacating is legal to enter, so following your own
+tail is safe. Every segment shortens the tick, so you build the difficulty curve yourself.
+
+Tunable: speed, grid size, walls vs wrap.
+
+### Drift
+
+Free movement — the craft follows your finger anywhere on the field. Collect gold orbs,
+avoid drifting hazards. Surviving scores on its own, so a cautious run still counts; chasing
+gold pays far better and is how you get hit.
+
+Tunable: hazard speed, hazard count, orb rate, lives.
+
+### Battery
+
+Missile defence. Tap the sky to detonate; every warhead you kill chains a smaller blast, so a
+well-placed first shot can clear a whole volley. Warheads aim at bases that are still standing,
+so pressure concentrates as you lose ground. Your only limit is how many blasts can be live at once.
+
+Tunable: fall speed, blast radius, concurrent blasts, base count.
 
 ## Running it
 
