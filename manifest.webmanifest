@@ -1,7 +1,7 @@
 {
   "name": "Rally & Astro",
   "short_name": "Rally",
-  "description": "Two small arcade games built to be played with one thumb.",
+  "description": "Nine small arcade games built to be played with one thumb.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

@@ -1,6 +1,6 @@
 # Rally &amp; Astro
 
-Five small arcade games that run in a browser, built to be played with one thumb on a phone.
+Nine small arcade games that run in a browser, built to be played with one thumb on a phone.
 
 Everything lives in **one self-contained `index.html`** — no build step, no package manager,
 no dependencies. The only thing fetched from the network is a Google Fonts stylesheet, and
@@ -8,7 +8,7 @@ the games play fine without it in fallback fonts.
 
 ## The games
 
-A menu offers all five; picking one hides the menu and shows a slim `← Games` bar.
+A menu offers all nine; picking one hides the menu and shows a slim `← Games` bar.
 
 ### Rally
 
@@ -64,6 +64,54 @@ so pressure concentrates as you lose ground. Your only limit is how many blasts 
 
 Tunable: fall speed, blast radius, concurrent blasts, base count.
 
+### Hopper
+
+Cross the road, ride the river, fill the five bays at the top. Every swipe is exactly one hop
+and a tap hops forward, so it plays with a thumb.
+
+- Five lanes of traffic, a safe verge, then five lanes of river where logs and turtles are the
+  only floor. Whatever you ride carries you, and being carried off the edge counts as a fall.
+- Diving turtles flash pink before they go under and take their passengers with them.
+- Each new row pays 10; a bay pays 50 plus 10 for every second left on the timer. A fly in an
+  empty bay is worth 200 more. All five bays clears the level for 500, and the next is 12% faster.
+
+Tunable: traffic speed, timer, lives, diving turtles.
+
+### Invaders
+
+The marching formation. Drag to move the cannon, hold to fire.
+
+- The block steps sideways, drops a row at each wall, and steps faster as it thins, so the last
+  invader is the quickest thing on the screen.
+- One shot in flight at a time by default, as in the original, so a miss costs time.
+- Four bunkers erode under fire from both sides and are rebuilt every wave. The mystery ship
+  pays 50 to 300. Letting the formation reach the ground ends the run outright.
+
+Tunable: march speed, return fire, shots at once, bunkers, lives.
+
+### Blocks
+
+Falling pieces on a 10 by 20 well, with a seven-piece bag, hold, a ghost piece and standard
+wall kicks.
+
+- Drag sideways to slide and down to ease it lower; flick down to drop, flick up to hold. A tap
+  on the right half turns it clockwise, on the left half anticlockwise.
+- One to four lines pay 100, 300, 500 and 800 times the level. A level is ten lines.
+
+Tunable: start level, preview length, ghost piece.
+
+### Lander
+
+Hold anywhere to burn; the craft leans toward your finger and rights itself when you let go.
+
+- Land with both feet on a pad, falling slower than the legs can take, near upright and barely
+  drifting. Telemetry under the score turns green inside every limit.
+- Pads pay 50 times their multiplier (x2, x3, x5 — the narrower, the better), doubled for a
+  perfect touchdown. A landing refunds fuel and a crash costs 150. The run ends when the tank
+  is dry. The field wraps at the sides.
+
+Tunable: gravity, fuel, leg strength, arrival drift.
+
 ## High scores
 
 A screen off the menu ranks your best run in every game, with the run count and when you last
@@ -95,7 +143,7 @@ Any static host works too — GitHub Pages, Netlify, an S3 bucket — since ther
 
 - **High scores are per-origin.** Each device, and each URL you serve from, keeps its own
   records in `localStorage`. Nothing syncs between them.
-- **Both games pause when the tab is hidden** and resume when it comes back.
+- **Every game pauses when the tab is hidden** and resumes when it comes back.
 - **Fit screen** hides the settings and sizes the board to the viewport. The play field keeps a
   fixed 2:3 shape so the physics are identical on every device, which does leave letterboxing
   on a tall phone.
@@ -144,7 +192,7 @@ Edit `index.html`, rebuild, publish `dist/artifact.html`. Never the other way ro
 ## Layout
 
 ```
-index.html                 both games, the menu shell, and all styles
+index.html                 every game, the menu shell, and all styles
 manifest.webmanifest       PWA metadata
 sw.js                      offline cache; stale-while-revalidate
 icons/                     generated app icons, including maskable
@@ -153,7 +201,7 @@ tools/build-artifact.py    strips the self-hosted block for the Artifact host
 dist/artifact.html         generated; the exact bytes last published
 ```
 
-The two games are independent modules behind a small `ARCADE.register(id, {boot, mount,
+The games are independent modules behind a small `ARCADE.register(id, {boot, mount,
 unmount, snapshot})` contract. Only the mounted game runs a `requestAnimationFrame` loop or
-responds to keys, so adding a third game means registering another module — nothing else
+responds to keys, so adding a game means registering another module — nothing else
 needs to change.

@@ -4,8 +4,9 @@ Guidance for Claude Code working in this repository.
 
 ## What this is
 
-Two browser arcade games — Rally (paddle/bricks) and Astro Smash (cannon/asteroids) — living
-in a single self-contained `index.html`. No build system, no package manager, no dependencies.
+Nine browser arcade games — Rally, Astro Smash, Snake, Drift, Battery, Hopper, Invaders,
+Blocks and Lander — living in a single self-contained `index.html`. No build system, no
+package manager, no dependencies.
 The only network fetch is a Google Fonts stylesheet, and the page is designed to work without it.
 
 ## The one rule
@@ -61,7 +62,8 @@ Each game is an independent module. In `index.html` you need three things:
 
 1. A `<section id="game-yourname" hidden>` holding its markup. Reuse the existing classes
    (`stage`, `hud`, `overlay`, `card`, `console`, `knobs`, `knob`, `foot`, `howto`) so it
-   matches without new CSS. Prefix element ids — Rally uses bare ids, Astro uses `a` prefixes.
+   matches without new CSS. Prefix element ids — Rally uses bare ids; Astro `a`, Snake `s`,
+   Drift `d`, Battery `m`, Hopper `f`, Invaders `i`, Blocks `b`, Lander `l`. Pick an unused letter.
 2. A `<button class="gamecard" data-game="yourname">` in the menu, with an inline SVG preview.
 3. A module that registers itself:
 
@@ -91,7 +93,7 @@ Rules the existing modules follow, which matter:
 
 ## Game-loop conventions
 
-Both games use a logical play field of `W = 100` by `H = 150` units, scaled to the canvas via
+Every game uses a logical play field of `W = 100` by `H = 150` units, scaled to the canvas via
 `ctx.setTransform`. All physics is in those units, so behaviour is identical on every screen.
 
 Fast-moving objects **substep**: movement is split into slices of ~1.4 units so a ball or
