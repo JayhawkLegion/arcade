@@ -70,6 +70,7 @@ Each game is an independent module. In `index.html` you need three things:
 
 ```js
 ARCADE.register("yourname", {
+  standard: function ()      { return ARCADE.isDefault(cfg, DEFAULTS); },
   boot:     function (saved) { /* build state; the section is still hidden, so no sizing */ },
   snapshot: function ()      { return { cfg: cfg, rec: rec }; },
   mount:    function ()      { live = true;  sizeStage();
@@ -81,6 +82,12 @@ ARCADE.register("yourname", {
 });
 ```
 
+4. Two calls into the shell: `ARCADE.begin("yourname")` the moment a run starts (from the
+   ready or game-over card, not on every life or board), and
+   `ARCADE.note("yourname", score, detail)` when it ends — an integer score and a short detail
+   such as `"wave 4"`. Then add the game to `BOARD` and the reset-all key list in the shell,
+   and to `GAMES` in `tools/leaderboard.gs` (and redeploy the script) or its scores are refused.
+
 Rules the existing modules follow, which matter:
 
 - **Gate every global listener on `live`.** `keydown`, `keyup`, `resize` and
@@ -91,6 +98,28 @@ Rules the existing modules follow, which matter:
 - **On `visibilitychange`, always cancel and reschedule** rather than testing `if (!raf)`.
   A frame scheduled while the page is hidden never runs but still leaves `raf` non-null, so
   an `if (!raf)` guard would refuse to ever restart the loop.
+
+## Shared leaderboard
+
+The top five of each game live in a Google Sheet behind `tools/leaderboard.gs`, an Apps Script
+web app. `ARCADE_LEADERBOARD_URL` in the **self-hosted** block holds its `/exec` URL — empty
+switches the feature off and the scores screen falls back to per-device bests. The build strips
+that block, so the Artifact copy never calls out.
+
+- Eligibility is judged in the shell: `begin()` snapshots `standard()`, and any `input` or
+  button click inside the game's `.knobs` during the run marks it ineligible, even if the
+  setting is put back. `note()` re-checks `standard()` and asks for initials only if the score
+  beats fifth place on the cached board (refreshed if over a minute old). The server re-checks
+  the top five under a lock, so a race just answers rank 0.
+- The browser POSTs a `text/plain` JSON body, so there is no CORS preflight.
+- `sw.js` lets every cross-origin request except Google Fonts go straight to the network.
+  Do not widen that, or a cached board gets served forever.
+- Timestamps are made by the script in `America/Chicago` (`CDT`/`CST`), not by the device.
+- After editing the script: **Deploy → Manage deployments → Edit → New version**, or the URL
+  keeps running the old code.
+- Cloud sessions cannot reach `script.google.com`. Test the script by running it in Node with
+  stubbed `SpreadsheetApp`/`ContentService`/`LockService`/`Utilities`, and test the page by
+  routing the URL in Playwright to that same stubbed script.
 
 ## Game-loop conventions
 

@@ -51,6 +51,10 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   const sameOrigin = url.origin === self.location.origin;
 
+  /* Anything else cross-origin -- the shared leaderboard above all -- goes
+     straight to the network. Caching it would serve a stale board forever. */
+  if (!sameOrigin && !/(^|\.)(fonts\.googleapis\.com|fonts\.gstatic\.com)$/.test(url.hostname)) return;
+
   /* Google Fonts: best effort. Serve a cached copy when we have one, otherwise
      go to the network. Offline without one, the page falls back to system
      fonts on its own, so nothing here is allowed to reject. */

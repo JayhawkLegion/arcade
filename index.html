@@ -31,6 +31,10 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(function () {});
   });
 }
+/* Shared leaderboard: the /exec URL of the Google Apps Script web app in
+   tools/leaderboard.gs. Empty switches the shared board off. Self-hosted
+   only -- the Artifact copy cannot reach it, so the build strips it. */
+window.ARCADE_LEADERBOARD_URL = "https://script.google.com/macros/s/AKfycbzdranstosL0m00ihfFtdRYpcIPE6fng0HL3zNRhSMO-W-v5Yo34ieGeI1iRSVe6GU/exec";
 </script>
 <!-- self-hosted:end -->
 <title>Rally &amp; Astro</title>
@@ -275,6 +279,48 @@ body.fit .topbar{display:none!important}
 .board-foot{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:14px}
 .board-foot .warn{font-size:12px; color:var(--ink-soft)}
 
+/* ---------- shared leaderboard ---------- */
+.lbstatus{margin:0 0 14px; font-size:12.5px; color:var(--ink-soft)}
+.lbgame{border:1px solid var(--line); border-radius:12px; background:var(--surface); box-shadow:var(--shadow); margin-bottom:12px; overflow:hidden}
+.lbhead{display:flex; align-items:center; gap:11px; width:100%; padding:12px 14px; font:inherit; text-align:left; cursor:pointer;
+  background:transparent; color:var(--ink); border:0; border-bottom:1px solid var(--line)}
+.lbhead:focus-visible{outline:2px solid var(--amber); outline-offset:-2px}
+.lbhead .pip{width:9px; height:24px; border-radius:99px; flex:0 0 auto}
+.lbhead b{flex:1 1 auto; font-family:"Bricolage Grotesque",system-ui,sans-serif; font-size:15px; font-weight:600; letter-spacing:-.015em}
+.lbhead span{font-family:"JetBrains Mono",monospace; font-size:10.5px; letter-spacing:.06em; color:var(--ink-soft); text-align:right}
+.lbrow{display:grid; grid-template-columns:18px 3.6em minmax(0,1fr) auto; gap:10px; align-items:baseline;
+  padding:8px 14px; border-bottom:1px solid var(--line); font-size:13px}
+.lbrow:last-child{border-bottom:0}
+.lbrow .rk{font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--ink-soft)}
+.lbrow .ini{font-family:"JetBrains Mono",monospace; font-weight:500; letter-spacing:.14em}
+.lbrow .when{font-size:11.5px; color:var(--ink-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.lbrow .pts{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-weight:800; font-size:16px;
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums; text-align:right}
+.lbempty{padding:10px 14px; font-size:12px; color:var(--ink-soft)}
+.lbrow.mine{background:rgba(180,118,26,.14)}
+
+.namebox{position:fixed; inset:0; z-index:40; display:grid; place-items:start center; padding:max(24px, 11vh) 20px 20px;
+  background:rgba(14,11,20,.62); -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px)}
+.namebox[hidden]{display:none!important}
+.namecard{width:min(340px,100%); background:var(--surface); color:var(--ink); border:1px solid var(--line);
+  border-radius:16px; box-shadow:var(--shadow); padding:20px 20px 18px; text-align:center}
+.namekick{margin:0; font-family:"JetBrains Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--amber)}
+.namecard h2{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-size:22px; font-weight:800; margin:6px 0 2px; letter-spacing:-.03em}
+.namescore{margin:0 0 14px; font-family:"Bricolage Grotesque",system-ui,sans-serif; font-weight:800; font-size:38px; line-height:1.05;
+  color:var(--amber); letter-spacing:-.04em; font-variant-numeric:tabular-nums}
+.namelbl{display:block; font-size:12px; color:var(--ink-soft); margin-bottom:6px}
+.nameinput{width:6.4ch; font-family:"JetBrains Mono",monospace; font-size:34px; font-weight:500; text-align:center; text-transform:uppercase;
+  letter-spacing:.3em; padding:6px 0 6px .3em; border:2px solid var(--line); border-radius:10px; background:var(--ground); color:var(--ink)}
+.nameinput:focus{outline:none; border-color:var(--amber)}
+.namemsg{min-height:1.4em; margin:10px 0 0; font-size:12.5px; color:var(--ink-soft)}
+.namebtns{display:flex; gap:8px; justify-content:center; margin-top:12px}
+button.act.primary{background:var(--amber); border-color:var(--amber); color:#fff}
+button.act:disabled{opacity:.45; cursor:default}
+.toast{position:fixed; left:50%; bottom:calc(18px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); z-index:45;
+  width:max-content; max-width:min(92vw,420px); padding:10px 14px; border-radius:10px; background:rgba(23,19,32,.94); color:#f4ecdf;
+  font-size:12.5px; line-height:1.4; text-align:center; box-shadow:0 10px 30px -12px rgba(0,0,0,.6); pointer-events:none}
+.toast[hidden]{display:none!important}
+
 /* Astro's playfield is its own sky */
 #aStage{background:#0a0f1e}
 </style>
@@ -284,6 +330,22 @@ body.fit .topbar{display:none!important}
   <button class="back" id="backBtn" type="button">&larr; Games</button>
   <span class="mark">Rally &amp; Astro</span>
 </header>
+
+<div class="namebox" id="nameBox" hidden role="dialog" aria-modal="true" aria-labelledby="nameTitle">
+  <form class="namecard" id="nameForm" autocomplete="off" novalidate>
+    <p class="namekick" id="nameKick">Top 5</p>
+    <h2 id="nameTitle">New high score</h2>
+    <p class="namescore" id="nameScore">0</p>
+    <label class="namelbl" for="nameInput">Your initials</label>
+    <input class="nameinput" id="nameInput" maxlength="3" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="done">
+    <p class="namemsg" id="nameMsg" aria-live="polite"></p>
+    <div class="namebtns">
+      <button class="act" id="nameSkip" type="button">Skip</button>
+      <button class="act primary" id="nameSave" type="submit">Save</button>
+    </div>
+  </form>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
 
 <section id="menu">
   <div class="wrap menu">
@@ -570,7 +632,7 @@ body.fit .topbar{display:none!important}
       </button>
     </div>
     <button class="scoreslink" type="button" id="scoresLink">
-      <span class="pipless"><b>High scores</b><br><span>Your best run in each of the ten.</span></span>
+      <span class="pipless"><b>High scores</b><br><span id="scoresSub">Your best run in each of the ten.</span></span>
       <span class="go">View &rarr;</span>
     </button>
     <p class="fineprint">Every game remembers its own settings and best score on this device.</p>
@@ -581,8 +643,9 @@ body.fit .topbar{display:none!important}
   <div class="wrap">
     <div class="masthead">
       <h1>High scores</h1>
-      <p class="tagline">Best run in each game, on this device.</p>
+      <p class="tagline" id="scoresTag">Best run in each game, on this device.</p>
     </div>
+    <p class="lbstatus" id="lbStatus" hidden></p>
     <div class="board" id="scoreBoard"></div>
     <div class="board-foot">
       <button class="act" id="scoresReset">Reset all scores</button>
@@ -1464,12 +1527,143 @@ window.ARCADE = (function(){
     try { return JSON.parse(localStorage.getItem("arcade.plays") || "{}") || {}; }
     catch(e){ return {}; }
   }
-  function note(id){
+  /* A game calls note(id, score, detail) when a run ends. It counts the play,
+     and if the run is eligible and makes the shared top five, asks for initials. */
+  function note(id, score, detail){
     try {
       var p = plays();
       p[id] = {n:((p[id] && p[id].n) || 0) + 1, last:Date.now()};
       localStorage.setItem("arcade.plays", JSON.stringify(p));
     } catch(e){}
+    var run = runs[id];
+    runs[id] = null;
+    if(!LB_URL || !(score > 0)) return;
+    var std = !!(run && run.std && games[id].standard && games[id].standard());
+    lbFresh(60000).then(function(board){
+      if(!board || !qualifies(id, score)) return;
+      if(std) askInitials(id, score, detail);
+      else toast("That would have made the top 5 \u2014 but only runs on default settings count.");
+    });
+  }
+
+  /* ---------- shared leaderboard ----------
+     The top five of each game live in a Google Sheet behind a small Apps
+     Script web app (tools/leaderboard.gs), so every device sees one board.
+     A run can enter only if it started on default settings and none of its
+     settings were touched before it ended. */
+  var LB_URL = String(window.ARCADE_LEADERBOARD_URL || "").trim();
+  var LB_TOP = 5;
+  var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var lb = {board:null, at:0, state:LB_URL ? "idle" : "off", pending:null, mine:null};
+  var runs = {}, ask = null, toastT = null;
+
+  function isDefault(cfg, defs){
+    for(var k in defs){
+      if(Object.prototype.hasOwnProperty.call(defs, k) && cfg[k] !== defs[k]) return false;
+    }
+    return true;
+  }
+  /* a game calls begin(id) when a run starts; settings are judged at that moment */
+  function begin(id){
+    runs[id] = {std: !!(games[id] && games[id].standard && games[id].standard())};
+  }
+  function taint(id){ if(runs[id]) runs[id].std = false; }
+
+  function lbFetch(){
+    if(!LB_URL) return Promise.resolve(null);
+    if(lb.pending) return lb.pending;
+    if(!lb.board) lb.state = "loading";
+    lb.pending = fetch(LB_URL, {cache:"no-store"})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d || !d.ok || !d.board) throw new Error("bad reply");
+        lb.board = d.board; lb.at = Date.now(); lb.state = "ok";
+        return lb.board;
+      })
+      .catch(function(){ lb.state = "error"; return null; })
+      .then(function(b){
+        lb.pending = null;
+        if(!el("screen-scores").hidden) renderBoard();
+        return b;
+      });
+    return lb.pending;
+  }
+  function lbFresh(maxAge){
+    return lb.board && Date.now() - lb.at < maxAge ? Promise.resolve(lb.board) : lbFetch();
+  }
+  function qualifies(id, score){
+    var list = (lb.board && lb.board[id]) || [];
+    return list.length < LB_TOP || score > list[list.length - 1].score;
+  }
+  function nameOf(id){
+    for(var i = 0; i < BOARD.length; i++) if(BOARD[i].id === id) return BOARD[i].name;
+    return id;
+  }
+  function prettyWhen(s){
+    var m = /^(\d{4})-(\d{2})-(\d{2}) (.+)$/.exec(s || "");
+    if(!m) return s || "";
+    var y = Number(m[1]);
+    return MON[Number(m[2]) - 1] + " " + Number(m[3]) + (y !== new Date().getFullYear() ? " " + y : "") + ", " + m[4];
+  }
+  function toast(msg){
+    var t = el("toast");
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastT);
+    toastT = setTimeout(function(){ t.hidden = true; }, 4500);
+  }
+
+  function askInitials(id, score, detail){
+    ask = {id:id, score:score, detail:detail || "", busy:false, done:false};
+    el("nameKick").textContent = "Top " + LB_TOP + " \u00b7 " + nameOf(id);
+    el("nameScore").textContent = score.toLocaleString();
+    el("nameMsg").textContent = "Three letters, as on the cabinet.";
+    var inp = el("nameInput"), last = "";
+    try { last = localStorage.getItem("arcade.initials") || ""; } catch(e){}
+    inp.value = last; inp.disabled = false;
+    el("nameSave").textContent = "Save";
+    el("nameSkip").hidden = false;
+    syncNameBtn();
+    el("nameBox").hidden = false;
+    setTimeout(function(){ try { inp.focus(); inp.select(); } catch(e){} }, 30);
+  }
+  function syncNameBtn(){
+    el("nameSave").disabled = !ask || ask.busy || (!ask.done && !/^[A-Z]{3}$/.test(el("nameInput").value));
+  }
+  function closeName(){
+    el("nameBox").hidden = true; ask = null;
+    try { el("nameInput").blur(); } catch(e){}
+  }
+  function saveName(){
+    if(!ask || ask.busy) return;
+    if(ask.done){ closeName(); return; }
+    var ini = el("nameInput").value;
+    if(!/^[A-Z]{3}$/.test(ini)) return;
+    var a = ask;
+    a.busy = true; syncNameBtn();
+    el("nameInput").disabled = true;
+    el("nameMsg").textContent = "Saving\u2026";
+    try { localStorage.setItem("arcade.initials", ini); } catch(e){}
+    fetch(LB_URL, {method:"POST", body:JSON.stringify({game:a.id, initials:ini, score:a.score, detail:a.detail})})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d || !d.ok) throw new Error("bad reply");
+        if(d.board){ lb.board = d.board; lb.at = Date.now(); lb.state = "ok"; }
+        lb.mine = d.rank ? {id:a.id, rank:d.rank, initials:ini, score:a.score} : null;
+        a.busy = false; a.done = true;
+        el("nameMsg").textContent = d.rank
+          ? "Saved \u2014 you\u2019re #" + d.rank + " on " + nameOf(a.id) + "."
+          : "So close \u2014 the top 5 moved on before you saved.";
+        el("nameSave").textContent = "Done";
+        el("nameSkip").hidden = true;
+        syncNameBtn();
+      })
+      .catch(function(){
+        a.busy = false;
+        el("nameInput").disabled = false;
+        el("nameMsg").textContent = "Couldn\u2019t reach the leaderboard. Check the connection and try again.";
+        el("nameSave").textContent = "Try again";
+        syncNameBtn();
+      });
   }
   function ago(ts){
     if(!ts) return "";
@@ -1483,8 +1677,57 @@ window.ARCADE = (function(){
   }
 
   function renderBoard(){
-    var host = el("scoreBoard"), p = plays();
+    var host = el("scoreBoard"), p = plays(), status = el("lbStatus");
     host.innerHTML = "";
+    status.hidden = !LB_URL;
+    if(LB_URL){
+      status.textContent = lb.state === "loading" ? "Loading the shared top 5\u2026"
+        : lb.state === "error" ? (lb.board ? "Couldn\u2019t refresh \u2014 showing the board from " + ago(lb.at) + "."
+                                           : "Couldn\u2019t reach the shared leaderboard, so these are this device\u2019s best runs.")
+        : "Only runs on default settings count. Times are US Central.";
+    }
+    if(!(LB_URL && lb.board)){ host.className = "board"; renderLocal(host, p); return; }
+
+    host.className = "";
+    BOARD.forEach(function(gm){
+      var box = document.createElement("div");
+      box.className = "lbgame";
+      var head = document.createElement("button");
+      head.type = "button"; head.className = "lbhead";
+      var pip = document.createElement("span"); pip.className = "pip"; pip.style.background = gm.pip;
+      var nm = document.createElement("b"); nm.textContent = gm.name;
+      var mineBest = num(gm.key);
+      var you = document.createElement("span");
+      you.textContent = mineBest ? "your best " + mineBest.toLocaleString() : "Play \u2192";
+      head.appendChild(pip); head.appendChild(nm); head.appendChild(you);
+      head.addEventListener("click", function(){ open(gm.id); });
+      box.appendChild(head);
+
+      var list = (lb.board[gm.id] || []).slice(0, LB_TOP);
+      list.forEach(function(e, i){
+        var row = document.createElement("div");
+        row.className = "lbrow" + (lb.mine && lb.mine.id === gm.id && lb.mine.rank === i + 1 ? " mine" : "");
+        var rk = document.createElement("span"); rk.className = "rk"; rk.textContent = i + 1;
+        var ini = document.createElement("span"); ini.className = "ini"; ini.textContent = e.initials;
+        var when = document.createElement("span"); when.className = "when";
+        when.textContent = [e.detail, prettyWhen(e.when)].filter(Boolean).join(" \u00b7 ");
+        var pts = document.createElement("span"); pts.className = "pts"; pts.textContent = Number(e.score).toLocaleString();
+        row.appendChild(rk); row.appendChild(ini); row.appendChild(when); row.appendChild(pts);
+        box.appendChild(row);
+      });
+      if(list.length < LB_TOP){
+        /* open places fold into one line rather than five empty rows */
+        var left = LB_TOP - list.length, gap = document.createElement("div");
+        gap.className = "lbempty";
+        gap.textContent = list.length ? left + (left === 1 ? " spot" : " spots") + " open on the board."
+                                      : "No scores yet \u2014 be the first.";
+        box.appendChild(gap);
+      }
+      host.appendChild(box);
+    });
+  }
+
+  function renderLocal(host, p){
     var ranked = BOARD.slice().sort(function(a, b){ return num(b.key) - num(a.key); });
     ranked.forEach(function(gm){
       var best = num(gm.key), pl = p[gm.id] || {};
@@ -1524,11 +1767,13 @@ window.ARCADE = (function(){
     el("screen-scores").hidden = false;
     el("topbar").hidden = false;
     armed = false;
-    el("scoresReset").textContent = "Reset all scores";
+    el("scoresReset").textContent = RESET_LABEL;
     renderBoard();
+    if(LB_URL) lbFetch();
   }
 
   var armed = false;
+  var RESET_LABEL = "Reset this device\u2019s scores";
 
   function boot(saved){
     if(booted) return;
@@ -1542,6 +1787,34 @@ window.ARCADE = (function(){
     });
     el("backBtn").addEventListener("click", home);
     el("scoresLink").addEventListener("click", scores);
+
+    order.forEach(function(k){
+      var knobs = el("game-" + k).querySelector(".knobs");
+      if(!knobs) return;
+      knobs.addEventListener("input", function(){ taint(k); });
+      knobs.addEventListener("click", function(e){ if(e.target.closest("button")) taint(k); });
+    });
+    var box = el("nameBox"), inp = el("nameInput");
+    /* keys typed into the dialog must never reach the game underneath */
+    box.addEventListener("keydown", function(e){
+      e.stopPropagation();
+      if(e.key === "Escape" && ask && !ask.busy) closeName();
+    });
+    box.addEventListener("keyup", function(e){ e.stopPropagation(); });
+    inp.addEventListener("input", function(){
+      var v = inp.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3);
+      if(v !== inp.value) inp.value = v;
+      syncNameBtn();
+    });
+    el("nameForm").addEventListener("submit", function(e){ e.preventDefault(); saveName(); });
+    el("nameSkip").addEventListener("click", function(){ if(ask && !ask.busy) closeName(); });
+    if(LB_URL){
+      el("scoresSub").textContent = "Top 5 in every game, shared across devices.";
+      el("scoresTag").textContent = "The top 5 in every game, from every device.";
+      el("scoresWarn").textContent = "Resetting clears this device\u2019s bests and play counts. The shared top 5 lives in the Google Sheet.";
+      lbFetch();
+    }
+    el("scoresReset").textContent = RESET_LABEL;
     el("scoresReset").addEventListener("click", function(){
       if(!armed){                       /* two taps, so a stray one cannot wipe the lot */
         armed = true;
@@ -1558,7 +1831,7 @@ window.ARCADE = (function(){
           .forEach(function(k){ localStorage.removeItem(k); });
       } catch(e){}
       armed = false;
-      el("scoresReset").textContent = "Reset all scores";
+      el("scoresReset").textContent = RESET_LABEL;
       renderBoard();
     });
     if(window.claude && window.claude.hot){
@@ -1572,7 +1845,7 @@ window.ARCADE = (function(){
   }
 
   return {register: register, open: open, home: home, boot: boot,
-          scores: scores, note: note};
+          scores: scores, note: note, begin: begin, isDefault: isDefault};
 })();
 </script>
 
@@ -1718,7 +1991,7 @@ window.ARCADE = (function(){
   }
   function primary(e){
     if(e) e.preventDefault();
-    if(g.phase === "ready" || g.phase === "cleared"){ drop(); }
+    if(g.phase === "ready" || g.phase === "cleared"){ if(g.phase === "ready") ARCADE.begin("rally"); drop(); }
     else if(g.phase === "over"){ g = newGame(); syncHUD(); }
   }
   stage.addEventListener("pointerdown", function(e){
@@ -1880,7 +2153,7 @@ window.ARCADE = (function(){
 
   function gameOver(){
     g.phase = "over";
-    ARCADE.note("rally");
+    ARCADE.note("rally", g.score, g.board + (g.board === 1 ? " board" : " boards"));
     saveRecord();
     syncHUD();
   }
@@ -2153,6 +2426,7 @@ window.ARCADE = (function(){
   }
 
   ARCADE.register("rally", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: start,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -2336,6 +2610,7 @@ window.ARCADE = (function(){
     if(g.phase === "ready" || g.phase === "over"){
       if(g.phase === "over") g = newGame();
       g.phase = "playing";
+      ARCADE.begin("astro");
       syncHUD();
       return true;
     }
@@ -2631,7 +2906,7 @@ window.ARCADE = (function(){
 
   function gameOver(){
     g.phase = "over";
-    ARCADE.note("astro");
+    ARCADE.note("astro", g.score, "wave " + g.wave);
     var changed = false;
     if(g.score > rec.score){ rec.score = g.score; changed = true; }
     if(g.wave  > rec.wave ){ rec.wave  = g.wave;  changed = true; }
@@ -2948,6 +3223,7 @@ window.ARCADE = (function(){
   }
 
   ARCADE.register("astro", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: start,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -3045,6 +3321,7 @@ window.ARCADE = (function(){
   function start(){
     if(g.phase === "over") g = newGame();
     g.phase = "playing";
+    ARCADE.begin("snake");
     syncHUD();
   }
 
@@ -3120,7 +3397,7 @@ window.ARCADE = (function(){
 
   function die(){
     g.phase = "over";
-    ARCADE.note("snake");
+    ARCADE.note("snake", g.score, "length " + g.body.length);
     shake = RM ? 0 : 3;
     var c = cell();
     spark((g.body[0].x + 0.5) * c, (g.body[0].y + 0.5) * c, 20, PAL.body);
@@ -3309,6 +3586,7 @@ window.ARCADE = (function(){
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("snake", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -3397,7 +3675,7 @@ window.ARCADE = (function(){
   function primary(){
     if(g.phase === "ready" || g.phase === "over"){
       if(g.phase === "over") g = newGame();
-      g.phase = "playing"; syncHUD(); return true;
+      g.phase = "playing"; ARCADE.begin("drift"); syncHUD(); return true;
     }
     return false;
   }
@@ -3494,7 +3772,7 @@ window.ARCADE = (function(){
 
   function over(){
     g.phase = "over";
-    ARCADE.note("drift");
+    ARCADE.note("drift", Math.floor(g.score), g.picked + (g.picked === 1 ? " orb" : " orbs"));
     var sc = Math.floor(g.score);
     if(sc > rec){ rec = sc; try { localStorage.setItem("drift.best", String(rec)); } catch(e){} syncRecord(); }
     syncHUD();
@@ -3662,6 +3940,7 @@ window.ARCADE = (function(){
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("drift", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -3756,7 +4035,7 @@ window.ARCADE = (function(){
   function primary(){
     if(g.phase === "ready" || g.phase === "over"){
       if(g.phase === "over") g = newGame();
-      g.phase = "playing"; syncHUD(); return true;
+      g.phase = "playing"; ARCADE.begin("battery"); syncHUD(); return true;
     }
     return false;
   }
@@ -3832,7 +4111,7 @@ window.ARCADE = (function(){
 
   function over(){
     g.phase = "over";
-    ARCADE.note("battery");
+    ARCADE.note("battery", g.score, "wave " + g.wave);
     var ch=false;
     if(g.score > rec.score){ rec.score = g.score; ch=true; }
     if(g.wave > rec.wave){ rec.wave = g.wave; ch=true; }
@@ -4013,6 +4292,7 @@ window.ARCADE = (function(){
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("battery", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -4151,6 +4431,7 @@ window.ARCADE = (function(){
   function start(){
     if(g.phase === "over") g = newGame();
     g.phase = "playing";
+    ARCADE.begin("hopper");
     syncHUD();
   }
   function hop(d){
@@ -4289,7 +4570,7 @@ window.ARCADE = (function(){
 
   function over(){
     g.phase = "over";
-    ARCADE.note("hopper");
+    ARCADE.note("hopper", g.score, "level " + g.level);
     var ch = false;
     if(g.score > rec.score){ rec.score = g.score; ch = true; }
     if(g.level > rec.level){ rec.level = g.level; ch = true; }
@@ -4697,6 +4978,7 @@ window.ARCADE = (function(){
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("hopper", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -4854,6 +5136,7 @@ window.ARCADE = (function(){
     if(g.phase === "ready" || g.phase === "over"){
       if(g.phase === "over") g = newGame();
       g.phase = "playing";
+      ARCADE.begin("invaders");
       syncHUD();
       return true;
     }
@@ -5130,7 +5413,7 @@ window.ARCADE = (function(){
 
   function over(){
     g.phase = "over";
-    ARCADE.note("invaders");
+    ARCADE.note("invaders", g.score, "wave " + g.wave);
     if(g.why === "invaded"){ shake = RM ? 0 : 4; flash = 1; }
     var ch = false;
     if(g.score > rec.score){ rec.score = g.score; ch = true; }
@@ -5355,6 +5638,7 @@ window.ARCADE = (function(){
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("invaders", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -5605,6 +5889,7 @@ window.ARCADE = (function(){
   function start(){
     if(g.phase === "over") g = newGame();
     g.phase = "playing";
+    ARCADE.begin("blocks");
     spawn(nextType());
     syncHUD();
   }
@@ -5720,7 +6005,7 @@ window.ARCADE = (function(){
   function over(){
     g.phase = "over";
     keySoft = false;
-    ARCADE.note("blocks");
+    ARCADE.note("blocks", g.score, g.lines + (g.lines === 1 ? " line" : " lines"));
     shake = RM ? 0 : 3; flash = 1;
     var ch = false;
     if(g.score > rec.score){ rec.score = g.score; ch = true; }
@@ -5966,6 +6251,7 @@ window.ARCADE = (function(){
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("blocks", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -6107,6 +6393,7 @@ window.ARCADE = (function(){
     if(g.phase === "ready" || g.phase === "over"){
       if(g.phase === "over") g = newGame();
       g.phase = "playing";
+      ARCADE.begin("lander");
       syncHUD();
       return true;
     }
@@ -6265,7 +6552,7 @@ window.ARCADE = (function(){
 
   function over(){
     g.phase = "over";
-    ARCADE.note("lander");
+    ARCADE.note("lander", g.score, g.landed + (g.landed === 1 ? " landing" : " landings"));
     var ch = false;
     if(g.score > rec.score){ rec.score = g.score; ch = true; }
     if(g.landed > rec.landed){ rec.landed = g.landed; ch = true; }
@@ -6512,6 +6799,7 @@ window.ARCADE = (function(){
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("lander", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -6647,6 +6935,7 @@ window.ARCADE = (function(){
     if(g.phase === "ready" || g.phase === "over"){
       if(g.phase === "over") g = newGame();
       g.phase = "playing";
+      ARCADE.begin("sortie");
       syncHUD();
       return true;
     }
@@ -6892,7 +7181,7 @@ window.ARCADE = (function(){
 
   function over(){
     g.phase = "over";
-    ARCADE.note("sortie");
+    ARCADE.note("sortie", g.score, "wave " + g.wave);
     var ch = false;
     if(g.score > rec.score){ rec.score = g.score; ch = true; }
     if(g.wave > rec.wave){ rec.wave = g.wave; ch = true; }
@@ -7150,6 +7439,7 @@ window.ARCADE = (function(){
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("sortie", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){

@@ -131,13 +131,35 @@ Tunable: scroll speed, cave height, squadrons per wave, enemy speed, fire rate, 
 
 ## High scores
 
-A screen off the menu ranks your best run in every game, with the run count and when you last
-played. It reads each game's own `localStorage` record rather than keeping a second copy, so it
-can never disagree with the in-game HUD; only the play counts (`arcade.plays`) are new. Resetting
-takes two taps.
+A screen off the menu shows the **shared top 5** for every game, from every device, each entry
+with three initials, the score, a detail (wave, lines, level…) and the date and time in US
+Central. Under each game it also shows your best on this device, read from the game's own
+`localStorage` record so it can never disagree with the in-game HUD.
 
-This is deliberately **not** a shared leaderboard. The site is static, so there is no server to
-hold one — scores live in the browser that set them, and each device keeps its own.
+- **Only default settings count.** A run can enter only if it started on every game's default
+  settings and none of its settings were touched before it ended — moving a slider and putting
+  it back still disqualifies that run. A top-5 run on custom settings gets a note saying so.
+- **Initials.** A qualifying score opens a three-letter initials box at game over. The last
+  initials used on the device are pre-filled. Skip leaves the board alone.
+- **Where it lives.** The site is static, so the board is a Google Sheet behind a small Apps
+  Script web app, `tools/leaderboard.gs`. The sheet *is* the board: it only ever holds each
+  game's top five, the script stamps entries in Central time, and you can fix or delete any row
+  there directly. Nothing can prove a score was really earned, so the sheet is where to tidy up.
+- **Switching it on.** Paste the web app's `/exec` URL into `ARCADE_LEADERBOARD_URL` in the
+  self-hosted block of `index.html`. Empty means off, and the screen falls back to this device's
+  bests. The Artifact copy never has it (the build strips that block), and the service worker
+  never caches it, so the board is always live.
+- Resetting clears this device's bests and play counts (two taps); it cannot touch the sheet.
+
+### Setting up the sheet
+
+1. Create a Google Sheet (any name). **Extensions → Apps Script**.
+2. Replace the editor's contents with `tools/leaderboard.gs` and save.
+3. **Deploy → New deployment**, type **Web app**, execute as **Me**, access **Anyone**. Authorise it.
+4. Copy the URL ending in `/exec` into `ARCADE_LEADERBOARD_URL`, rebuild, push.
+
+The script creates a **Leaderboard** tab on the first score. After changing the script later,
+use **Deploy → Manage deployments → Edit → New version** so the same URL keeps working.
 
 ## Running it
 
@@ -215,10 +237,12 @@ sw.js                      offline cache; stale-while-revalidate
 icons/                     generated app icons, including maskable
 tools/make-icons.py        redraws icons/
 tools/build-artifact.py    strips the self-hosted block for the Artifact host
+tools/leaderboard.gs       the shared top-5 board: Apps Script for a Google Sheet
 dist/artifact.html         generated; the exact bytes last published
 ```
 
 The games are independent modules behind a small `ARCADE.register(id, {boot, mount,
-unmount, snapshot})` contract. Only the mounted game runs a `requestAnimationFrame` loop or
+unmount, snapshot, standard})` contract, plus `ARCADE.begin(id)` when a run starts and
+`ARCADE.note(id, score, detail)` when it ends. Only the mounted game runs a `requestAnimationFrame` loop or
 responds to keys, so adding a game means registering another module — nothing else
 needs to change.
