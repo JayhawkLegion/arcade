@@ -66,8 +66,9 @@ Tunable: fall speed, blast radius, concurrent blasts, base count.
 
 ### Hopper
 
-Cross the road, ride the river, fill the five bays at the top. Every swipe is exactly one hop
-and a tap hops forward, so it plays with a thumb.
+Cross the road, ride the river, fill the five bays at the top. A tap hops forward, a tap beside
+the frog hops left or right, and every swipe is exactly one hop in its direction, so it plays
+with a thumb.
 
 - Five lanes of traffic, a safe verge, then five lanes of river where logs and turtles are the
   only floor. Whatever you ride carries you, and being carried off the edge counts as a fall.
