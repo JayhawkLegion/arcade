@@ -106,7 +106,9 @@ Tunable: start level, preview length, ghost piece.
 
 ### Lander
 
-Hold anywhere to burn; the craft leans toward your finger and rights itself when you let go.
+Hold anywhere to burn; the craft leans toward your finger and snaps upright when you let go.
+Close to the ground it holds itself nearly upright, and the engine always beats gravity by a
+fixed margin, so a late burn still stops you in a short distance.
 
 - Land with both feet on a pad, falling slower than the legs can take, near upright and barely
   drifting. Telemetry under the score turns green inside every limit.

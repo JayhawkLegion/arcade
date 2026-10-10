@@ -1328,23 +1328,23 @@ button.act:disabled{opacity:.45; cursor:default}
     </div>
     <div class="knobs">
       <div class="knob">
-        <label for="lGrav"><span class="name">Gravity</span><span class="val" id="vLGrav">6</span></label>
-        <input type="range" id="lGrav" min="3" max="12" step="1" value="6">
-        <p class="note">Pull toward the ground. The engine scales with it, so heavier gravity means a quicker, twitchier craft rather than an impossible one.</p>
+        <label for="lGrav"><span class="name">Gravity</span><span class="val" id="vLGrav">3</span></label>
+        <input type="range" id="lGrav" min="1" max="5" step="1" value="3">
+        <p class="note">Pull toward the ground. The engine always out-pulls it by the same margin, so heavier gravity means a faster fall to catch, never an engine too weak to save you.</p>
       </div>
       <div class="knob">
-        <label for="lFuelK"><span class="name">Fuel</span><span class="val" id="vLFuel">800</span></label>
-        <input type="range" id="lFuelK" min="300" max="1500" step="50" value="800">
+        <label for="lFuelK"><span class="name">Fuel</span><span class="val" id="vLFuel">1000</span></label>
+        <input type="range" id="lFuelK" min="500" max="1500" step="50" value="1000">
         <p class="note">The tank you start with. The engine burns 40 a second. Applies to your next run.</p>
       </div>
       <div class="knob">
-        <label for="lLegs"><span class="name">Leg strength</span><span class="val" id="vLLegs">7</span></label>
-        <input type="range" id="lLegs" min="4" max="12" step="1" value="7">
+        <label for="lLegs"><span class="name">Leg strength</span><span class="val" id="vLLegs">10</span></label>
+        <input type="range" id="lLegs" min="5" max="15" step="1" value="10">
         <p class="note">The fastest fall the legs survive. Sideways drift is allowed half of that.</p>
       </div>
       <div class="knob">
-        <label for="lDrift"><span class="name">Arrival drift</span><span class="val" id="vLDrift">8</span></label>
-        <input type="range" id="lDrift" min="0" max="16" step="1" value="8">
+        <label for="lDrift"><span class="name">Arrival drift</span><span class="val" id="vLDrift">4</span></label>
+        <input type="range" id="lDrift" min="0" max="8" step="1" value="4">
         <p class="note">How fast you are already sliding sideways when each round begins.</p>
       </div>
       <div class="knob">
@@ -1363,7 +1363,7 @@ button.act:disabled{opacity:.45; cursor:default}
   <div class="howto">
     <div>
       <h3>Burn toward your finger</h3>
-      <p>Holding anywhere fires the engine, and the craft leans toward wherever your finger is. Let go and it rights itself while it falls.</p>
+      <p>Holding anywhere fires the engine, and the craft leans toward wherever your finger is. Let go and it snaps back upright, and close to the ground it holds itself nearly upright for you.</p>
     </div>
     <div>
       <h3>What counts as a landing</h3>
@@ -6413,9 +6413,12 @@ window.ARCADE = (function(){
   "use strict";
   var W = 100, H = 150;
   var BURN = 40;                         /* fuel per second of thrust */
-  var TURN = 150 * Math.PI / 180;        /* how fast the craft can lean, rad/s */
+  var TURN = 150 * Math.PI / 180;        /* how fast the craft can lean over, rad/s */
+  var RIGHTING = 320 * Math.PI / 180;    /* coming back upright is quicker than leaning */
   var LEAN_MAX = 70 * Math.PI / 180;
-  var SAFE_TILT = 12 * Math.PI / 180;
+  var SAFE_TILT = 15 * Math.PI / 180;
+  var ASSIST_ALT = 20;                   /* below this height the lean is held back */
+  var ENGINE_LIFT = 14;                  /* the engine beats gravity by this much, upright */
   var FEET = [[-2.6, 3.2], [2.6, 3.2]];
   var HULL = [[-2.1, -2.3], [2.1, -2.3], [0, -3.1], [-2.3, 0.8], [2.3, 0.8]];
   var CRASH_COST = 150;
@@ -6433,8 +6436,8 @@ window.ARCADE = (function(){
     flame:"#ffb347", flameCore:"#fff1c9", safe:"#5fd39a", warn:"#e8a94a", bad:"#e2543c"
   };
 
-  var DEFAULTS = {gravity:6, fuel:800, legs:7, drift:8};
-  var cfg = {gravity:6, fuel:800, legs:7, drift:8};
+  var DEFAULTS = {gravity:3, fuel:1000, legs:10, drift:4};
+  var cfg = {gravity:3, fuel:1000, legs:10, drift:4};
 
   var g = null, rec = {score:0, landed:0};
   var raf = null, lastT = 0, live = false, shake = 0, flash = 0;
@@ -6446,7 +6449,8 @@ window.ARCADE = (function(){
     rec.landed = parseInt(localStorage.getItem("lander.landed") || "0", 10) || 0;
   } catch(e){}
 
-  function thrustAcc(){ return cfg.gravity * 2.4; }
+  /* a fixed margin over gravity, so braking is quick at every setting */
+  function thrustAcc(){ return cfg.gravity + ENGINE_LIFT; }
   function maxVx(){ return cfg.legs * 0.5; }
 
   /* ---------- terrain ---------- */
@@ -6655,8 +6659,13 @@ window.ARCADE = (function(){
       target = Math.max(-1, Math.min(1, dx / 22));
     }
     target *= LEAN_MAX;
+    /* landing assist: near the ground the lean is held back, so the craft arrives
+       upright even with a finger still off to one side */
+    var alt = groundAt(s.x) - (s.y + FEET[0][1]);
+    if(alt < ASSIST_ALT) target *= Math.max(0.2, alt / ASSIST_ALT);
+    var rate = Math.abs(target) < Math.abs(s.a) ? RIGHTING : TURN;
     var da = target - s.a;
-    s.a += Math.max(-TURN * dt, Math.min(TURN * dt, da));
+    s.a += Math.max(-rate * dt, Math.min(rate * dt, da));
 
     g.burning = (touching || keyUp) && g.fuel > 0;
     var ax = 0, ay = cfg.gravity;
