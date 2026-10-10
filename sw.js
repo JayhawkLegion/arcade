@@ -1,4 +1,4 @@
-/* Service worker for Rally & Astro.
+/* Service worker for the Arcade.
  *
  * Strategy is stale-while-revalidate for everything same-origin: the cached
  * copy is served immediately so the game opens instantly and works with no

@@ -1,4 +1,4 @@
-# Rally &amp; Astro
+# Arcade
 
 Ten small arcade games that run in a browser, built to be played with one thumb on a phone.
 

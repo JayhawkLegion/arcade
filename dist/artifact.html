@@ -1,4 +1,4 @@
-<title>Rally &amp; Astro</title>
+<title>Arcade</title>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&display=swap">
 <style>
@@ -211,11 +211,12 @@ body.fit .topbar{display:none!important}
 /* ---------- high scores ---------- */
 .scoreslink{
   display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%;
-  margin-top:14px; font:inherit; text-align:left; cursor:pointer;
+  margin-top:18px; font:inherit; text-align:left; cursor:pointer;
   background:var(--surface); color:var(--ink); border:1px solid var(--line);
   border-radius:12px; padding:13px 15px; box-shadow:var(--shadow);
 }
 .scoreslink:hover{border-color:var(--amber)}
+.scoreslink + .cards{margin-top:14px}
 .scoreslink:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
 .scoreslink b{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-size:15px; font-weight:600; letter-spacing:-.015em}
 .scoreslink span{font-size:12.5px; color:var(--ink-soft)}
@@ -288,7 +289,7 @@ button.act:disabled{opacity:.45; cursor:default}
 
 <header class="topbar" id="topbar" hidden>
   <button class="back" id="backBtn" type="button">&larr; Games</button>
-  <span class="mark">Rally &amp; Astro</span>
+  <span class="mark">Arcade</span>
 </header>
 
 <div class="namebox" id="nameBox" hidden role="dialog" aria-modal="true" aria-labelledby="nameTitle">
@@ -309,8 +310,12 @@ button.act:disabled{opacity:.45; cursor:default}
 
 <section id="menu">
   <div class="wrap menu">
-    <h1>Rally &amp; Astro</h1>
+    <h1>Arcade</h1>
     <p class="lede">Ten small arcade games built to run on a phone. Pick one &mdash; the menu steps aside while you play.</p>
+    <button class="scoreslink" type="button" id="scoresLink">
+      <span class="pipless"><b>High scores</b><br><span id="scoresSub">Your best run in each of the ten.</span></span>
+      <span class="go">View &rarr;</span>
+    </button>
     <div class="cards">
       <button class="gamecard" type="button" data-game="rally">
         <svg class="art" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paddle, ball and coloured bricks">
@@ -591,10 +596,6 @@ button.act:disabled{opacity:.45; cursor:default}
         </span>
       </button>
     </div>
-    <button class="scoreslink" type="button" id="scoresLink">
-      <span class="pipless"><b>High scores</b><br><span id="scoresSub">Your best run in each of the ten.</span></span>
-      <span class="go">View &rarr;</span>
-    </button>
     <p class="fineprint">Every game remembers its own settings and best score on this device.</p>
   </div>
 </section>
