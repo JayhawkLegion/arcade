@@ -38,11 +38,15 @@ h1{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-weight:800;
 /* ---------- stage ---------- */
 .stagewrap{display:flex; justify-content:center}
 
-/* fit-screen: the board takes the viewport, everything else steps aside */
-body.fit{overflow:hidden}
-body.fit .wrap{max-width:none; height:100%; padding-inline:8px; padding-block:8px; display:flex}
+/* fit-screen ("full screen"): the board takes the viewport under a compact top bar,
+   everything else steps aside. Games open this way; the top bar toggles it. */
+body.fit{overflow:hidden; display:flex; flex-direction:column}
+body.fit > section:not([hidden]){flex:1 1 auto; min-height:0; display:flex; flex-direction:column}
+body.fit .wrap{max-width:none; width:100%; flex:1 1 auto; min-height:0; padding-inline:8px; padding-block:6px 8px; display:flex}
 body.fit .masthead,body.fit .console,body.fit .howto{display:none}
 body.fit .stagewrap{flex:1; min-height:0; align-items:center}
+/* the top bar carries the full-screen toggle, so the pill over the board is retired */
+.stage .fitexit{display:none!important}
 .fitexit{
   position:absolute; top:9px; left:50%; transform:translateX(-50%); z-index:6;
   pointer-events:auto; cursor:pointer;
@@ -165,21 +169,42 @@ button.act:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
 
 /* ---------- arcade shell ---------- */
 .topbar{
-  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  position:relative; z-index:30;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
   max-width:760px; margin:0 auto; padding:14px 16px 0;
 }
 .topbar[hidden]{display:none!important}
+.tb-left{display:flex; align-items:center; gap:8px}
+.navbtn{display:grid; place-items:center; width:40px; height:36px; padding:0; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line); border-radius:10px}
+.navbtn svg{width:20px; height:20px}
+.navbtn[aria-expanded="true"]{border-color:var(--amber); color:var(--amber)}
+.navbtn:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
+.back[hidden]{display:none!important}
+body.fit .topbar{max-width:none; width:100%; margin:0; padding:6px 10px 0}
+body.fit .topbar .back{min-height:32px; padding:5px 12px}
+body.fit .navbtn{height:32px; width:38px}
+.navmenu{position:absolute; top:calc(100% + 6px); left:16px; z-index:35; width:min(290px, calc(100vw - 32px));
+  max-height:min(72vh, 580px); overflow:auto; padding:6px;
+  background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow)}
+body.fit .navmenu{left:10px}
+.navmenu[hidden]{display:none!important}
+.navhead{margin:6px 10px 4px; font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-soft)}
+.navitem{display:flex; align-items:center; gap:10px; width:100%; padding:9px 10px; font:inherit; font-size:14px;
+  text-align:left; cursor:pointer; background:transparent; color:var(--ink); border:0; border-radius:8px}
+.navitem:hover,.navitem:focus-visible{background:var(--surface-2); outline:none}
+.navitem[aria-current="true"]{font-weight:600}
+.navitem .pip{width:8px; height:20px; border-radius:99px; flex:0 0 auto}
+.navitem .nm{flex:1 1 auto}
+.navitem .tp{font-family:"JetBrains Mono",monospace; font-size:10.5px; letter-spacing:.06em; color:var(--ink-soft); white-space:nowrap}
+.navsep{height:1px; background:var(--line); margin:6px 4px}
 .back{
   font:inherit; font-size:12.5px; font-weight:600; cursor:pointer;
   background:transparent; color:var(--ink); border:1px solid var(--line);
   border-radius:99px; padding:7px 14px; min-height:36px;
 }
 .back:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
-.topbar .mark{
-  font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:.14em;
-  text-transform:uppercase; color:var(--ink-soft);
-}
-body.fit .topbar{display:none!important}
 
 .menu h1{
   font-family:"Bricolage Grotesque",system-ui,sans-serif; font-weight:800;
@@ -200,6 +225,15 @@ body.fit .topbar{display:none!important}
 .gamecard:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
 .gamecard .art{display:block; width:100%; height:auto; aspect-ratio:16/10}
 .gamecard .meta{padding:13px 15px 15px}
+.gamecard .cardtop{display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding:8px 15px;
+  background:var(--surface-2); border-bottom:1px solid var(--line);
+  font-family:"JetBrains Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft)}
+.gamecard .cardtop[hidden]{display:none}
+.gamecard .cardtop .r{display:flex; align-items:baseline; gap:8px}
+.gamecard .cardtop .who{color:var(--amber); font-weight:500; font-size:12px; letter-spacing:.16em}
+.gamecard .cardtop b{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-weight:800; font-size:15px; letter-spacing:-.02em;
+  text-transform:none; color:var(--ink); font-variant-numeric:tabular-nums}
+.gamecard .cardtop .none{text-transform:none; letter-spacing:0; font-family:"Public Sans",system-ui,sans-serif; font-size:12px}
 .gamecard h2{font-family:"Bricolage Grotesque",system-ui,sans-serif; font-size:17px; font-weight:600; margin:0 0 4px; letter-spacing:-.015em}
 .gamecard p{margin:0; font-size:12.5px; color:var(--ink-soft)}
 .gamecard .tag{
@@ -287,9 +321,15 @@ button.act:disabled{opacity:.45; cursor:default}
 #aStage{background:#0a0f1e}
 </style>
 
-<header class="topbar" id="topbar" hidden>
-  <button class="back" id="backBtn" type="button">&larr; Games</button>
-  <span class="mark">Arcade</span>
+<header class="topbar" id="topbar">
+  <div class="tb-left">
+    <button class="navbtn" id="navBtn" type="button" aria-label="Games menu" aria-haspopup="true" aria-expanded="false" aria-controls="navMenu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <button class="back" id="backBtn" type="button" hidden>&larr; Games</button>
+  </div>
+  <button class="back" id="fitToggle" type="button" hidden>Exit full screen</button>
+  <nav class="navmenu" id="navMenu" hidden aria-label="Games"></nav>
 </header>
 
 <div class="namebox" id="nameBox" hidden role="dialog" aria-modal="true" aria-labelledby="nameTitle">
@@ -1439,8 +1479,12 @@ window.ARCADE = (function(){
     current = id;
     order.forEach(function(k){ el("game-" + k).hidden = (k !== id); });
     el("menu").hidden = true;
-    el("topbar").hidden = false;
+    el("screen-scores").hidden = true;
+    el("backBtn").hidden = false;
+    closeNav();
     if(games[id].mount) games[id].mount();
+    if(games[id].fit) games[id].fit(true);      /* games open full screen; the top bar toggles it */
+    syncChrome();
   }
 
   function home(){
@@ -1449,7 +1493,10 @@ window.ARCADE = (function(){
     order.forEach(function(k){ el("game-" + k).hidden = true; });
     el("screen-scores").hidden = true;
     el("menu").hidden = false;
-    el("topbar").hidden = true;
+    el("backBtn").hidden = true;
+    closeNav();
+    renderCardTops();
+    syncChrome();
   }
 
   /* ---------- high scores ----------
@@ -1545,6 +1592,7 @@ window.ARCADE = (function(){
       .then(function(b){
         lb.pending = null;
         if(!el("screen-scores").hidden) renderBoard();
+        renderCardTops();
         return b;
       });
     return lb.pending;
@@ -1571,6 +1619,90 @@ window.ARCADE = (function(){
     t.textContent = msg; t.hidden = false;
     clearTimeout(toastT);
     toastT = setTimeout(function(){ t.hidden = true; }, 4500);
+  }
+
+  /* ---------- top bar: games menu and the full-screen toggle ---------- */
+  function topOf(id){
+    var list = lb.board && lb.board[id];
+    return list && list.length ? list[0] : null;
+  }
+  function buildNav(){
+    var nav = el("navMenu");
+    nav.innerHTML = "";
+    var head = document.createElement("p"); head.className = "navhead"; head.textContent = "Games";
+    nav.appendChild(head);
+    BOARD.forEach(function(gm){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "navitem"; b.dataset.nav = gm.id;
+      if(gm.id === current) b.setAttribute("aria-current", "true");
+      var pip = document.createElement("span"); pip.className = "pip"; pip.style.background = gm.pip;
+      var nm = document.createElement("span"); nm.className = "nm"; nm.textContent = gm.name;
+      b.appendChild(pip); b.appendChild(nm);
+      var top = topOf(gm.id);
+      if(top){
+        var tp = document.createElement("span"); tp.className = "tp";
+        tp.textContent = top.initials + " " + Number(top.score).toLocaleString();
+        b.appendChild(tp);
+      }
+      nav.appendChild(b);
+    });
+    var sep = document.createElement("div"); sep.className = "navsep"; nav.appendChild(sep);
+    [["home", "All games"], ["scores", "High scores"]].forEach(function(x){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "navitem"; b.dataset.nav = x[0];
+      var nm = document.createElement("span"); nm.className = "nm"; nm.textContent = x[1];
+      b.appendChild(nm); nav.appendChild(b);
+    });
+  }
+  function openNav(){
+    buildNav();
+    el("navMenu").hidden = false;
+    el("navBtn").setAttribute("aria-expanded", "true");
+    var first = el("navMenu").querySelector('.navitem[aria-current="true"]') || el("navMenu").querySelector(".navitem");
+    if(first) try { first.focus({preventScroll:true}); } catch(e){}
+  }
+  function closeNav(){
+    if(el("navMenu").hidden) return;
+    el("navMenu").hidden = true;
+    el("navBtn").setAttribute("aria-expanded", "false");
+  }
+  function syncChrome(){
+    var t = el("fitToggle"), fit = document.body.classList.contains("fit");
+    t.hidden = !current;
+    t.textContent = fit ? "Exit full screen" : "Full screen";
+  }
+
+  /* under each game's picture on the menu: the shared #1, or this device's best */
+  function renderCardTops(){
+    Array.prototype.forEach.call(document.querySelectorAll(".gamecard"), function(btn){
+      var id = btn.dataset.game, box = btn.querySelector(".cardtop");
+      if(!box) return;
+      var gm = null;
+      BOARD.forEach(function(b){ if(b.id === id) gm = b; });
+      box.innerHTML = "";
+      var label = document.createElement("span"), right = document.createElement("span");
+      right.className = "r";
+      if(LB_URL && lb.board){
+        label.textContent = "Top score";
+        var top = topOf(id);
+        if(top){
+          var who = document.createElement("span"); who.className = "who"; who.textContent = top.initials;
+          var pts = document.createElement("b"); pts.textContent = Number(top.score).toLocaleString();
+          right.appendChild(who); right.appendChild(pts);
+        } else {
+          var none = document.createElement("span"); none.className = "none"; none.textContent = "None yet \u2014 be the first";
+          right.appendChild(none);
+        }
+      } else {
+        var best = gm ? num(gm.key) : 0;
+        if(!best){ box.hidden = true; return; }
+        label.textContent = "Your best";
+        var mine = document.createElement("b"); mine.textContent = best.toLocaleString();
+        right.appendChild(mine);
+      }
+      box.hidden = false;
+      box.appendChild(label); box.appendChild(right);
+    });
   }
 
   function askInitials(id, score, detail){
@@ -1608,7 +1740,7 @@ window.ARCADE = (function(){
       .then(function(r){ return r.json(); })
       .then(function(d){
         if(!d || !d.ok) throw new Error("bad reply");
-        if(d.board){ lb.board = d.board; lb.at = Date.now(); lb.state = "ok"; }
+        if(d.board){ lb.board = d.board; lb.at = Date.now(); lb.state = "ok"; renderCardTops(); }
         lb.mine = d.rank ? {id:a.id, rank:d.rank, initials:ini, score:a.score} : null;
         a.busy = false; a.done = true;
         el("nameMsg").textContent = d.rank
@@ -1726,7 +1858,9 @@ window.ARCADE = (function(){
     order.forEach(function(k){ el("game-" + k).hidden = true; });
     el("menu").hidden = true;
     el("screen-scores").hidden = false;
-    el("topbar").hidden = false;
+    el("backBtn").hidden = false;
+    closeNav();
+    syncChrome();
     armed = false;
     el("scoresReset").textContent = RESET_LABEL;
     renderBoard();
@@ -1748,6 +1882,42 @@ window.ARCADE = (function(){
     });
     el("backBtn").addEventListener("click", home);
     el("scoresLink").addEventListener("click", scores);
+
+    Array.prototype.forEach.call(document.querySelectorAll(".gamecard"), function(btn){
+      var strip = document.createElement("span");
+      strip.className = "cardtop"; strip.hidden = true;
+      btn.insertBefore(strip, btn.querySelector(".meta"));
+    });
+    var navBtn = el("navBtn"), nav = el("navMenu");
+    navBtn.addEventListener("click", function(e){
+      e.stopPropagation();
+      if(nav.hidden) openNav(); else closeNav();
+    });
+    nav.addEventListener("click", function(e){
+      var b = e.target.closest(".navitem");
+      if(!b) return;
+      var to = b.dataset.nav;
+      closeNav();
+      if(to === "home") home();
+      else if(to === "scores") scores();
+      else if(to === current){ if(games[to].fit) games[to].fit(true); }
+      else open(to);
+    });
+    /* keys inside the menu never reach the game underneath */
+    nav.addEventListener("keydown", function(e){
+      e.stopPropagation();
+      if(e.key === "Escape"){ closeNav(); navBtn.focus(); }
+    });
+    document.addEventListener("pointerdown", function(e){
+      if(!nav.hidden && !nav.contains(e.target) && !navBtn.contains(e.target)) closeNav();
+    });
+    el("fitToggle").addEventListener("click", function(){
+      if(current && games[current].fit) games[current].fit(!document.body.classList.contains("fit"));
+    });
+    /* a game can leave full screen on its own (Escape, its own button), so watch for it */
+    if(window.MutationObserver){
+      new MutationObserver(syncChrome).observe(document.body, {attributes:true, attributeFilter:["class"]});
+    }
 
     order.forEach(function(k){
       var knobs = el("game-" + k).querySelector(".knobs");
@@ -2388,6 +2558,7 @@ window.ARCADE = (function(){
 
   ARCADE.register("rally", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: start,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -3185,6 +3356,7 @@ window.ARCADE = (function(){
 
   ARCADE.register("astro", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: start,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -3548,6 +3720,7 @@ window.ARCADE = (function(){
   }
   ARCADE.register("snake", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -3902,6 +4075,7 @@ window.ARCADE = (function(){
   }
   ARCADE.register("drift", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -4254,6 +4428,7 @@ window.ARCADE = (function(){
   }
   ARCADE.register("battery", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -4940,6 +5115,7 @@ window.ARCADE = (function(){
   }
   ARCADE.register("hopper", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -5600,6 +5776,7 @@ window.ARCADE = (function(){
   }
   ARCADE.register("invaders", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -6213,6 +6390,7 @@ window.ARCADE = (function(){
   }
   ARCADE.register("blocks", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -6761,6 +6939,7 @@ window.ARCADE = (function(){
   }
   ARCADE.register("lander", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){
@@ -7401,6 +7580,7 @@ window.ARCADE = (function(){
   }
   ARCADE.register("sortie", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
     boot: boot,
     snapshot: function(){ return {cfg:cfg, rec:rec}; },
     mount: function(){

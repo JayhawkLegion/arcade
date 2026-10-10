@@ -8,7 +8,10 @@ the games play fine without it in fallback fonts.
 
 ## The games
 
-A menu offers all ten; picking one hides the menu and shows a slim `← Games` bar.
+A menu offers all ten, each card showing the shared top score and initials under its picture.
+Picking a game, from its card or from the ☰ menu in the top-left corner, opens it **full screen**:
+the board fills the screen under a slim bar holding the ☰ games menu, `← Games` and an
+`Exit full screen` toggle that brings the settings back.
 
 ### Rally
 
@@ -183,7 +186,7 @@ Any static host works too — GitHub Pages, Netlify, an S3 bucket — since ther
 - **High scores are per-origin.** Each device, and each URL you serve from, keeps its own
   records in `localStorage`. Nothing syncs between them.
 - **Every game pauses when the tab is hidden** and resumes when it comes back.
-- **Fit screen** hides the settings and sizes the board to the viewport. The play field keeps a
+- **Full screen** (the fit mode) is how every game opens: it hides the settings and sizes the board to the viewport. The play field keeps a
   fixed 2:3 shape so the physics are identical on every device, which does leave letterboxing
   on a tall phone.
 - Reduced-motion preferences are respected: trails, particles and screen shake switch off.

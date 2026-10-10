@@ -71,6 +71,7 @@ Each game is an independent module. In `index.html` you need three things:
 ```js
 ARCADE.register("yourname", {
   standard: function ()      { return ARCADE.isDefault(cfg, DEFAULTS); },
+  fit:      function (on)    { setFit(!!on); },
   boot:     function (saved) { /* build state; the section is still hidden, so no sizing */ },
   snapshot: function ()      { return { cfg: cfg, rec: rec }; },
   mount:    function ()      { live = true;  sizeStage();
@@ -87,6 +88,12 @@ ARCADE.register("yourname", {
    `ARCADE.note("yourname", score, detail)` when it ends — an integer score and a short detail
    such as `"wave 4"`. Then add the game to `BOARD` and the reset-all key list in the shell,
    and to `GAMES` in `tools/leaderboard.gs` (and redeploy the script) or its scores are refused.
+
+Games open **full screen**: `ARCADE.open()` calls the module's `fit(true)` right after `mount`,
+and the shell's top bar (☰ games menu, `← Games`, the full-screen toggle) stays visible above the
+board in fit mode. The old in-stage "Exit full screen" pill is hidden by CSS. In tests, the settings
+panel is hidden while a game is full screen — click `#fitToggle` first, or click controls via
+`element.click()` in `page.evaluate`.
 
 Rules the existing modules follow, which matter:
 
