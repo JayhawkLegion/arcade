@@ -1,6 +1,6 @@
 # Rally &amp; Astro
 
-Nine small arcade games that run in a browser, built to be played with one thumb on a phone.
+Ten small arcade games that run in a browser, built to be played with one thumb on a phone.
 
 Everything lives in **one self-contained `index.html`** — no build step, no package manager,
 no dependencies. The only thing fetched from the network is a Google Fonts stylesheet, and
@@ -8,7 +8,7 @@ the games play fine without it in fallback fonts.
 
 ## The games
 
-A menu offers all nine; picking one hides the menu and shows a slim `← Games` bar.
+A menu offers all ten; picking one hides the menu and shows a slim `← Games` bar.
 
 ### Rally
 
@@ -111,6 +111,22 @@ Hold anywhere to burn; the craft leans toward your finger and rights itself when
   is dry. The field wraps at the sides.
 
 Tunable: gravity, fuel, leg strength, arrival drift.
+
+### Sortie
+
+A side-scrolling cave run. The landscape slides left; you fly forward, back, up and down
+between the ceiling and the floor while squadrons fly at you from the right.
+
+- Drag anywhere and the ship moves as far as your finger does (relative drag), so your thumb
+  never covers it. Holding fires.
+- Rock, an enemy or an enemy shot each cost a ship; you start with three. A new ship blinks for
+  two seconds, safe from enemies but not from the walls.
+- Enemies ride the cave as a fraction of its height, so a squadron follows the walls. Darts,
+  weavers, then divers (wave 2) that home on you and two-hit gunners (wave 3) that shoot back.
+- Kills pay 100 to 250, a whole squadron 300 more, a cleared wave 250 times its number. Each wave
+  scrolls a little faster with a narrower cave. Another ship every 20,000.
+
+Tunable: scroll speed, cave height, squadrons per wave, enemy speed, fire rate, return fire, ships.
 
 ## High scores
 

@@ -252,7 +252,7 @@ body.fit .topbar{display:none!important}
 <section id="menu">
   <div class="wrap menu">
     <h1>Rally &amp; Astro</h1>
-    <p class="lede">Nine small arcade games built to run on a phone. Pick one &mdash; the menu steps aside while you play.</p>
+    <p class="lede">Ten small arcade games built to run on a phone. Pick one &mdash; the menu steps aside while you play.</p>
     <div class="cards">
       <button class="gamecard" type="button" data-game="rally">
         <svg class="art" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paddle, ball and coloured bricks">
@@ -504,9 +504,37 @@ body.fit .topbar{display:none!important}
           <span class="tag">Hold to burn &middot; physics &middot; fuel</span>
         </span>
       </button>
+      <button class="gamecard" type="button" data-game="sortie">
+        <svg class="art" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A ship flying through a cave, firing at an incoming squadron">
+          <rect width="160" height="100" fill="#060914"/>
+          <g fill="#ffffff">
+            <circle cx="40" cy="34" r=".8" opacity=".4"/><circle cx="96" cy="30" r=".9" opacity=".5"/>
+            <circle cx="140" cy="44" r=".7" opacity=".35"/><circle cx="70" cy="66" r=".8" opacity=".3"/>
+          </g>
+          <path d="M0 0 L0 18 L10 22 L20 16 L30 24 L42 20 L54 28 L66 22 L80 26 L92 18 L104 24 L118 20 L130 30 L144 22 L160 26 L160 0 Z" fill="#2a1d14" stroke="#e08a3c" stroke-width="1" stroke-linejoin="round"/>
+          <path d="M0 100 L0 84 L12 80 L24 86 L36 78 L50 82 L62 74 L76 80 L88 76 L100 84 L114 78 L126 82 L140 72 L150 78 L160 76 L160 100 Z" fill="#2a1d14" stroke="#e08a3c" stroke-width="1" stroke-linejoin="round"/>
+          <g transform="translate(36 52) scale(1.9)">
+            <polygon points="-4.2,-1 -7.6,0 -4.2,1" fill="#ffb347"/>
+            <polygon points="-1.5,0.6 1.2,0.6 -2.4,3 -3.6,3" fill="#3b7fa6"/>
+            <polygon points="4.6,0 1,-1.4 -2,-1.6 -3.6,-3.2 -4.2,-1.4 -4.2,1.4 -2,1.6 1,1.4" fill="#7fd4ff"/>
+            <ellipse cx="0.8" cy="-0.5" rx="1.4" ry="0.6" fill="#e8fffb"/>
+          </g>
+          <g fill="#f4ecdf"><rect x="52" y="51.5" width="6" height="1"/><rect x="70" y="51.5" width="6" height="1"/><rect x="88" y="51.5" width="6" height="1"/></g>
+          <g fill="#ff5f6d">
+            <polygon points="106,52 116,48 113.5,52 116,56"/><polygon points="122,44 132,40 129.5,44 132,48"/><polygon points="138,36 148,32 145.5,36 148,40"/>
+          </g>
+          <circle cx="102" cy="52" r="5" fill="none" stroke="#ff5f6d" stroke-width="0.8" opacity=".6"/>
+          <g transform="translate(128 64)"><ellipse cx="0" cy="0.8" rx="5.6" ry="2.4" fill="#6fdc6f"/><path d="M-2.6 0 A2.6 1.9 0 0 1 2.6 0 Z" fill="#e8fffb" opacity=".85"/></g>
+        </svg>
+        <span class="meta">
+          <h2>Sortie</h2>
+          <p>The cave scrolls by while squadrons fly at you. Dodge the rock, shoot the ships, and keep your three lives.</p>
+          <span class="tag">Drag to fly &middot; hold to fire &middot; waves</span>
+        </span>
+      </button>
     </div>
     <button class="scoreslink" type="button" id="scoresLink">
-      <span class="pipless"><b>High scores</b><br><span>Your best run in each of the nine.</span></span>
+      <span class="pipless"><b>High scores</b><br><span>Your best run in each of the ten.</span></span>
       <span class="go">View &rarr;</span>
     </button>
     <p class="fineprint">Every game remembers its own settings and best score on this device.</p>
@@ -1249,6 +1277,93 @@ body.fit .topbar{display:none!important}
 </div>
 </section>
 
+<section id="game-sortie" hidden>
+<div class="wrap">
+  <div class="masthead">
+    <h1>Sortie</h1>
+    <p class="tagline">Fly the cave. Shoot what comes the other way.</p>
+  </div>
+
+  <div class="stagewrap">
+    <div class="stage" id="xStage">
+      <canvas id="xCv"></canvas>
+      <div class="hud"><div><span class="lbl">Score</span><span class="score" id="xScore">0</span></div><div class="right"><div><span class="lbl">Ships</span><span class="stat" id="xShips">3</span></div><div><span class="lbl">Wave</span><span class="stat" id="xWave">1</span></div><div><span class="lbl">Best</span><span class="stat gold" id="xBest">0</span></div></div></div>
+      <button class="fitexit" id="xFitExit" type="button" hidden>Exit full screen</button>
+      <div class="overlay" id="xOverlay"><div class="card" id="xCard"></div></div>
+    </div>
+  </div>
+
+  <section class="console">
+    <div class="console-head">
+      <h2>Settings</h2>
+      <div class="readout"><span>flown <b id="xoDist">0</b></span><span>enemies <b id="xoFoes">0</b></span><span>scroll <b id="xoScroll">18.0</b></span><span>gap <b id="xoGap">78</b></span></div>
+    </div>
+    <div class="knobs">
+      <div class="knob">
+        <label for="xScroll"><span class="name">Scroll speed</span><span class="val" id="vXScroll">18</span></label>
+        <input type="range" id="xScroll" min="8" max="40" step="1" value="18">
+        <p class="note">How fast the landscape slides past. Each wave adds 6% on top.</p>
+      </div>
+      <div class="knob">
+        <label for="xGap"><span class="name">Cave height</span><span class="val" id="vXGap">78</span></label>
+        <input type="range" id="xGap" min="50" max="110" step="2" value="78">
+        <p class="note">Average room between ceiling and floor. It narrows 3% a wave, never below 46. New ground picks up a change.</p>
+      </div>
+      <div class="knob">
+        <label for="xSize"><span class="name">Squadrons per wave</span><span class="val" id="vXSize">5</span></label>
+        <input type="range" id="xSize" min="3" max="10" step="1" value="5">
+        <p class="note">How many groups make up a wave. Squadrons get bigger as the waves go on.</p>
+      </div>
+      <div class="knob">
+        <label for="xFoe"><span class="name">Enemy speed</span><span class="val" id="vXFoe">26</span></label>
+        <input type="range" id="xFoe" min="10" max="50" step="1" value="26">
+        <p class="note">How fast they cross toward you. Darts are quicker than this, gunners slower. Each wave adds 8%.</p>
+      </div>
+      <div class="knob">
+        <label for="xRate"><span class="name">Fire rate</span><span class="val" id="vXRate">6</span></label>
+        <input type="range" id="xRate" min="3" max="12" step="1" value="6">
+        <p class="note">Your shots per second while you hold. Shots stop at rock.</p>
+      </div>
+      <div class="knob">
+        <label for="xShoot"><span class="name">Return fire</span><span class="val" id="vXShoot">2</span></label>
+        <input type="range" id="xShoot" min="0" max="5" step="1" value="2">
+        <p class="note">How often they shoot back. Gunners always do above 0; higher settings arm the others too.</p>
+      </div>
+      <div class="knob">
+        <label for="xShipsK"><span class="name">Ships</span><span class="val" id="vXShips">3</span></label>
+        <input type="range" id="xShipsK" min="1" max="5" step="1" value="3">
+        <p class="note">Applies to your next game. Another every 20,000 points.</p>
+      </div>
+      <div class="knob">
+        <div class="head"><span class="name">Record</span><span class="val" id="vXRec">&mdash;</span></div>
+        <p class="note" id="xRecNote">No runs yet.</p>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="act" id="xFitBtn">Fit screen</button>
+      <button class="act" id="xReset">Reset settings</button>
+      <button class="act" id="xClear">Clear record</button>
+      <span class="keys">&larr; &uarr; &darr; &rarr; or W A S D &middot; Space to fire &middot; drag anywhere</span>
+    </div>
+  </section>
+
+  <div class="howto">
+    <div>
+      <h3>Your thumb stays out of the way</h3>
+      <p>Drag anywhere and the ship moves as far as your finger does, so you never cover it. Holding down fires. You can fly forward and back as well as up and down.</p>
+    </div>
+    <div>
+      <h3>Anything you touch kills you</h3>
+      <p>Rock, an enemy or one of their shots each cost a ship. A new ship blinks for two seconds, safe from enemies &mdash; but not from the walls.</p>
+    </div>
+    <div>
+      <h3>Squadrons pay extra</h3>
+      <p>Darts <code>100</code>, weavers <code>150</code>, divers <code>200</code>, gunners <code>250</code> (two hits). Down a whole squadron for <code>300</code> more, and clear a wave for <code>250</code> times its number.</p>
+    </div>
+  </div>
+</div>
+</section>
+
 
 <script>
 window.ARCADE = (function(){
@@ -1303,7 +1418,9 @@ window.ARCADE = (function(){
        return l ? l + (l===1?" line":" lines") + " cleared" : "no lines yet"; }},
     {id:"lander",  name:"Lander",      pip:"#f2c14e", key:"lander.best",  unit:"points",
      detail:function(){ var n=num("lander.landed");
-       return n ? n + (n===1?" landing":" landings") + " in a run" : "no landings yet"; }}
+       return n ? n + (n===1?" landing":" landings") + " in a run" : "no landings yet"; }},
+    {id:"sortie",  name:"Sortie",      pip:"#7fd4ff", key:"sortie.best",  unit:"points",
+     detail:function(){ var w=num("sortie.wave"); return w>1 ? "reached wave "+w : "wave 1"; }}
   ];
 
   function num(k){ try { return parseInt(localStorage.getItem(k) || "0", 10) || 0; } catch(e){ return 0; } }
@@ -1400,6 +1517,7 @@ window.ARCADE = (function(){
          "drift.best","battery.best","battery.wave",
          "hopper.best","hopper.level","invaders.best","invaders.wave",
          "blocks.best","blocks.lines","lander.best","lander.landed",
+         "sortie.best","sortie.wave",
          "arcade.plays"]
           .forEach(function(k){ localStorage.removeItem(k); });
       } catch(e){}
@@ -6358,6 +6476,645 @@ window.ARCADE = (function(){
     },
     unmount: function(){
       live = false; touching = false; fingerX = null; keyL = keyR = keyUp = false;
+      if(raf){ cancelAnimationFrame(raf); raf = null; }
+      if(document.body.classList.contains("fit")) setFit(false);
+    }
+  });
+})();
+</script>
+
+<script>
+/* ====================================================================== */
+/* Sortie — side-scrolling cave run                                       */
+/* ====================================================================== */
+(function(){
+  "use strict";
+  var W = 100, H = 150;
+  var SEG = 4;                                 /* terrain sample spacing, in world units */
+  var SHIP_MIN_X = 8, SHIP_MAX_X = 70, SPAWN_X = 18;
+  var SHIP_SPEED = 120, KEY_SPEED = 80, DRAG_GAIN = 1.25;
+  var BULLET_SPEED = 150, EXTRA_AT = 20000, SQUAD_BONUS = 300;
+  var HULL = [[4.6, 0], [1, -1.5], [1, 1.5], [-3.6, -3], [-4.2, 1.5]];   /* collision points, ship frame */
+  var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var stage = document.getElementById("xStage");
+  var cv = document.getElementById("xCv");
+  var ctx = cv.getContext("2d");
+  var overlay = document.getElementById("xOverlay");
+  var card = document.getElementById("xCard");
+
+  var PAL = {
+    bg:"#060914", rock:"#2a1d14", rockDeep:"#1d140e", edge:"#e08a3c",
+    ship:"#7fd4ff", shipDark:"#3b7fa6", cockpit:"#e8fffb", flame:"#ffb347", flameCore:"#fff1c9",
+    shot:"#f4ecdf", foeShot:"#ff6bd6", hurt:"#e2543c", gold:"#e8a94a"
+  };
+  var TYPES = {
+    dart:   {speed:1.35, pts:100, r:2.4, hp:1, col:"#ff5f6d", wave:1},
+    weave:  {speed:1.0,  pts:150, r:2.6, hp:1, col:"#6fdc6f", wave:1},
+    diver:  {speed:0.9,  pts:200, r:2.5, hp:1, col:"#ff9f43", wave:2},
+    gunner: {speed:0.62, pts:250, r:3.0, hp:2, col:"#b57cff", wave:3}
+  };
+
+  var DEFAULTS = {scroll:18, gap:78, size:5, foe:26, rate:6, shoot:2, ships:3};
+  var cfg = {scroll:18, gap:78, size:5, foe:26, rate:6, shoot:2, ships:3};
+
+  var g = null, rec = {score:0, wave:1};
+  var raf = null, lastT = 0, live = false, shake = 0, flash = 0;
+  var stars = [];
+  for(var si = 0; si < 50; si++) stars.push({x:Math.random() * W, y:Math.random() * H, r:.2 + Math.random() * .4,
+                                             a:.1 + Math.random() * .45, depth:si % 2 ? 0.2 : 0.45});
+
+  try {
+    rec.score = parseInt(localStorage.getItem("sortie.best") || "0", 10) || 0;
+    rec.wave  = parseInt(localStorage.getItem("sortie.wave") || "1", 10) || 1;
+  } catch(e){}
+
+  function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+
+  /* ---------- terrain ----------
+     A heightmap sampled every SEG units of world distance, generated just
+     ahead of the screen and dropped once it scrolls off the left. The cave
+     is a wandering centre line with a gap that breathes around the setting. */
+  function gapNow(st){ return Math.max(46, cfg.gap * (1 - 0.03 * (st.wave - 1))); }
+  function genSample(st){
+    var t = st.terr, n = t.base + t.top.length;
+    var calm = Math.min(1, n / 40);            /* the opening stretch is wide and gentle */
+    var gap = Math.min(138, gapNow(st) * (1 + 0.16 * Math.sin(n * 0.045 + t.phase)) + (1 - calm) * 24);
+    t.dc = clamp((t.dc + (Math.random() - 0.5) * 1.1 * calm) * 0.9, -2.4, 2.4);
+    t.c += t.dc;
+    var lo = gap / 2 + 3, hi = 147 - gap / 2;
+    if(lo > hi) lo = hi = 75;
+    if(t.c < lo){ t.c = lo; t.dc = Math.abs(t.dc) * 0.5; }
+    if(t.c > hi){ t.c = hi; t.dc = -Math.abs(t.dc) * 0.5; }
+    var jag = 4.5 * calm;
+    t.top.push(t.c - gap / 2 + (Math.random() - 0.5) * jag);
+    t.bot.push(t.c + gap / 2 + (Math.random() - 0.5) * jag);
+  }
+  function caveAt(st, wx){
+    var t = st.terr, f = wx / SEG, i = Math.floor(f), k = f - i, j = i - t.base;
+    if(j < 0){ j = 0; k = 0; }
+    while(j + 1 >= t.top.length) genSample(st);
+    return {top:t.top[j] + (t.top[j + 1] - t.top[j]) * k, bot:t.bot[j] + (t.bot[j + 1] - t.bot[j]) * k};
+  }
+  function trimTerrain(st){
+    var t = st.terr, keep = Math.floor((st.scroll - 8) / SEG);
+    while(t.base < keep && t.top.length > 2){ t.top.shift(); t.bot.shift(); t.base++; }
+  }
+
+  function newGame(){
+    var st = {
+      phase:"ready", score:0, ships:cfg.ships, wave:1, kills:0, dist:0, scroll:0, distPts:0,
+      ship:{x:SPAWN_X, y:75, inv:0}, target:null, firing:false, fireCd:0,
+      bullets:[], foes:[], shots:[], sparks:[], rings:[], pops:[],
+      terr:{base:0, top:[], bot:[], c:75, dc:0, phase:Math.random() * 6.28},
+      squadsLeft:cfg.size, squadCd:2.2, squadId:0, squads:{}, banner:null,
+      pause:0, nextExtra:EXTRA_AT
+    };
+    return st;
+  }
+  function scrollSpeed(){ return cfg.scroll * Math.min(2, 1 + 0.06 * (g.wave - 1)); }
+  function foeSpeed(){ return cfg.foe * Math.min(2, 1 + 0.08 * (g.wave - 1)); }
+  function squadGap(){ return Math.max(1.4, 3.2 - (g.wave - 1) * 0.15); }
+  function fireEvery(){ return Math.max(0.8, 3.2 - cfg.shoot * 0.4); }
+
+  function spark(x, y, n, col){
+    if(RM) return;
+    for(var i = 0; i < n; i++){
+      var a = Math.random() * Math.PI * 2, s = 10 + Math.random() * 36;
+      g.sparks.push({x:x, y:y, vx:Math.cos(a) * s, vy:Math.sin(a) * s, life:.25 + Math.random() * .35, age:0, c:col});
+    }
+  }
+  function pop(x, y, text){ g.pops.push({x:x, y:y, text:text, age:0}); }
+  function popStat(id){
+    var el = document.getElementById(id);
+    el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop");
+  }
+
+  /* ---------- input ---------- */
+  var keyL = false, keyR = false, keyU = false, keyD = false, keyFire = false;
+  var drag = null;
+  function ptW(e){
+    var r = cv.getBoundingClientRect();
+    if(!r.width || !r.height) return null;
+    return {x:(e.clientX - r.left) / r.width * W, y:(e.clientY - r.top) / r.height * H};
+  }
+  function primary(){
+    if(g.phase === "ready" || g.phase === "over"){
+      if(g.phase === "over") g = newGame();
+      g.phase = "playing";
+      syncHUD();
+      return true;
+    }
+    return false;
+  }
+  stage.addEventListener("pointerdown", function(e){
+    e.preventDefault();
+    try { stage.setPointerCapture(e.pointerId); } catch(err){}
+    if(primary()) return;
+    var p = ptW(e);
+    /* relative drag: the ship moves by however far the finger moves, so your
+       thumb never has to sit on top of it */
+    if(p) drag = {fx:p.x, fy:p.y, lx:p.x, ly:p.y, sx:g.ship.x, sy:g.ship.y};
+    g.firing = true;
+  });
+  stage.addEventListener("pointermove", function(e){
+    if(!drag) return;
+    var p = ptW(e);
+    if(!p) return;
+    drag.lx = p.x; drag.ly = p.y;
+    g.target = {x:drag.sx + (p.x - drag.fx) * DRAG_GAIN, y:drag.sy + (p.y - drag.fy) * DRAG_GAIN};
+  });
+  function release(){ drag = null; if(g){ g.firing = false; g.target = null; } }
+  stage.addEventListener("pointerup", release);
+  stage.addEventListener("pointercancel", release);
+  window.addEventListener("keydown", function(e){
+    if(!live) return;
+    var k = e.key;
+    if(k === "ArrowLeft"  || k === "a" || k === "A"){ keyL = true; e.preventDefault(); }
+    if(k === "ArrowRight" || k === "d" || k === "D"){ keyR = true; e.preventDefault(); }
+    if(k === "ArrowUp"    || k === "w" || k === "W"){ keyU = true; e.preventDefault(); }
+    if(k === "ArrowDown"  || k === "s" || k === "S"){ keyD = true; e.preventDefault(); }
+    if(k === " " || k === "Enter"){ e.preventDefault(); if(!primary()) keyFire = true; }
+    if(k === "Escape" && document.body.classList.contains("fit")) setFit(false);
+  });
+  window.addEventListener("keyup", function(e){
+    if(!live) return;
+    var k = e.key;
+    if(k === "ArrowLeft"  || k === "a" || k === "A") keyL = false;
+    if(k === "ArrowRight" || k === "d" || k === "D") keyR = false;
+    if(k === "ArrowUp"    || k === "w" || k === "W") keyU = false;
+    if(k === "ArrowDown"  || k === "s" || k === "S") keyD = false;
+    if(k === " " || k === "Enter") keyFire = false;
+  });
+
+  /* ---------- waves ---------- */
+  function spawnSquad(){
+    var pool = Object.keys(TYPES).filter(function(k){ return TYPES[k].wave <= g.wave; });
+    var type = pool[(Math.random() * pool.length) | 0];
+    var n = type === "gunner" ? Math.min(4, 2 + Math.floor(g.wave / 3))
+                              : Math.min(7, 4 + Math.floor((g.wave - 1) / 2));
+    var id = ++g.squadId;
+    g.squads[id] = {total:n, killed:0};
+    var frac = 0.2 + Math.random() * 0.6, phase = Math.random() * 6.28;
+    var armed = type === "gunner" ? (cfg.shoot > 0 ? 1 : 0) : cfg.shoot * 0.06;
+    for(var k = 0; k < n; k++){
+      g.foes.push({type:type, squad:id, x:W + 6 + k * 9, y:75, frac:frac, base:frac, ph:phase + k * 0.7,
+                   t:0, hp:TYPES[type].hp, flash:0, rot:0,
+                   armed:Math.random() < armed, fireCd:1 + Math.random() * 2});
+    }
+  }
+  function foeDown(i, scored){
+    var f = g.foes[i], T = TYPES[f.type];
+    g.foes.splice(i, 1);
+    spark(f.x, f.y, 12, T.col);
+    g.rings.push({x:f.x, y:f.y, t:0, c:T.col});
+    if(!scored) return;
+    g.score += T.pts; g.kills++;
+    var sq = g.squads[f.squad];
+    if(sq && ++sq.killed === sq.total){
+      g.score += SQUAD_BONUS;
+      pop(f.x, f.y - 5, "+" + SQUAD_BONUS);
+    }
+    afterScore();
+  }
+  function afterScore(){
+    while(g.score >= g.nextExtra){
+      g.nextExtra += EXTRA_AT;
+      if(g.ships < 9){ g.ships++; popStat("xShips"); }
+    }
+    syncHUD();
+  }
+  function waveCleared(){
+    var bonus = 250 * g.wave;
+    g.score += bonus;
+    g.wave++;
+    g.squadsLeft = cfg.size; g.squadCd = 2.6;
+    g.banner = {text:"Wave " + g.wave, sub:"+" + bonus, t:1.8};
+    popStat("xWave");
+    afterScore();
+  }
+
+  function crash(){
+    var s = g.ship;
+    g.phase = "dying"; g.pause = 1.6; g.ships--;
+    spark(s.x, s.y, 26, PAL.flame); spark(s.x, s.y, 14, PAL.ship);
+    g.rings.push({x:s.x, y:s.y, t:0, c:PAL.flame});
+    shake = RM ? 0 : 4; flash = 1;
+    syncHUD();
+  }
+  function respawn(){
+    if(g.ships <= 0) return over();
+    var c = caveAt(g, g.scroll + SPAWN_X);
+    g.ship = {x:SPAWN_X, y:(c.top + c.bot) / 2, inv:2.2};
+    g.shots = [];
+    /* give the new ship some room: anything close to the spawn point goes */
+    g.foes = g.foes.filter(function(f){ return f.x > SPAWN_X + 30; });
+    g.target = null;
+    if(drag){ drag.sx = g.ship.x; drag.sy = g.ship.y; drag.fx = drag.lx; drag.fy = drag.ly; }
+    g.phase = "playing";
+    syncHUD();
+  }
+
+  /* ---------- simulation ---------- */
+  function step(dt){
+    var i, s = g.ship;
+    for(i = g.sparks.length - 1; i >= 0; i--){
+      var sp = g.sparks[i];
+      sp.age += dt;
+      if(sp.age >= sp.life){ g.sparks.splice(i, 1); continue; }
+      sp.x += sp.vx * dt - scrollSpeed() * dt * 0.5; sp.y += sp.vy * dt;
+    }
+    for(i = g.rings.length - 1; i >= 0; i--){ g.rings[i].t += dt; if(g.rings[i].t > 0.5) g.rings.splice(i, 1); }
+    for(i = g.pops.length - 1; i >= 0; i--){ g.pops[i].age += dt; if(g.pops[i].age > 1.1) g.pops.splice(i, 1); }
+    if(g.banner){ g.banner.t -= dt; if(g.banner.t <= 0) g.banner = null; }
+
+    /* the ground always moves, even behind the start and end cards */
+    var sv = scrollSpeed();
+    g.scroll += sv * dt;
+    trimTerrain(g);
+
+    if(g.phase === "ready"){
+      var c0 = caveAt(g, g.scroll + s.x);
+      s.y += ((c0.top + c0.bot) / 2 - s.y) * Math.min(1, dt * 3);
+      return;
+    }
+
+    var playing = g.phase === "playing";
+    if(playing){
+      g.dist += sv * dt;
+      g.distPts += sv * dt / 5;                  /* distance pays a little, steadily */
+      if(g.distPts >= 1){ var whole = Math.floor(g.distPts); g.distPts -= whole; g.score += whole; }
+
+      if(s.inv > 0) s.inv -= dt;
+      if(keyL || keyR || keyU || keyD){
+        g.target = null;
+        var mx = (keyR ? 1 : 0) - (keyL ? 1 : 0), my = (keyD ? 1 : 0) - (keyU ? 1 : 0);
+        var len = Math.hypot(mx, my) || 1;
+        s.x += mx / len * KEY_SPEED * dt; s.y += my / len * KEY_SPEED * dt;
+      } else if(g.target){
+        var dx = g.target.x - s.x, dy = g.target.y - s.y, d = Math.hypot(dx, dy);
+        if(d > 0.05){ var st = Math.min(d, SHIP_SPEED * dt); s.x += dx / d * st; s.y += dy / d * st; }
+      }
+      s.x = clamp(s.x, SHIP_MIN_X, SHIP_MAX_X);
+      s.y = clamp(s.y, 2, H - 2);
+
+      g.fireCd -= dt;
+      if((g.firing || keyFire) && g.fireCd <= 0){
+        g.bullets.push({x:s.x + 4.6, y:s.y});
+        g.fireCd = 1 / cfg.rate;
+      }
+
+      g.squadCd -= dt;
+      if(g.squadsLeft > 0 && g.squadCd <= 0){ spawnSquad(); g.squadsLeft--; g.squadCd = squadGap(); }
+
+      /* touching rock is fatal, invulnerable or not */
+      for(i = 0; i < HULL.length; i++){
+        var hx = s.x + HULL[i][0], hy = s.y + HULL[i][1], cave = caveAt(g, g.scroll + hx);
+        if(hy <= cave.top || hy >= cave.bot){ crash(); break; }
+      }
+    } else if(g.phase === "dying"){
+      g.pause -= dt;
+      if(g.pause <= 0) respawn();
+    }
+
+    /* our shots, substepped */
+    for(i = g.bullets.length - 1; i >= 0; i--){
+      var b = g.bullets[i], dist = BULLET_SPEED * dt, n = Math.ceil(dist / 1.4), sd = dist / n, gone = false;
+      for(var k = 0; k < n && !gone; k++){
+        b.x += sd;
+        if(b.x > W + 4){ gone = true; break; }
+        var cb = caveAt(g, g.scroll + b.x);
+        if(b.y <= cb.top || b.y >= cb.bot){ spark(b.x, b.y, 4, PAL.edge); gone = true; break; }
+        for(var q = g.foes.length - 1; q >= 0; q--){
+          var f = g.foes[q];
+          if(Math.hypot(f.x - b.x, f.y - b.y) <= TYPES[f.type].r + 0.8){
+            gone = true;
+            if(--f.hp <= 0) foeDown(q, true);
+            else { f.flash = 0.15; spark(b.x, b.y, 4, TYPES[f.type].col); }
+            break;
+          }
+        }
+      }
+      if(gone) g.bullets.splice(i, 1);
+    }
+
+    /* the enemy: flies in screen space, but rides the cave as a fraction of its
+       height, so a squadron follows the walls instead of flying into them */
+    var base = foeSpeed(), pc = caveAt(g, g.scroll + s.x);
+    var shipFrac = clamp((s.y - pc.top) / Math.max(1, pc.bot - pc.top), 0.12, 0.88);
+    for(i = g.foes.length - 1; i >= 0; i--){
+      var fo = g.foes[i], T = TYPES[fo.type];
+      fo.t += dt; fo.rot += dt * 4;
+      if(fo.flash > 0) fo.flash -= dt;
+      fo.x -= base * T.speed * dt;
+      if(fo.type === "weave") fo.frac = fo.base + 0.26 * Math.sin(fo.ph + fo.t * 2.6);
+      else if(fo.type === "gunner") fo.frac = fo.base + 0.12 * Math.sin(fo.ph + fo.t * 1.3);
+      else if(fo.type === "diver" && fo.x < W - 18) fo.frac += clamp(shipFrac - fo.frac, -0.45 * dt, 0.45 * dt);
+      fo.frac = clamp(fo.frac, 0.12, 0.88);
+      var fc = caveAt(g, g.scroll + fo.x);
+      fo.y = fc.top + (fc.bot - fc.top) * fo.frac;
+
+      if(fo.x < -8){ g.foes.splice(i, 1); continue; }
+
+      if(playing && fo.armed && fo.x < W - 2 && fo.x > s.x + 10){
+        fo.fireCd -= dt;
+        if(fo.fireCd <= 0){
+          var ax = s.x - fo.x, ay = s.y - fo.y, ad = Math.hypot(ax, ay) || 1, asp = 38 + g.wave * 2;
+          g.shots.push({x:fo.x - 2, y:fo.y, vx:ax / ad * asp, vy:ay / ad * asp});
+          fo.fireCd = fireEvery() * (0.7 + Math.random() * 0.6);
+        }
+      }
+      if(g.phase === "playing" && s.inv <= 0 && Math.hypot(fo.x - s.x, fo.y - s.y) < T.r + 2.2){
+        foeDown(i, false);
+        crash();
+      }
+    }
+
+    for(i = g.shots.length - 1; i >= 0; i--){
+      var sh = g.shots[i];
+      sh.x += sh.vx * dt; sh.y += sh.vy * dt;
+      if(sh.x < -3 || sh.x > W + 3 || sh.y < -3 || sh.y > H + 3){ g.shots.splice(i, 1); continue; }
+      var cs = caveAt(g, g.scroll + sh.x);
+      if(sh.y <= cs.top || sh.y >= cs.bot){ g.shots.splice(i, 1); continue; }
+      if(g.phase === "playing" && s.inv <= 0 && Math.abs(sh.x - s.x) <= 4 && Math.abs(sh.y - s.y) <= 1.8){
+        g.shots.splice(i, 1);
+        crash();
+      }
+    }
+
+    if(g.phase === "playing" && g.squadsLeft === 0 && g.foes.length === 0) waveCleared();
+  }
+
+  function over(){
+    g.phase = "over";
+    ARCADE.note("sortie");
+    var ch = false;
+    if(g.score > rec.score){ rec.score = g.score; ch = true; }
+    if(g.wave > rec.wave){ rec.wave = g.wave; ch = true; }
+    if(ch){
+      try { localStorage.setItem("sortie.best", String(rec.score));
+            localStorage.setItem("sortie.wave", String(rec.wave)); } catch(e){}
+      syncRecord();
+    }
+    syncHUD();
+  }
+
+  /* ---------- drawing ---------- */
+  function sizeStage(){
+    var fit = document.body.classList.contains("fit");
+    var host = stage.parentElement;
+    var availH = fit ? host.clientHeight : Math.min(window.innerHeight * 0.64, 620);
+    var capW = fit ? host.clientWidth : Math.min(host.clientWidth, 430);
+    var w = Math.min(capW, availH * (W / H)), h = w * (H / W);
+    stage.style.width = Math.round(w) + "px"; stage.style.height = Math.round(h) + "px";
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr * w / W, 0, 0, dpr * w / W, 0, 0);
+  }
+
+  function drawShip(s){
+    ctx.save(); ctx.translate(s.x, s.y);
+    var len = 2.2 + Math.random() * 1.8;
+    ctx.fillStyle = PAL.flame;
+    ctx.beginPath(); ctx.moveTo(-4.2, -1); ctx.lineTo(-4.2 - len, 0); ctx.lineTo(-4.2, 1); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.flameCore;
+    ctx.beginPath(); ctx.moveTo(-4.2, -0.5); ctx.lineTo(-4.2 - len * 0.5, 0); ctx.lineTo(-4.2, 0.5); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.shipDark;
+    ctx.beginPath(); ctx.moveTo(-1.5, 0.6); ctx.lineTo(1.2, 0.6); ctx.lineTo(-2.4, 3); ctx.lineTo(-3.6, 3); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.ship;
+    ctx.beginPath();
+    ctx.moveTo(4.6, 0); ctx.lineTo(1, -1.4); ctx.lineTo(-2, -1.6); ctx.lineTo(-3.6, -3.2);
+    ctx.lineTo(-4.2, -1.4); ctx.lineTo(-4.2, 1.4); ctx.lineTo(-2, 1.6); ctx.lineTo(1, 1.4);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.cockpit;
+    ctx.beginPath(); ctx.ellipse(0.8, -0.5, 1.4, 0.6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  function drawFoe(f){
+    var T = TYPES[f.type], col = f.flash > 0 ? "#ffffff" : T.col;
+    ctx.save(); ctx.translate(f.x, f.y);
+    ctx.fillStyle = col;
+    if(f.type === "dart"){
+      ctx.beginPath(); ctx.moveTo(-3, 0); ctx.lineTo(2.6, -2.2); ctx.lineTo(1.2, 0); ctx.lineTo(2.6, 2.2); ctx.closePath(); ctx.fill();
+    } else if(f.type === "weave"){
+      ctx.beginPath(); ctx.ellipse(0, 0.4, 3, 1.3, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "rgba(232,255,251,.85)";
+      ctx.beginPath(); ctx.ellipse(0, -0.5, 1.4, 1, 0, Math.PI, 0); ctx.fill();
+    } else if(f.type === "diver"){
+      ctx.rotate(f.rot);
+      ctx.beginPath(); ctx.moveTo(0, -2.6); ctx.lineTo(2.6, 0); ctx.lineTo(0, 2.6); ctx.lineTo(-2.6, 0); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "rgba(6,9,20,.6)"; ctx.fillRect(-0.7, -0.7, 1.4, 1.4);
+    } else {
+      var aim = Math.atan2(g.ship.y - f.y, g.ship.x - f.x);
+      ctx.save(); ctx.rotate(aim);
+      ctx.fillStyle = col; ctx.fillRect(0, -0.5, 4, 1);
+      ctx.restore();
+      ctx.beginPath(); ctx.arc(0, 0, 2.8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "rgba(6,9,20,.55)"; ctx.beginPath(); ctx.arc(0, 0, 1.2, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function paint(){
+    var ox = 0, oy = 0, i, x;
+    if(shake > .01){ ox = (Math.random() - .5) * shake; oy = (Math.random() - .5) * shake; }
+    ctx.save(); ctx.translate(ox, oy);
+    ctx.fillStyle = PAL.bg; ctx.fillRect(-4, -4, W + 8, H + 8);
+
+    for(i = 0; i < stars.length; i++){
+      var st = stars[i];
+      x = ((st.x - g.scroll * st.depth) % W + W) % W;
+      ctx.globalAlpha = st.a; ctx.fillStyle = "#fff"; ctx.fillRect(x, st.y, st.r, st.r);
+    }
+    ctx.globalAlpha = 1;
+
+    /* cave walls: ceiling and floor polygons along the samples */
+    caveAt(g, g.scroll + W + SEG * 2);            /* make sure the right edge exists */
+    var t = g.terr, n = t.top.length;
+    ctx.fillStyle = PAL.rock;
+    ctx.beginPath(); ctx.moveTo(t.base * SEG - g.scroll, -4);
+    for(i = 0; i < n; i++) ctx.lineTo((t.base + i) * SEG - g.scroll, t.top[i]);
+    ctx.lineTo((t.base + n - 1) * SEG - g.scroll, -4); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(t.base * SEG - g.scroll, H + 4);
+    for(i = 0; i < n; i++) ctx.lineTo((t.base + i) * SEG - g.scroll, t.bot[i]);
+    ctx.lineTo((t.base + n - 1) * SEG - g.scroll, H + 4); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = PAL.edge; ctx.lineWidth = 0.7; ctx.lineJoin = "round";
+    ctx.beginPath();
+    for(i = 0; i < n; i++){ x = (t.base + i) * SEG - g.scroll; if(i) ctx.lineTo(x, t.top[i]); else ctx.moveTo(x, t.top[i]); }
+    ctx.stroke();
+    ctx.beginPath();
+    for(i = 0; i < n; i++){ x = (t.base + i) * SEG - g.scroll; if(i) ctx.lineTo(x, t.bot[i]); else ctx.moveTo(x, t.bot[i]); }
+    ctx.stroke();
+
+    for(i = 0; i < g.foes.length; i++) if(g.foes[i].x < W + 6) drawFoe(g.foes[i]);
+
+    ctx.fillStyle = PAL.foeShot;
+    for(i = 0; i < g.shots.length; i++){ ctx.beginPath(); ctx.arc(g.shots[i].x, g.shots[i].y, 0.8, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = PAL.shot;
+    for(i = 0; i < g.bullets.length; i++) ctx.fillRect(g.bullets[i].x - 1.6, g.bullets[i].y - 0.25, 3.2, 0.5);
+
+    var s = g.ship;
+    if(g.phase !== "dying" && g.phase !== "over" && !(s.inv > 0 && Math.floor(s.inv * 12) % 2 === 0)) drawShip(s);
+
+    for(i = 0; i < g.rings.length; i++){
+      var rg = g.rings[i];
+      ctx.globalAlpha = Math.max(0, 1 - rg.t / 0.5);
+      ctx.strokeStyle = rg.c; ctx.lineWidth = 0.6;
+      ctx.beginPath(); ctx.arc(rg.x, rg.y, 1 + rg.t * 14, 0, Math.PI * 2); ctx.stroke();
+    }
+    for(i = 0; i < g.sparks.length; i++){
+      var sp = g.sparks[i];
+      ctx.globalAlpha = Math.max(0, 1 - sp.age / sp.life) * .9;
+      ctx.fillStyle = sp.c; ctx.fillRect(sp.x - .45, sp.y - .45, 0.9, 0.9);
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.font = "800 4.2px 'Bricolage Grotesque', system-ui, sans-serif";
+    for(i = 0; i < g.pops.length; i++){
+      var pp = g.pops[i];
+      ctx.globalAlpha = Math.max(0, 1 - pp.age / 1.1);
+      ctx.fillStyle = PAL.gold; ctx.fillText(pp.text, pp.x, pp.y - pp.age * 5);
+    }
+    ctx.globalAlpha = 1;
+    if(g.banner){
+      ctx.globalAlpha = Math.min(1, g.banner.t * 2);
+      ctx.fillStyle = "#f4ecdf";
+      ctx.font = "800 7px 'Bricolage Grotesque', system-ui, sans-serif";
+      ctx.fillText(g.banner.text, W / 2, 70);
+      ctx.font = "500 3.6px 'JetBrains Mono', monospace";
+      ctx.fillStyle = PAL.gold; ctx.fillText(g.banner.sub, W / 2, 77);
+      ctx.globalAlpha = 1;
+    }
+    if(flash > .05){
+      ctx.globalAlpha = flash * .12; ctx.fillStyle = g.phase === "dying" ? PAL.hurt : "#fff";
+      ctx.fillRect(-4, -4, W + 8, H + 8); ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+  }
+
+  function syncHUD(){
+    document.getElementById("xScore").textContent = g.score;
+    document.getElementById("xShips").textContent = Math.max(0, g.ships);
+    document.getElementById("xWave").textContent = g.wave;
+    document.getElementById("xBest").textContent = rec.score;
+    if(g.phase === "ready"){
+      overlay.hidden = false;
+      card.innerHTML = '<h2>Into the cave</h2>' +
+        '<p>Drag anywhere to fly and hold to fire. Keep off the ceiling and the floor, and shoot the squadrons coming the other way.</p>' +
+        '<span class="cue">Tap to start</span>';
+    } else if(g.phase === "over"){
+      overlay.hidden = false;
+      card.innerHTML = '<p class="huge">' + g.score + '</p>' +
+        '<h2>' + (g.score >= rec.score && g.score > 0 ? "New best" : "Wave " + g.wave) + '</h2>' +
+        '<p>' + g.kills + ' shot down on wave ' + g.wave + ', ' + Math.round(g.dist).toLocaleString() +
+        ' flown &middot; best ' + rec.score + '.</p>' +
+        '<span class="cue">Tap to fly again</span>';
+    } else overlay.hidden = true;
+  }
+  function syncReadout(){
+    document.getElementById("xoDist").textContent = Math.round(g.dist);
+    document.getElementById("xoFoes").textContent = g.foes.length;
+    document.getElementById("xoScroll").textContent = scrollSpeed().toFixed(1);
+    document.getElementById("xoGap").textContent = Math.round(gapNow(g));
+  }
+  function syncRecord(){
+    document.getElementById("vXRec").textContent = rec.score ? rec.score + " pts" : "—";
+    document.getElementById("xRecNote").textContent = rec.score
+      ? "Best " + rec.score + " points, reached wave " + rec.wave + "."
+      : "No runs yet.";
+  }
+
+  function bind(id, valId, key){
+    var el = document.getElementById(id), out = document.getElementById(valId);
+    el.addEventListener("input", function(){
+      cfg[key] = parseInt(el.value, 10);
+      out.textContent = cfg[key];
+      if(g.phase === "ready" || g.phase === "over"){
+        if(key === "ships") g.ships = cfg.ships;
+        if(key === "size") g.squadsLeft = cfg.size;
+        syncHUD();
+      }
+      syncReadout();
+    });
+  }
+  bind("xScroll", "vXScroll", "scroll");
+  bind("xGap", "vXGap", "gap");
+  bind("xSize", "vXSize", "size");
+  bind("xFoe", "vXFoe", "foe");
+  bind("xRate", "vXRate", "rate");
+  bind("xShoot", "vXShoot", "shoot");
+  bind("xShipsK", "vXShips", "ships");
+  var KNOBS = [["xScroll", "vXScroll", "scroll"], ["xGap", "vXGap", "gap"], ["xSize", "vXSize", "size"],
+               ["xFoe", "vXFoe", "foe"], ["xRate", "vXRate", "rate"], ["xShoot", "vXShoot", "shoot"],
+               ["xShipsK", "vXShips", "ships"]];
+  function applyCfg(){
+    KNOBS.forEach(function(k){
+      document.getElementById(k[0]).value = cfg[k[2]];
+      document.getElementById(k[1]).textContent = cfg[k[2]];
+    });
+  }
+  document.getElementById("xReset").addEventListener("click", function(){
+    cfg = {scroll:DEFAULTS.scroll, gap:DEFAULTS.gap, size:DEFAULTS.size, foe:DEFAULTS.foe,
+           rate:DEFAULTS.rate, shoot:DEFAULTS.shoot, ships:DEFAULTS.ships};
+    applyCfg();
+    if(g.phase === "ready" || g.phase === "over"){ g.ships = cfg.ships; g.squadsLeft = cfg.size; syncHUD(); }
+    syncReadout();
+  });
+  document.getElementById("xClear").addEventListener("click", function(){
+    rec = {score:0, wave:1};
+    try { localStorage.removeItem("sortie.best"); localStorage.removeItem("sortie.wave"); } catch(e){}
+    syncRecord(); syncHUD();
+  });
+
+  var fitBtn = document.getElementById("xFitBtn"), fitExit = document.getElementById("xFitExit");
+  function setFit(on){
+    document.body.classList.toggle("fit", on);
+    fitExit.hidden = !on;
+    fitBtn.textContent = on ? "Exit full screen" : "Fit screen";
+    sizeStage();
+  }
+  fitBtn.addEventListener("click", function(){ setFit(!document.body.classList.contains("fit")); });
+  fitExit.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+  fitExit.addEventListener("click", function(e){ e.stopPropagation(); setFit(false); });
+
+  var rf = 0;
+  function frame(t){
+    if(!lastT) lastT = t;
+    var dt = Math.min((t - lastT) / 1000, .04); lastT = t;
+    step(dt);
+    flash = Math.max(0, flash - dt * 4); shake = Math.max(0, shake - dt * 7);
+    paint();
+    if(++rf % 5 === 0){ syncReadout(); if(g.phase === "playing") syncHUD(); }
+    raf = requestAnimationFrame(frame);
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(!live) return;
+    if(raf){ cancelAnimationFrame(raf); raf = null; }
+    if(!document.hidden){ lastT = 0; raf = requestAnimationFrame(frame); }
+  });
+  window.addEventListener("resize", function(){ if(live) sizeStage(); });
+
+  function boot(saved){
+    if(saved && saved.cfg) cfg = saved.cfg;
+    if(saved && saved.rec){
+      if(saved.rec.score > rec.score) rec.score = saved.rec.score;
+      if(saved.rec.wave  > rec.wave ) rec.wave  = saved.rec.wave;
+    }
+    applyCfg(); g = newGame();
+    syncHUD(); syncReadout(); syncRecord();
+  }
+  ARCADE.register("sortie", {
+    boot: boot,
+    snapshot: function(){ return {cfg:cfg, rec:rec}; },
+    mount: function(){
+      live = true; sizeStage();
+      if(raf) cancelAnimationFrame(raf);
+      lastT = 0; raf = requestAnimationFrame(frame);
+    },
+    unmount: function(){
+      live = false; drag = null; keyL = keyR = keyU = keyD = keyFire = false;
+      if(g){ g.firing = false; g.target = null; }
       if(raf){ cancelAnimationFrame(raf); raf = null; }
       if(document.body.classList.contains("fit")) setFit(false);
     }
