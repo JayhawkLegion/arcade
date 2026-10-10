@@ -86,7 +86,7 @@ ARCADE.register("yourname", {
 4. Two calls into the shell: `ARCADE.begin("yourname")` the moment a run starts (from the
    ready or game-over card, not on every life or board), and
    `ARCADE.note("yourname", score, detail)` when it ends — an integer score and a short detail
-   such as `"wave 4"`. Then add the game to `BOARD` and the reset-all key list in the shell,
+   such as `"wave 4"`. Then add the game to `BOARD` in the shell,
    and to `GAMES` in `tools/leaderboard.gs` (and redeploy the script) or its scores are refused.
 
 Games open **full screen**: `ARCADE.open()` calls the module's `fit(true)` right after `mount`,

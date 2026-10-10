@@ -272,8 +272,6 @@ body.fit .navmenu{left:10px}
   letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:3px}
 .row.empty .who b,.row.empty .num b{color:var(--ink-soft)}
 .row.empty .pip{opacity:.3}
-.board-foot{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:14px}
-.board-foot .warn{font-size:12px; color:var(--ink-soft)}
 
 /* ---------- shared leaderboard ---------- */
 .lbstatus{margin:0 0 14px; font-size:12.5px; color:var(--ink-soft)}
@@ -648,10 +646,6 @@ button.act:disabled{opacity:.45; cursor:default}
     </div>
     <p class="lbstatus" id="lbStatus" hidden></p>
     <div class="board" id="scoreBoard"></div>
-    <div class="board-foot">
-      <button class="act" id="scoresReset">Reset all scores</button>
-      <span class="warn" id="scoresWarn">Scores live in this browser only &mdash; each device keeps its own.</span>
-    </div>
   </div>
 </section>
 
@@ -1371,7 +1365,7 @@ button.act:disabled{opacity:.45; cursor:default}
     </div>
     <div>
       <h3>Fuel is the clock</h3>
-      <p>Pads pay <code>50</code> times their multiplier, doubled for a perfect touchdown. A landing refunds fuel; a crash costs <code>150</code>. The run ends when the tank is dry.</p>
+      <p>Pads pay <code>50</code> times their multiplier, doubled for a perfect touchdown. A landing refunds <code>100</code> fuel; a crash costs <code>150</code>. The run ends when the tank is dry.</p>
     </div>
   </div>
 </div>
@@ -1861,14 +1855,10 @@ window.ARCADE = (function(){
     el("backBtn").hidden = false;
     closeNav();
     syncChrome();
-    armed = false;
-    el("scoresReset").textContent = RESET_LABEL;
     renderBoard();
     if(LB_URL) lbFetch();
   }
 
-  var armed = false;
-  var RESET_LABEL = "Reset this device\u2019s scores";
 
   function boot(saved){
     if(booted) return;
@@ -1942,29 +1932,8 @@ window.ARCADE = (function(){
     if(LB_URL){
       el("scoresSub").textContent = "Top 5 in every game, shared across devices.";
       el("scoresTag").textContent = "The top 5 in every game, from every device.";
-      el("scoresWarn").textContent = "Resetting clears this device\u2019s bests and play counts. The shared top 5 lives in the Google Sheet.";
       lbFetch();
     }
-    el("scoresReset").textContent = RESET_LABEL;
-    el("scoresReset").addEventListener("click", function(){
-      if(!armed){                       /* two taps, so a stray one cannot wipe the lot */
-        armed = true;
-        el("scoresReset").textContent = "Tap again to erase";
-        return;
-      }
-      try {
-        ["rally.best","rally.boards","astro.best","astro.wave","snake.best",
-         "drift.best","battery.best","battery.wave",
-         "hopper.best","hopper.level","invaders.best","invaders.wave",
-         "blocks.best","blocks.lines","lander.best","lander.landed",
-         "sortie.best","sortie.wave",
-         "arcade.plays"]
-          .forEach(function(k){ localStorage.removeItem(k); });
-      } catch(e){}
-      armed = false;
-      el("scoresReset").textContent = RESET_LABEL;
-      renderBoard();
-    });
     if(window.claude && window.claude.hot){
       window.claude.hot.snapshot(function(){
         var out = {open: current};
@@ -6597,7 +6566,7 @@ window.ARCADE = (function(){
     if(ok){
       var perfect = s.vy <= cfg.legs * 0.45 && Math.abs(s.a) <= 5 * Math.PI / 180 && Math.abs(s.vx) <= maxVx() * 0.5;
       var pts = (perfect ? 100 : 50) * pad.mult;
-      var refund = perfect ? 100 : 50;
+      var refund = 100;                     /* every landing refunds 100 fuel */
       g.score += pts; g.landed++;
       g.fuel = Math.min(cfg.fuel * 1.5, g.fuel + refund);
       s.y = pad.y - FEET[0][1]; s.a = 0;

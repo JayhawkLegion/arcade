@@ -113,7 +113,7 @@ fixed margin, so a late burn still stops you in a short distance.
 - Land with both feet on a pad, falling slower than the legs can take, near upright and barely
   drifting. Telemetry under the score turns green inside every limit.
 - Pads pay 50 times their multiplier (x2, x3, x5 — the narrower, the better), doubled for a
-  perfect touchdown. A landing refunds fuel and a crash costs 150. The run ends when the tank
+  perfect touchdown. A landing refunds 100 fuel and a crash costs 150. The run ends when the tank
   is dry. The field wraps at the sides.
 
 Tunable: gravity, fuel, leg strength, arrival drift.
@@ -154,7 +154,6 @@ Central. Under each game it also shows your best on this device, read from the g
   self-hosted block of `index.html`. Empty means off, and the screen falls back to this device's
   bests. The Artifact copy never has it (the build strips that block), and the service worker
   never caches it, so the board is always live.
-- Resetting clears this device's bests and play counts (two taps); it cannot touch the sheet.
 
 ### Setting up the sheet
 
