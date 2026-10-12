@@ -1670,7 +1670,7 @@ button.act:disabled{opacity:.45; cursor:default}
       <div class="overlay" id="gOverlay"><div class="card" id="gCard"></div></div>
       <div class="gbuild" id="gBuild" role="dialog" aria-label="Build upgrades" hidden>
         <div class="gbhead"><h2>Build</h2><span class="gbchips"><span class="gchip" aria-hidden="true">&#9670;</span> <b id="gBuildChips">0</b> chips</span></div>
-        <p class="gbnote">Frozen. Upgrades last until you lose a ship; unspent chips are kept.</p>
+        <p class="gbnote">Frozen. Resume gives you a 3-second countdown. Upgrades last until you lose a ship.</p>
         <div class="gbgrid" id="gBuildGrid"></div>
         <button class="gbresume" id="gResume" type="button">Resume</button>
       </div>
@@ -1711,7 +1711,7 @@ button.act:disabled{opacity:.45; cursor:default}
       <div class="knob">
         <label for="gLivesK"><span class="name">Lives</span><span class="val" id="vGLives">3</span></label>
         <input type="range" id="gLivesK" min="1" max="5" step="1" value="3">
-        <p class="note">Applies to your next game. Another every 20,000 points.</p>
+        <p class="note">Applies to your next game. Another every 40,000 points.</p>
       </div>
       <div class="knob">
         <div class="head"><span class="name">Record</span><span class="val" id="vGRec">&mdash;</span></div>
@@ -1729,7 +1729,7 @@ button.act:disabled{opacity:.45; cursor:default}
   <div class="howto">
     <div>
       <h3>Win a whole series</h3>
-      <p>Enemies come in series. Shoot down every ship in one and the last drops a gold build chip &mdash; fly near it and it comes to you. Let one get away and that series pays no chip.</p>
+      <p>Enemies come in series, and every other series carries a build chip (the tracker in the corner shows &#9670;). Shoot down every ship in it: the last one left turns gold, and it drops the chip &mdash; fly near and the chip comes to you. Let one get away and the series pays nothing.</p>
     </div>
     <div>
       <h3>Freeze and build</h3>
@@ -1737,7 +1737,7 @@ button.act:disabled{opacity:.45; cursor:default}
     </div>
     <div>
       <h3>The same route, then the bosses</h3>
-      <p>The stage never changes, so you can learn it, but every group flies one more ship each stage, and the land closes in as the bosses near. At the end the screen stops for a fire-breathing dragon on your left. Each stage another boss joins: a snake that spits purple blobs, a bird whose wind shoves you around, a wandering eye that shrinks as you hit it, a giant brain with grasping tentacles, and a core with four spinning arms. Ships <code>100</code>, walkers <code>200</code>, a full series <code>500</code>, a chip <code>100</code>, each boss <code>5,000</code> times the stage. Another life every 20,000.</p>
+      <p>The stage never changes, so you can learn it, but every group flies one more ship each stage, and the land closes in as the bosses near. At the end the screen stops for a fire-breathing dragon on your left. Each stage another boss joins: a snake that spits purple blobs, a bird whose wind shoves you around, a wandering eye that shrinks as you hit it, a giant brain with grasping tentacles, and a core with four spinning arms. Ships <code>100</code>, walkers <code>200</code>, a full series <code>500</code>, a chip <code>100</code>, each boss <code>5,000</code> times the stage. Another life every 40,000.</p>
     </div>
   </div>
 </div>
@@ -8544,7 +8544,7 @@ window.ARCADE = (function(){
   "use strict";
   var W = 100, H = 150;
   var SHIP_MIN_X = 6, SHIP_MAX_X = 86, SPAWN_X = 20, BOSS_SPAWN_X = 72;
-  var DRAG_GAIN = 1.25, EXTRA_AT = 20000, SERIES_BONUS = 500, CHIP_PTS = 100, BOSS_PTS = 5000;
+  var DRAG_GAIN = 1.25, EXTRA_AT = 40000, SERIES_BONUS = 500, CHIP_PTS = 100, BOSS_PTS = 5000;
   var STAGE_LEN = 1500, SPACING = 8, NECK = 11, LASER_LEN = 14;
   var SHIP_SPEEDS = [75, 105, 135], KEY_SPEEDS = [55, 75, 95], RATE_MULT = [1, 1.5, 2];
   var BULLET = {shot:150, rings:115, laser:200};
@@ -8748,7 +8748,7 @@ window.ARCADE = (function(){
       ship:{x:SPAWN_X, y:75, inv:0}, target:null, firing:false, fireCd:0,
       bullets:[], foes:[], shots:[], flames:[], blobs:[], gusts:[], push:{vx:0, vy:0}, chipsOut:[], sparks:[], rings:[], pops:[],
       chips:0, up:freshUp(), series:{}, seriesId:0, track:0, scriptIdx:0, boss:null,
-      banner:null, pause:0, nextExtra:EXTRA_AT, kills:0, cleared:0, spawned:0, downed:0, frozen:false
+      banner:null, pause:0, nextExtra:EXTRA_AT, kills:0, cleared:0, spawned:0, downed:0, frozen:false, countdown:0
     };
   }
   function loopMult(){ return 1 + 0.1 * (g.loop - 1); }
@@ -8783,8 +8783,10 @@ window.ARCADE = (function(){
     sp.n = Math.min(14, base.n + g.loop - 1);
     if(sp.gap && sp.n > 1) sp.gap = Math.min(base.gap, 104 / (sp.n - 1));     /* columns squeeze to stay on screen */
     var id = ++g.seriesId, T = TYPES[sp.type], v = foeSpeed() * T.mult;
-    g.series[id] = {total:sp.n, killed:0, escaped:0, broken:false, won:false, showT:1.4};
-    g.track = id; g.spawned++;
+    g.spawned++;
+    /* every other group, in the order they come, carries a build chip */
+    g.series[id] = {total:sp.n, killed:0, escaped:0, broken:false, won:false, showT:1.4, chip:g.spawned % 2 === 1};
+    g.track = id;
     for(var i = 0; i < sp.n; i++){
       var delay = sp.kind === "column" ? 0 : sp.kind === "hover" ? i * 0.3 : i * SPACING / v;
       var armed = sp.type === "gunner" ? cfg.shoot > 0
@@ -8815,10 +8817,10 @@ window.ARCADE = (function(){
     if(ser){
       ser.killed++;
       if(!ser.broken && ser.killed === ser.total){
-        /* the whole series is down: the last one drops a build chip */
+        /* the whole series is down: a chip group's last ship drops a build chip */
         ser.won = true; g.cleared++;
         g.score += SERIES_BONUS;
-        g.chipsOut.push({x:f.x, y:f.y, t:0});
+        if(ser.chip !== false) g.chipsOut.push({x:f.x, y:f.y, t:0});
         pop(f.x, f.y - 5, "+" + SERIES_BONUS);
       }
       settle(ser);
@@ -8867,6 +8869,7 @@ window.ARCADE = (function(){
   function closeBuild(){
     if(!g.frozen) return;
     g.frozen = false;
+    g.countdown = 3;                               /* the board holds still for three seconds before play goes on */
     panel.hidden = true;
     syncHUD();
   }
@@ -9325,6 +9328,7 @@ window.ARCADE = (function(){
   function step(dt){
     var i, s = g.ship;
     if(g.frozen) return;
+    if(g.countdown > 0){ g.countdown = Math.max(0, g.countdown - dt); return; }
     for(i = g.sparks.length - 1; i >= 0; i--){
       var sp = g.sparks[i];
       sp.age += dt;
@@ -9578,9 +9582,19 @@ window.ARCADE = (function(){
     }
     ctx.restore();
   }
+  /* the last ship left in an unbroken chip group: shoot it for the chip */
+  function carrier(f){
+    var ser = g.series[f.series];
+    return !!ser && ser.chip !== false && !ser.broken && ser.killed === ser.total - 1;
+  }
   function drawFoe(f){
-    var T = TYPES[f.type], col = f.flash > 0 ? "#ffffff" : T.col;
+    var T = TYPES[f.type], gold = carrier(f), col = f.flash > 0 ? "#ffffff" : gold ? PAL.chip : T.col;
     ctx.save(); ctx.translate(f.x, f.y);
+    if(gold){
+      ctx.globalAlpha = 0.3 + 0.2 * Math.sin(Date.now() / 120);
+      ctx.fillStyle = PAL.chip; ctx.beginPath(); ctx.arc(0, 0, T.r + 2.4, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
     ctx.fillStyle = col;
     if(f.type === "drone"){
       ctx.beginPath(); ctx.ellipse(0, 0, 2.8, 1.9, 0, 0, Math.PI * 2); ctx.fill();
@@ -9942,8 +9956,10 @@ window.ARCADE = (function(){
     if(ser && g.phase !== "ready" && (!ser.over || ser.showT > 0)){
       var px0 = 6, py = 132.5;
       ctx.font = "500 2.3px 'JetBrains Mono', monospace"; ctx.textAlign = "left";
-      ctx.fillStyle = ser.won ? PAL.gold : ser.broken ? "rgba(244,236,223,.4)" : "rgba(244,236,223,.7)";
-      ctx.fillText(ser.won ? "SERIES \u2713 CHIP" : ser.broken ? "SERIES MISSED" : "SERIES", px0, py - 3.4);
+      var hasChip = ser.chip !== false;
+      ctx.fillStyle = ser.won ? PAL.gold : ser.broken ? "rgba(244,236,223,.4)" : hasChip ? PAL.chip : "rgba(244,236,223,.7)";
+      ctx.fillText(ser.won ? (hasChip ? "SERIES \u2713 CHIP" : "SERIES \u2713 +" + SERIES_BONUS) : ser.broken ? "SERIES MISSED"
+                   : hasChip ? "SERIES \u25C6 CHIP" : "SERIES", px0, py - 3.4);
       for(i = 0; i < ser.total; i++){
         var done = i < ser.killed;
         ctx.fillStyle = done ? PAL.gold : ser.broken ? "rgba(226,84,60,.6)" : "rgba(244,236,223,.25)";
@@ -9965,6 +9981,16 @@ window.ARCADE = (function(){
     if(flash > .05){
       ctx.globalAlpha = flash * .12; ctx.fillStyle = g.phase === "dying" ? PAL.hurt : "#fff";
       ctx.fillRect(-4, -4, W + 8, H + 8); ctx.globalAlpha = 1;
+    }
+    if(g.countdown > 0){
+      var cn = Math.ceil(g.countdown), cf = g.countdown - Math.floor(g.countdown);
+      ctx.fillStyle = "rgba(8,6,26,.35)"; ctx.fillRect(-4, -4, W + 8, H + 8);
+      ctx.globalAlpha = 0.4 + 0.6 * cf;
+      ctx.font = "800 " + (16 + 6 * cf).toFixed(1) + "px 'Bricolage Grotesque', system-ui, sans-serif";
+      ctx.fillStyle = PAL.gold; ctx.fillText(String(cn), W / 2, 70);
+      ctx.globalAlpha = 1;
+      ctx.font = "500 3.2px 'JetBrains Mono', monospace"; ctx.fillStyle = "#f4ecdf";
+      ctx.fillText("GET READY", W / 2, 84);
     }
     ctx.restore();
   }

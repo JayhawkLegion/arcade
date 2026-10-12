@@ -161,13 +161,15 @@ same patterns at the same points on every run, so it can be learned.
 
 - Enemies come in series (a snake, a loop, a dive, a column, a U-turn, gunners that stop and
   shoot, ships from behind, and walkers that stride along the top or bottom land, stepping
-  forward and back to line up a shot). Shoot down every ship in a series and the last one drops
-  a gold build chip that drifts to you when you get close. Let one escape and the series pays
-  nothing.
+  forward and back to line up a shot). Every other series, in a fixed order, carries a build chip
+  (the corner tracker marks it). Shoot down every ship in it and the last one left turns gold;
+  it drops the chip, which drifts to you when you get close. Let one escape and the series pays
+  nothing. A full series without a chip still pays its 500.
 - Each stage starts wide open. As it nears the bosses the land grows in from both edges, cycling
   through hills, spires, steps and pinches, and flying patterns squeeze into the space left. It
   opens up again just before the fight.
-- Tap **BUILD** (or press B) at any time to freeze the game and spend chips. Speed boost 1 then
+- Tap **BUILD** (or press B) at any time to freeze the game and spend chips; Resume counts down
+  3, 2, 1 before play goes on. Speed boost 1 then
   2, left shooter (fires backward) 1, up shooter and down shooter (fire ahead at an angle, handy
   against walkers) 2 each, top pod and bottom pod (a small ball above or below the ship that fires
   ahead; enemy fire or a wall that reaches a pod knocks out the pod instead of the ship, and it
@@ -175,7 +177,7 @@ same patterns at the same points on every run, so it can be learned.
   (wide) 3, laser (long, pierces) 4. Rings and laser are alternative bullet types for every gun;
   buying one replaces the other. Number keys 1 to 0 buy from the menu.
 - Losing a ship loses every upgrade, but unspent chips are kept. Three lives, another every
-  20,000.
+  40,000.
 - At the end of the stage the scroll stops until every boss is down. Stage 1 is a dragon on the
   left that breathes bursts and, below half health, fans of fire. It is behind you, so a left
   shooter is the natural answer. Stage 2 adds a green snake on the right that spits spreads of
