@@ -160,12 +160,20 @@ along the very top and bottom, and the stage is scripted: the same series of ene
 same patterns at the same points on every run, so it can be learned.
 
 - Enemies come in series (a snake, a loop, a dive, a column, a U-turn, gunners that stop and
-  shoot, ships from behind). Shoot down every ship in a series and the last one drops a gold
-  build chip that drifts to you when you get close. Let one escape and the series pays nothing.
+  shoot, ships from behind, and walkers that stride along the top or bottom land, stepping
+  forward and back to line up a shot). Shoot down every ship in a series and the last one drops
+  a gold build chip that drifts to you when you get close. Let one escape and the series pays
+  nothing.
+- Each stage starts wide open. As it nears the bosses the land grows in from both edges, cycling
+  through hills, spires, steps and pinches, and flying patterns squeeze into the space left. It
+  opens up again just before the fight.
 - Tap **BUILD** (or press B) at any time to freeze the game and spend chips. Speed boost 1 then
-  2, left shooter (fires backward) 1, right shooter (a second forward cannon) 2, rapid fire 2
-  then 3, force shield (absorbs one hit) 3, ring shot (wide) 3, laser (long, pierces) 4. Rings
-  and laser are alternative bullet types; buying one replaces the other.
+  2, left shooter (fires backward) 1, up shooter and down shooter (fire ahead at an angle, handy
+  against walkers) 2 each, top pod and bottom pod (a small ball above or below the ship that fires
+  ahead; enemy fire or a wall that reaches a pod knocks out the pod instead of the ship, and it
+  can be bought again) 2 each, rapid fire 2 then 3, force shield (absorbs one hit) 3, ring shot
+  (wide) 3, laser (long, pierces) 4. Rings and laser are alternative bullet types for every gun;
+  buying one replaces the other. Number keys 1 to 0 buy from the menu.
 - Losing a ship loses every upgrade, but unspent chips are kept. Three lives, another every
   20,000.
 - At the end of the stage the scroll stops until every boss is down. Stage 1 is a dragon on the
@@ -173,12 +181,17 @@ same patterns at the same points on every run, so it can be learned.
   shooter is the natural answer. Stage 2 adds a green snake on the right that spits spreads of
   purple blobs, so you are caught between them. Stage 3 adds a yellow bird hovering above whose
   wingbeats send out rings of wind: they never hurt, but they shove the ship (and your finger's
-  anchor with it) toward fire, walls and teeth. Every boss telegraphs its attack first. Embers
-  keep coming during the fight and pay chips, so you can rebuild mid-fight.
+  anchor with it) toward fire, walls and teeth. Stage 4 adds a blue eye that roams the whole
+  board on its own path; it never shoots, but it shrinks as you hit it and speeds up as it does.
+  From stage 5 the newcomers follow Life Force: a giant brain whose two tentacles grab at you
+  (stage 5) and a core with four arms that spin, stop, reverse and reach in and out (stage 6);
+  only the brain and the core take damage, the tentacles and arms just block. Every boss with an
+  attack telegraphs it first. Embers keep coming during the fight and pay chips, so you can
+  rebuild mid-fight.
 - Each stage repeats the same pattern faster, and every group flies one more ship than the
   stage before (a group of 4 becomes 5, then 6), embers included. Each boss pays 5,000 times
   the stage and is a quarter tougher than the stage before.
-- Ships 100 (gunners 150, two hits), a full series 500, a chip 100.
+- Ships 100 (gunners 150 and walkers 200, two hits each), a full series 500, a chip 100.
 
 Tunable: scroll speed, enemy speed, return fire, fire rate, boss toughness, lives.
 

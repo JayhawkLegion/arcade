@@ -335,8 +335,8 @@ button.act:disabled{opacity:.45; cursor:default}
 .gbuildbtn:focus-visible,.gtile:focus-visible,.gbresume:focus-visible{outline:2px solid #ffd166; outline-offset:2px}
 .gchip{color:#ffd166}
 .gbuild{
-  position:absolute; inset:0; z-index:7; display:flex; flex-direction:column; gap:10px;
-  padding:16px 14px 14px; overflow:auto; cursor:auto;
+  position:absolute; inset:0; z-index:7; display:flex; flex-direction:column; gap:8px;
+  padding:14px 12px 12px; overflow:auto; cursor:auto;
   background:rgba(10,8,24,.9); backdrop-filter:blur(3px); color:#f4ecdf;
 }
 .gbuild[hidden]{display:none!important}
@@ -347,13 +347,13 @@ button.act:disabled{opacity:.45; cursor:default}
 .gbnote{margin:0; font-size:12px; line-height:1.4; color:rgba(244,236,223,.62)}
 .gbgrid{display:grid; grid-template-columns:1fr 1fr; gap:8px}
 .gtile{
-  display:flex; flex-direction:column; align-items:flex-start; gap:3px; min-height:64px;
-  padding:9px 10px; text-align:left; cursor:pointer; font:inherit; color:inherit;
+  display:grid; grid-template-columns:1fr auto; column-gap:6px; row-gap:2px; align-content:start; min-height:48px;
+  padding:7px 9px; text-align:left; cursor:pointer; font:inherit; color:inherit;
   background:rgba(244,236,223,.06); border:1px solid rgba(244,236,223,.18); border-radius:10px;
 }
-.gtile .nm{font-weight:700; font-size:13px}
-.gtile .ds{font-size:11px; line-height:1.3; color:rgba(244,236,223,.66)}
-.gtile .ct{margin-top:auto; font-family:"JetBrains Mono",monospace; font-size:11px; color:#ffd166}
+.gtile .nm{grid-column:1; grid-row:1; font-weight:700; font-size:13px}
+.gtile .ct{grid-column:2; grid-row:1; align-self:center; font-family:"JetBrains Mono",monospace; font-size:11px; color:#ffd166; white-space:nowrap}
+.gtile .ds{grid-column:1 / -1; grid-row:2; font-size:11px; line-height:1.3; color:rgba(244,236,223,.66)}
 .gtile.owned{border-color:rgba(127,212,255,.55); background:rgba(127,212,255,.08)}
 .gtile.owned .ct{color:#7fd4ff}
 .gtile:disabled{cursor:default; opacity:.5}
@@ -1670,7 +1670,7 @@ button.act:disabled{opacity:.45; cursor:default}
       <div class="overlay" id="gOverlay"><div class="card" id="gCard"></div></div>
       <div class="gbuild" id="gBuild" role="dialog" aria-label="Build upgrades" hidden>
         <div class="gbhead"><h2>Build</h2><span class="gbchips"><span class="gchip" aria-hidden="true">&#9670;</span> <b id="gBuildChips">0</b> chips</span></div>
-        <p class="gbnote">The game is frozen. Upgrades last until you lose a ship; unspent chips are yours to keep.</p>
+        <p class="gbnote">Frozen. Upgrades last until you lose a ship; unspent chips are kept.</p>
         <div class="gbgrid" id="gBuildGrid"></div>
         <button class="gbresume" id="gResume" type="button">Resume</button>
       </div>
@@ -1706,7 +1706,7 @@ button.act:disabled{opacity:.45; cursor:default}
       <div class="knob">
         <label for="gBoss"><span class="name">Boss toughness</span><span class="val" id="vGBoss">3</span></label>
         <input type="range" id="gBoss" min="1" max="5" step="1" value="3">
-        <p class="note">How many hits the bosses take: the dragon this many times 20, the snake 80% of that, the bird 60%. A quarter tougher each stage.</p>
+        <p class="note">How many hits the bosses take: the dragon, brain and core this many times 20, the snake 80% of that, the eye 70%, the bird 60%. A quarter tougher each stage.</p>
       </div>
       <div class="knob">
         <label for="gLivesK"><span class="name">Lives</span><span class="val" id="vGLives">3</span></label>
@@ -1733,11 +1733,11 @@ button.act:disabled{opacity:.45; cursor:default}
     </div>
     <div>
       <h3>Freeze and build</h3>
-      <p>Tap BUILD (or press B) any time to stop the action and spend chips: speed, left and right shooters, rapid fire, a force shield that takes one hit, ring shot or laser. Better upgrades cost more. Losing a ship loses its upgrades, never your chips.</p>
+      <p>Tap BUILD (or press B) any time to stop the action and spend chips: speed, a left shooter, up and down shooters that fire at an angle, pods above and below the ship that fire ahead (a wall or a hit knocks a pod out, not the ship), rapid fire, a force shield that takes one hit, ring shot or laser. Better upgrades cost more. Losing a ship loses its upgrades, never your chips.</p>
     </div>
     <div>
       <h3>The same route, then the bosses</h3>
-      <p>The stage never changes, so you can learn it, but every group flies one more ship each stage. At the end the screen stops for a fire-breathing dragon on your left; from stage 2 a snake on the right spits purple blobs, and from stage 3 a bird above beats out rings of wind that shove you around. Ships <code>100</code>, a full series <code>500</code>, a chip <code>100</code>, each boss <code>5,000</code> times the stage. Another life every 20,000.</p>
+      <p>The stage never changes, so you can learn it, but every group flies one more ship each stage, and the land closes in as the bosses near. At the end the screen stops for a fire-breathing dragon on your left. Each stage another boss joins: a snake that spits purple blobs, a bird whose wind shoves you around, a wandering eye that shrinks as you hit it, a giant brain with grasping tentacles, and a core with four spinning arms. Ships <code>100</code>, walkers <code>200</code>, a full series <code>500</code>, a chip <code>100</code>, each boss <code>5,000</code> times the stage. Another life every 20,000.</p>
     </div>
   </div>
 </div>
@@ -8570,12 +8570,17 @@ window.ARCADE = (function(){
     snake:"#3fae4a", snakeDark:"#23702b", snakeBelly:"#c9e58a", blob:"#b45cff", blobLit:"#e2b6ff",
     bird:"#ffd84a", birdDark:"#e0a92a", beak:"#ff8a3d"
   };
-  var NAMES = {dragon:"Dragon", snake:"Snake", bird:"Bird"};
+  var NAMES = {dragon:"Dragon", snake:"Snake", bird:"Bird", eye:"Eye", brain:"Brain", core:"Core"};
+  /* one more boss joins the fight each stage, in this order */
+  var BOSS_ORDER = ["dragon", "snake", "bird", "eye", "brain", "core"];
+  var BOSS_HP = {dragon:1, snake:0.8, bird:0.6, eye:0.7, brain:1, core:1};
+  var BOSS_COL = {dragon:"#ff6b3d", snake:"#3fae4a", bird:"#ffd84a", eye:"#3b7bff", brain:"#e58fb3", core:"#ff5f6d"};
   var TYPES = {
     drone:  {mult:1.0,  pts:100, r:2.4, hp:1, col:"#4fe3c1"},
     fan:    {mult:1.15, pts:100, r:2.3, hp:1, col:"#7fd4ff"},
     gunner: {mult:0.8,  pts:150, r:3.0, hp:2, col:"#ff9f43"},
-    ember:  {mult:1.05, pts:100, r:2.2, hp:1, col:"#ff6b3d"}
+    ember:  {mult:1.05, pts:100, r:2.2, hp:1, col:"#ff6b3d"},
+    walker: {mult:1.0,  pts:200, r:2.8, hp:2, col:"#d8b45a"}
   };
 
   /* ---------- the stage: the same series, in the same places, every run ---------- */
@@ -8584,23 +8589,29 @@ window.ARCADE = (function(){
     {at:105,  kind:"wave",   type:"drone",  n:5, y:100, A:14, f:0.09},
     {at:170,  kind:"column", type:"fan",    n:4, y:75,  gap:15},
     {at:235,  kind:"loop",   type:"drone",  n:5, y:62,  cx:52, r:18, up:true},
+    {at:270,  kind:"walk",   type:"walker", n:2, side:"floor"},
     {at:300,  kind:"rear",   type:"fan",    n:4, y:112, A:8,  f:0.07},
     {at:360,  kind:"dive",   type:"drone",  n:5, y0:28, y1:122},
     {at:425,  kind:"hover",  type:"gunner", n:3, y:75,  gap:26, xh:74, dwell:2.6},
     {at:495,  kind:"zig",    type:"fan",    n:6, top:28, bot:122, P:70},
+    {at:530,  kind:"walk",   type:"walker", n:2, side:"ceil"},
     {at:560,  kind:"uturn",  type:"drone",  n:5, y0:42, y1:96, xt:26},
     {at:625,  kind:"wave",   type:"drone",  n:6, y:75,  A:32, f:0.055},
     {at:690,  kind:"rear",   type:"drone",  n:5, y:40,  A:10, f:0.08},
     {at:750,  kind:"dive",   type:"fan",    n:5, y0:122, y1:28},
+    {at:785,  kind:"walk",   type:"walker", n:2, side:"floor"},
     {at:815,  kind:"loop",   type:"drone",  n:6, y:90,  cx:48, r:18, up:false},
     {at:880,  kind:"hover",  type:"gunner", n:4, y:75,  gap:22, xh:70, dwell:2.4},
     {at:950,  kind:"column", type:"fan",    n:5, y:75,  gap:16},
+    {at:985,  kind:"walk",   type:"walker", n:3, side:"ceil"},
     {at:1010, kind:"uturn",  type:"drone",  n:6, y0:110, y1:52, xt:22},
     {at:1075, kind:"zig",    type:"drone",  n:6, top:20, bot:130, P:60},
     {at:1135, kind:"rear",   type:"fan",    n:5, y:75,  A:28, f:0.05},
+    {at:1165, kind:"walk",   type:"walker", n:2, side:"floor"},
     {at:1200, kind:"wave",   type:"drone",  n:5, y:44,  A:10, f:0.1},
     {at:1200, kind:"wave",   type:"drone",  n:5, y:106, A:10, f:0.1, ph:3.14},
     {at:1280, kind:"hover",  type:"gunner", n:4, y:75,  gap:24, xh:72, dwell:2.2},
+    {at:1320, kind:"walk",   type:"walker", n:2, side:"ceil"},
     {at:1350, kind:"dive",   type:"drone",  n:6, y0:30, y1:120},
     {at:1420, kind:"loop",   type:"fan",    n:6, y:62,  cx:56, r:20, up:true}
   ];
@@ -8614,7 +8625,10 @@ window.ARCADE = (function(){
   var UPG = [
     {id:"speed",  name:"Speed boost",   costs:[1, 2], desc:["Fly faster", "Fly faster still"]},
     {id:"left",   name:"Left shooter",  costs:[1],    desc:["Fires backward, to the left"]},
-    {id:"right",  name:"Right shooter", costs:[2],    desc:["A second forward cannon"]},
+    {id:"upAngle",   name:"Up shooter",    costs:[2], desc:["Fires up and ahead at an angle"]},
+    {id:"downAngle", name:"Down shooter",  costs:[2], desc:["Fires down and ahead at an angle"]},
+    {id:"topPod",    name:"Top pod",       costs:[2], desc:["Fires ahead from above. A wall or a hit knocks it out"]},
+    {id:"bottomPod", name:"Bottom pod",    costs:[2], desc:["Fires ahead from below. A wall or a hit knocks it out"]},
     {id:"rapid",  name:"Rapid fire",    costs:[2, 3], desc:["Shoot 50% faster", "Shoot twice as fast"]},
     {id:"shield", name:"Force shield",  costs:[3],    desc:["Takes one hit for you"]},
     {id:"rings",  name:"Ring shot",     costs:[3],    desc:["Wide rings instead of bullets"]},
@@ -8637,14 +8651,41 @@ window.ARCADE = (function(){
 
   function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
 
-  /* ---------- terrain: thin, fixed bands along the very top and bottom ---------- */
+  /* ---------- terrain ----------
+     Thin bands along the very top and bottom, plus land that grows in from
+     both edges as the stage nears its bosses: hills, spires, steps and
+     pinches in turn. It opens up again for the fight, and every stage starts
+     wide open. All of it is fixed, so it is the same on every run. */
+  function smooth(a, b, v){ var t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); }
+  var LAND_SEG = 260, NO_LAND = {t:0, b:0};
+  function landShape(kind, u){
+    if(kind === 0) return [0.55 + 0.45 * Math.sin(u * 0.035), 0.55 + 0.45 * Math.sin(u * 0.035 + 2.2)];     /* rolling hills */
+    if(kind === 1){                                                                                          /* spires, top then bottom */
+      var a = Math.max(0, Math.sin(u * 0.06)), b = Math.max(0, Math.sin(u * 0.06 + Math.PI));
+      return [0.25 + 0.95 * a * a * a, 0.25 + 0.95 * b * b * b];
+    }
+    if(kind === 2) return [0.35 + 0.55 * Math.round((Math.sin(u * 0.022) + 1) * 2) / 4,                       /* steps */
+                           0.35 + 0.55 * Math.round((Math.cos(u * 0.019) + 1) * 2) / 4];
+    var p = 0.5 + 0.5 * Math.sin(u * 0.026); p *= p;                                                         /* pinches */
+    return [0.3 + 0.7 * p, 0.3 + 0.7 * p];
+  }
+  function landExtra(wx){
+    var u = wx - g.scroll + g.dist;                  /* how far into this stage that bit of ground is */
+    var amp = smooth(150, 1150, u) * (1 - smooth(1300, 1440, u));
+    if(amp <= 0) return NO_LAND;
+    var M = Math.min(36, 32 + 2 * (g.loop - 1)) * amp;
+    var seg = Math.floor(u / LAND_SEG), A = landShape((seg + g.loop) % 4, u);
+    var mix = smooth(LAND_SEG - 40, LAND_SEG, u - seg * LAND_SEG);
+    if(mix > 0){ var B = landShape((seg + 1 + g.loop) % 4, u); A = [A[0] + (B[0] - A[0]) * mix, A[1] + (B[1] - A[1]) * mix]; }
+    return {t:M * A[0], b:M * A[1]};
+  }
   function ceilAt(wx){
     var b = Math.sin(wx * 0.017); b = b > 0 ? Math.pow(b, 6) : 0;
-    return 5 + 2.2 * Math.sin(wx * 0.045) + 1.6 * Math.sin(wx * 0.11 + 2) + 5 * b;
+    return 5 + 2.2 * Math.sin(wx * 0.045) + 1.6 * Math.sin(wx * 0.11 + 2) + 5 * b + landExtra(wx).t;
   }
   function floorAt(wx){
     var b = Math.sin(wx * 0.019 + 1.3); b = b > 0 ? Math.pow(b, 6) : 0;
-    return H - (5 + 2.2 * Math.sin(wx * 0.05 + 1) + 1.6 * Math.sin(wx * 0.13) + 5 * b);
+    return H - (5 + 2.2 * Math.sin(wx * 0.05 + 1) + 1.6 * Math.sin(wx * 0.13) + 5 * b) - landExtra(wx).b;
   }
 
   /* ---------- flight paths: polylines in screen space, flown at a steady speed ---------- */
@@ -8700,7 +8741,7 @@ window.ARCADE = (function(){
   }
 
   /* ---------- state ---------- */
-  function freshUp(){ return {speed:0, left:0, right:0, rapid:0, shield:0, weapon:"shot"}; }
+  function freshUp(){ return {speed:0, left:0, upAngle:0, downAngle:0, topPod:0, bottomPod:0, rapid:0, shield:0, weapon:"shot"}; }
   function newGame(){
     return {
       phase:"ready", score:0, lives:cfg.lives, loop:1, dist:0, scroll:0, sv:cfg.scroll,
@@ -8719,7 +8760,7 @@ window.ARCADE = (function(){
   function gustEvery(){ return Math.max(1.6, 3.0 - cfg.shoot * 0.25 - 0.15 * (g.loop - 1)); }
   /* more bosses each stage, so each one only toughens by a quarter */
   function bossHp(){ return Math.round(60 * cfg.boss / 3 * (1 + 0.25 * (g.loop - 1))); }
-  function hasUpgrades(){ var u = g.up; return u.speed || u.left || u.right || u.rapid || u.shield || u.weapon !== "shot"; }
+  function hasUpgrades(){ var u = g.up; return u.speed || u.left || u.upAngle || u.downAngle || u.topPod || u.bottomPod || u.rapid || u.shield || u.weapon !== "shot"; }
 
   function spark(x, y, n, col){
     if(RM) return;
@@ -8749,6 +8790,12 @@ window.ARCADE = (function(){
       var armed = sp.type === "gunner" ? cfg.shoot > 0
                 : sp.type === "ember" ? cfg.shoot >= 2 && i === 2
                 : cfg.shoot >= 3 && i % (cfg.shoot >= 4 ? 2 : 3) === 1;
+      if(sp.kind === "walk"){
+        /* walkers: they ride the land instead of a flight path */
+        g.foes.push({type:"walker", walker:true, side:sp.side, series:id, x:W + 6 + i * 9, y:sp.side === "ceil" ? 20 : 130,
+                     t:-i * 0.5, on:false, hp:T.hp, flash:0, rot:0, stride:0, armed:cfg.shoot > 0, fireCd:1.2 + i * 0.5});
+        continue;
+      }
       var path = makePath(sp, i);
       g.foes.push({type:sp.type, series:id, path:path, s:0, k:0, t:-delay, held:0, v:v,
                    x:path.pts[0].x, y:path.pts[0].y, on:false, hp:T.hp, flash:0, rot:i,
@@ -8840,8 +8887,7 @@ window.ARCADE = (function(){
       b.querySelector(".nm").textContent = u.name;
       b.querySelector(".ds").textContent = max ? u.desc[u.desc.length - 1]
         : u.desc[lv] + (other && g.up.weapon === other ? " (replaces " + (other === "laser" ? "the laser" : "rings") + ")" : "");
-      b.querySelector(".ct").textContent = max ? (u.costs.length > 1 ? "Maxed" : "Fitted")
-        : (u.costs.length > 1 ? "Level " + (lv + 1) + " \u00B7 " : "") + "\u25C6 " + c;
+      b.querySelector(".ct").textContent = max ? (u.costs.length > 1 ? "Max" : "Fitted") : "\u25C6 " + c;
       b.classList.toggle("owned", lv > 0);
       b.disabled = max || g.chips < c;
     });
@@ -8863,6 +8909,7 @@ window.ARCADE = (function(){
     if(g.phase === "ready" || g.phase === "over"){
       if(g.phase === "over") g = newGame();
       g.phase = "playing";
+      g.scroll = 0;                              /* every run starts on the same ground, however long the start card sat */
       ARCADE.begin("forge");
       syncHUD();
       return true;
@@ -8893,7 +8940,7 @@ window.ARCADE = (function(){
     var k = e.key;
     if(g.frozen){
       if(k === "b" || k === "B" || k === "Escape"){ e.preventDefault(); closeBuild(); }
-      else if(k >= "1" && k <= String(UPG.length)){ e.preventDefault(); buy(UPG[+k - 1].id); }
+      else if(k >= "0" && k <= "9"){ var ui = k === "0" ? 9 : +k - 1; if(ui < UPG.length){ e.preventDefault(); buy(UPG[ui].id); } }
       return;
     }
     if(k === "b" || k === "B"){ e.preventDefault(); openBuild(); return; }
@@ -8915,14 +8962,32 @@ window.ARCADE = (function(){
   });
 
   /* ---------- the ship ---------- */
-  function addBullet(x, y, dir){
-    g.bullets.push({x:x, y:y, dir:dir, w:g.up.weapon, t:0, hit:g.up.weapon === "laser" ? [] : null});
+  var ANGLE = 0.5, POD_DY = 6.4, POD_R = 1.7;
+  function addBullet(x, y, ux, uy){
+    g.bullets.push({x:x, y:y, dir:ux < 0 ? -1 : 1, ux:ux, uy:uy, w:g.up.weapon, t:0, hit:g.up.weapon === "laser" ? [] : null});
   }
   function volley(){
+    var s = g.ship, u = g.up;
+    addBullet(s.x + 4.6, s.y, 1, 0);
+    if(u.left) addBullet(s.x - 4.2, s.y, -1, 0);
+    if(u.upAngle) addBullet(s.x + 3, s.y - 1.2, Math.cos(ANGLE), -Math.sin(ANGLE));
+    if(u.downAngle) addBullet(s.x + 3, s.y + 1.2, Math.cos(ANGLE), Math.sin(ANGLE));
+    if(u.topPod) addBullet(s.x + 2.6, s.y - POD_DY, 1, 0);
+    if(u.bottomPod) addBullet(s.x + 2.6, s.y + POD_DY, 1, 0);
+  }
+  /* the pods ride above and below the ship; enemy fire or a wall that reaches one knocks it out */
+  function podLost(key, y){
+    g.up[key] = 0;
+    spark(g.ship.x, y, 12, PAL.flame);
+    g.rings.push({x:g.ship.x, y:y, t:0, c:PAL.flame});
+    pop(g.ship.x + 2, y - 4, "Pod lost", PAL.hurt);
+  }
+  function podHit(x, y, r){
+    if(g.phase !== "playing") return false;
     var s = g.ship;
-    if(g.up.right){ addBullet(s.x + 3.4, s.y - 2.2, 1); addBullet(s.x + 3.4, s.y + 2.2, 1); }
-    else addBullet(s.x + 4.6, s.y, 1);
-    if(g.up.left) addBullet(s.x - 4.2, s.y, -1);
+    if(g.up.topPod && Math.hypot(x - s.x - 0.6, y - s.y + POD_DY) <= POD_R + r){ podLost("topPod", s.y - POD_DY); return true; }
+    if(g.up.bottomPod && Math.hypot(x - s.x - 0.6, y - s.y - POD_DY) <= POD_R + r){ podLost("bottomPod", s.y + POD_DY); return true; }
+    return false;
   }
   function hurt(){
     var s = g.ship;
@@ -8971,27 +9036,46 @@ window.ARCADE = (function(){
     return {x:B.x - 1 - j * 2.9, y:headY(B.t - j * 0.13), r:3.1 + j * 0.13};
   }
   /* the part you can hurt */
+  function eyeR(B){ return 9 * (0.35 + 0.65 * B.hp / B.max); }
   function headOf(B){
     if(B.kind === "dragon") return {x:B.x + 2, y:B.y, r:5.2};
     if(B.kind === "snake") return {x:B.x - 1.5, y:B.y, r:4.4};
+    if(B.kind === "eye") return {x:B.x, y:B.y, r:eyeR(B)};
+    if(B.kind === "brain") return {x:B.x, y:B.y - 0.5, r:8};
+    if(B.kind === "core") return {x:B.x, y:B.y, r:4.6};
     return {x:B.x, y:B.y, r:4.2};
+  }
+  /* the parts that hurt to touch and soak up shots without taking damage */
+  function partsOf(B){
+    if(B.kind === "dragon" || B.kind === "snake"){
+      var out = [];
+      for(var j = 1; j <= NECK; j++) out.push(neckAt(B, j));
+      return out;
+    }
+    return B.parts || [];
   }
   function bossAlive(kind){
     return !!g.boss && g.boss.list.some(function(B){ return B.kind === kind && !B.dead && B.dying <= 0; });
   }
   function makeBoss(kind){
-    var hp = Math.round(bossHp() * (kind === "dragon" ? 1 : kind === "snake" ? 0.8 : 0.6));
-    return {kind:kind, hp:hp, max:hp, t:0, enter:0, flash:0, mouth:0, dying:0, dead:false,
-            x:kind === "dragon" ? -30 : kind === "snake" ? W + 30 : 50, y:kind === "bird" ? -20 : 75,
-            cd:kind === "dragon" ? 2.6 : kind === "snake" ? 3.4 : 3, windup:0, burst:0, burstCd:0, breaths:0};
+    var hp = Math.round(bossHp() * BOSS_HP[kind]);
+    var B = {kind:kind, hp:hp, max:hp, t:0, enter:0, flash:0, mouth:0, dying:0, dead:false, x:50, y:75,
+             cd:kind === "dragon" ? 2.6 : kind === "snake" ? 3.4 : kind === "brain" ? 2 : 3, windup:0, burst:0, burstCd:0, breaths:0};
+    if(kind === "dragon") B.x = -30;
+    if(kind === "snake" || kind === "core") B.x = W + 30;
+    if(kind === "bird") B.y = -20;
+    if(kind === "eye"){ B.x = W + 20; B.y = -20; B.vx = -0.7; B.vy = 0.7; }
+    if(kind === "brain"){ B.x = 52; B.y = H + 25; B.reach = false; B.arms = [{x:45, y:H + 20}, {x:59, y:H + 20}]; B.parts = []; }
+    if(kind === "core"){ B.ang = 0; B.parts = []; }
+    return B;
   }
+  var JOINS = {eye:"and now an eye that wanders", brain:"and now a giant brain", core:"and now a spinning core"};
   function startBoss(){
-    var kinds = ["dragon"];
-    if(g.loop >= 2) kinds.push("snake");
-    if(g.loop >= 3) kinds.push("bird");
+    var kinds = BOSS_ORDER.slice(0, Math.min(BOSS_ORDER.length, g.loop));
     g.boss = {t:0, list:kinds.map(makeBoss), emberCd:3.5, emberIdx:0};
     g.banner = {text:"Warning", t:2.8, warn:true,
-                sub:g.loop >= 3 ? "dragon behind, snake ahead, bird above" : g.loop >= 2 ? "a dragon behind, a snake ahead" : "a dragon, behind you"};
+                sub:g.loop > BOSS_ORDER.length ? "all of them at once" : g.loop >= 4 ? JOINS[kinds[kinds.length - 1]]
+                  : g.loop >= 3 ? "dragon behind, snake ahead, bird above" : g.loop >= 2 ? "a dragon behind, a snake ahead" : "a dragon, behind you"};
   }
   function flame(x, y, a){
     var sp = 40 + 4 * (g.loop - 1);
@@ -9083,16 +9167,80 @@ window.ARCADE = (function(){
       B.cd = gustEvery();
     }
   }
+  function stepEye(B, dt){
+    var e = enterEase(B, 2.4, dt);
+    if(B.enter < 1){ B.x = W + 20 - (W + 20 - 70) * e; B.y = -20 + 60 * e; return; }
+    /* it roams the whole board on its own, paying no mind to the others; the smaller it gets, the faster it goes */
+    var r = eyeR(B), sp = (20 + 22 * (1 - B.hp / B.max)) * loopMult(), len = Math.hypot(B.vx, B.vy) || 1;
+    var turn = Math.sin(B.t * 0.7) * 0.5 * dt, c = Math.cos(turn), sn = Math.sin(turn);
+    var vx = (B.vx * c - B.vy * sn) / len * sp, vy = (B.vx * sn + B.vy * c) / len * sp;
+    B.vx = vx; B.vy = vy;
+    B.x += vx * dt; B.y += vy * dt;
+    if(B.x < r + 4){ B.x = r + 4; B.vx = Math.abs(B.vx); }
+    if(B.x > W - r - 4){ B.x = W - r - 4; B.vx = -Math.abs(B.vx); }
+    if(B.y < 18 + r){ B.y = 18 + r; B.vy = Math.abs(B.vy); }
+    if(B.y > 132 - r){ B.y = 132 - r; B.vy = -Math.abs(B.vy); }
+  }
+  function stepBrain(B, dt){
+    var s = g.ship, e = enterEase(B, 2.6, dt);
+    var by = 114 + 7 * Math.sin(B.t * 0.41);
+    B.x = 52 + 14 * Math.sin(B.t * 0.27);
+    B.y = H + 25 - (H + 25 - by) * e;
+    /* two tentacles reach for you, then curl back to the brain for a moment */
+    B.cd -= dt;
+    if(B.cd <= 0){ B.reach = !B.reach; B.cd = B.reach ? 5.5 : 1.6; }
+    var a, A;
+    for(a = 0; a < 2; a++){
+      A = B.arms[a];
+      A.bx = B.x + (a ? 7 : -7); A.by = B.y - 5;
+      var tx, ty;
+      if(B.reach && B.enter >= 1){ tx = s.x + (a ? 5 : -5); ty = s.y + (a ? 3 : -3); }
+      else { tx = A.bx + (a ? 9 : -9); ty = A.by - 10; }
+      var dx = tx - A.bx, dy = ty - A.by, dd = Math.hypot(dx, dy);
+      if(dd > 48){ tx = A.bx + dx / dd * 48; ty = A.by + dy / dd * 48; }
+      var mx = tx - A.x, my = ty - A.y, md = Math.hypot(mx, my), st = Math.min(md, (B.reach ? 15 : 40) * loopMult() * dt);
+      if(md > 0.01){ A.x += mx / md * st; A.y += my / md * st; }
+    }
+    B.parts = [];
+    for(a = 0; a < 2; a++){
+      A = B.arms[a];
+      var lx = A.x - A.bx, ly = A.y - A.by, ll = Math.hypot(lx, ly) || 1, nx = -ly / ll, ny = lx / ll;
+      for(var k = 1; k <= 10; k++){
+        var f = k / 10, w = Math.sin(B.t * 4 + k * 0.8 + a * 2) * 2.4 * Math.sin(f * Math.PI);
+        B.parts.push({x:A.bx + lx * f + nx * w, y:A.by + ly * f + ny * w, r:2.3 - f * 0.8, k:k});
+      }
+    }
+  }
+  function stepCore(B, dt){
+    var e = enterEase(B, 2.5, dt);
+    B.x = W + 30 - (W + 30 - (64 + 4 * Math.sin(B.t * 0.5))) * e;
+    B.y = 75 + 28 * Math.sin(B.t * 0.31);
+    /* four arms spin, slow, stop and spin back, reaching in and out as they go */
+    B.ang += 1.1 * Math.sin(B.t * 0.35) * loopMult() * dt;
+    var L = 0.62 + 0.38 * Math.sin(B.t * 0.8);
+    B.parts = [];
+    for(var a = 0; a < 4; a++){
+      var th = B.ang + a * Math.PI / 2;
+      for(var k = 1; k <= 7; k++){
+        var d = 5 + k * 3.1 * L;
+        B.parts.push({x:B.x + Math.cos(th) * d, y:B.y + Math.sin(th) * d, r:k === 7 ? 2.4 : 1.8, k:k});
+      }
+    }
+  }
   function touchBoss(B){
     var s = g.ship;
     if(g.phase !== "playing" || s.inv > 0) return;
-    var h = headOf(B), touch = Math.hypot(s.x - h.x, s.y - h.y) < h.r + 2;
-    for(var j = 1; j <= NECK && !touch && B.kind !== "bird"; j++){ var n = neckAt(B, j); touch = Math.hypot(s.x - n.x, s.y - n.y) < n.r + 2.4; }
+    var h = headOf(B), touch = Math.hypot(s.x - h.x, s.y - h.y) < h.r + 2, parts = partsOf(B);
+    for(var j = 0; j < parts.length && !touch; j++) touch = Math.hypot(s.x - parts[j].x, s.y - parts[j].y) < parts[j].r + 2.4;
     if(!touch) return;
     hurt();
     if(g.phase !== "playing") return;
-    if(B.kind === "bird") s.y = clamp(s.y + 9, 2, H - 2);
-    else s.x = clamp(s.x + (B.kind === "snake" ? -8 : 8), SHIP_MIN_X, SHIP_MAX_X);
+    /* a shield takes the hit and knocks you clear */
+    if(B.kind === "dragon") s.x += 8;
+    else if(B.kind === "snake") s.x -= 8;
+    else if(B.kind === "bird") s.y += 9;
+    else { var kx = s.x - h.x, ky = s.y - h.y, kd = Math.hypot(kx, ky) || 1; s.x += kx / kd * 9; s.y += ky / kd * 9; }
+    s.x = clamp(s.x, SHIP_MIN_X, SHIP_MAX_X); s.y = clamp(s.y, 2, H - 2);
   }
   function stepBoss(dt){
     var F = g.boss, alive = 0;
@@ -9106,8 +9254,10 @@ window.ARCADE = (function(){
       if(B.dying > 0){
         B.dying -= dt;
         if(!RM && Math.random() < dt * 16){
-          var p = B.kind === "bird" ? {x:B.x + (Math.random() - .5) * 10, y:B.y + (Math.random() - .5) * 6} : neckAt(B, (Math.random() * NECK) | 0);
-          var col = B.kind === "dragon" ? PAL.fire : B.kind === "snake" ? PAL.snake : PAL.bird;
+          var pts = partsOf(B), hd = headOf(B);
+          var p = pts.length && Math.random() < 0.6 ? pts[(Math.random() * pts.length) | 0]
+                : {x:hd.x + (Math.random() - .5) * hd.r * 2.4, y:hd.y + (Math.random() - .5) * hd.r * 2};
+          var col = B.kind === "dragon" ? PAL.fire : BOSS_COL[B.kind];
           spark(p.x, p.y, 10, col);
           g.rings.push({x:p.x, y:p.y, t:0, c:col});
         }
@@ -9117,7 +9267,10 @@ window.ARCADE = (function(){
       alive++;
       if(B.kind === "dragon") stepDragon(B, dt);
       else if(B.kind === "snake") stepSnake(B, dt);
-      else stepBird(B, dt);
+      else if(B.kind === "bird") stepBird(B, dt);
+      else if(B.kind === "eye") stepEye(B, dt);
+      else if(B.kind === "brain") stepBrain(B, dt);
+      else stepCore(B, dt);
       if(B.enter >= 1) touchBoss(B);
     }
     if(F.list.every(function(B){ return B.dead; })){ bossDone(); return; }
@@ -9131,8 +9284,10 @@ window.ARCADE = (function(){
   function reach(b){ return b.w === "rings" ? Math.min(5.5, 1.2 + b.t * 16) : 0.8; }
   function touches(b, x, y, r){
     if(b.w === "laser"){
-      var x0 = b.dir > 0 ? b.x - LASER_LEN : b.x, x1 = b.dir > 0 ? b.x : b.x + LASER_LEN;
-      return Math.abs(y - b.y) <= r + 0.7 && x >= x0 - r && x <= x1 + r;
+      /* the beam is a segment trailing behind its head */
+      var ux = b.ux === undefined ? b.dir : b.ux, uy = b.uy || 0, px = x - b.x, py = y - b.y;
+      var along = clamp(-(px * ux + py * uy), 0, LASER_LEN);
+      return Math.hypot(px + ux * along, py + uy * along) <= r + 0.7;
     }
     return Math.hypot(x - b.x, y - b.y) <= r + reach(b);
   }
@@ -9156,10 +9311,11 @@ window.ARCADE = (function(){
         if(b.hit.indexOf(B) < 0){ b.hit.push(B); hitBoss(B, 2, b.x, b.y); }
         continue;
       }
-      /* bodies soak up shots without taking damage; only the head counts */
-      for(var j = 1; j <= NECK && !b.hit && B.kind !== "bird"; j++){
-        var n = neckAt(B, j);
-        if(touches(b, n.x, n.y, n.r)){ spark(b.x, b.y, 3, B.kind === "snake" ? PAL.snakeBelly : PAL.dragBelly); return true; }
+      /* bodies, tentacles and arms soak up shots without taking damage; only the weak spot counts */
+      var parts = b.hit ? [] : partsOf(B);
+      for(var j = 0; j < parts.length; j++){
+        var n = parts[j];
+        if(touches(b, n.x, n.y, n.r)){ spark(b.x, b.y, 3, B.kind === "dragon" ? PAL.dragBelly : BOSS_COL[B.kind]); return true; }
       }
     }
     return false;
@@ -9191,8 +9347,8 @@ window.ARCADE = (function(){
       return;
     }
     var playing = g.phase === "playing";
+    if(playing || g.phase === "dying") g.dist += g.sv * dt;
     if(playing){
-      g.dist += g.sv * dt;
       while(g.scriptIdx < SCRIPT.length && g.dist >= SCRIPT[g.scriptIdx].at) spawnSeries(SCRIPT[g.scriptIdx++]);
       if(!g.boss && g.dist >= STAGE_LEN) startBoss();
 
@@ -9227,6 +9383,11 @@ window.ARCADE = (function(){
         var hx = s.x + HULL[i][0], hy = s.y + HULL[i][1];
         if(hy <= ceilAt(g.scroll + hx) || hy >= floorAt(g.scroll + hx)){ crash(); break; }
       }
+      if(g.phase === "playing"){
+        var pwx = g.scroll + s.x + 0.6;
+        if(g.up.topPod && s.y - POD_DY - POD_R * 0.6 <= ceilAt(pwx)) podLost("topPod", s.y - POD_DY);
+        if(g.up.bottomPod && s.y + POD_DY + POD_R * 0.6 >= floorAt(pwx)) podLost("bottomPod", s.y + POD_DY);
+      }
     } else if(g.phase === "dying"){
       g.pause -= dt;
       if(g.pause <= 0) respawn();
@@ -9236,10 +9397,11 @@ window.ARCADE = (function(){
     for(i = g.bullets.length - 1; i >= 0; i--){
       var b = g.bullets[i], dist = BULLET[b.w] * dt, n = Math.ceil(dist / 1.4), sd = dist / n, gone = false;
       var tail = b.w === "laser" ? LASER_LEN : 0;
+      if(b.ux === undefined){ b.ux = b.dir; b.uy = 0; }
       b.t += dt;
       for(var k = 0; k < n && !gone; k++){
-        b.x += sd * b.dir;
-        if(b.x > W + 4 + tail || b.x < -4 - tail){ gone = true; break; }
+        b.x += sd * b.ux; b.y += sd * b.uy;
+        if(b.x > W + 4 + tail || b.x < -4 - tail || b.y < -4 - tail || b.y > H + 4 + tail){ gone = true; break; }
         if(b.x > 0 && b.x < W && (b.y <= ceilAt(g.scroll + b.x) || b.y >= floorAt(g.scroll + b.x))){
           spark(b.x, b.y, 4, PAL.edge); gone = true; break;
         }
@@ -9255,21 +9417,38 @@ window.ARCADE = (function(){
       if(f.flash > 0) f.flash -= dt;
       if(f.t < 0) continue;
       f.on = true;
-      var adv = f.v * dt;
-      if(P.holdAt >= 0 && f.held < P.hold && f.s + adv >= P.holdAt){
-        if(f.s < P.holdAt) f.s = P.holdAt; else f.held += dt;
-      } else f.s += adv;
-      if(f.s >= P.len){ escape(i); continue; }
-      while(f.k < P.cum.length - 2 && P.cum[f.k + 1] < f.s) f.k++;
-      var pa = P.pts[f.k], pb = P.pts[f.k + 1], sl = P.cum[f.k + 1] - P.cum[f.k], u = sl > 0 ? (f.s - P.cum[f.k]) / sl : 0;
-      f.x = pa.x + (pb.x - pa.x) * u; f.y = pa.y + (pb.y - pa.y) * u;
+      if(f.walker){
+        /* it walks forward and back along the land to line up a shot, then gives up and walks off */
+        var want = clamp(s.x + 28, 34, W - 8), rel = f.t < 9 ? clamp(g.sv + (want - f.x) * 1.5, -30, 30) : -16;
+        f.x += (rel - g.sv) * dt;
+        f.stride += Math.abs(rel) * dt;
+        f.settled = f.t < 9 && Math.abs(want - f.x) < 5;
+        if(f.x < -8){ escape(i); continue; }
+        f.y = f.side === "ceil" ? ceilAt(g.scroll + f.x) + 2.6 : floorAt(g.scroll + f.x) - 2.6;
+      } else {
+        var adv = f.v * dt;
+        if(P.holdAt >= 0 && f.held < P.hold && f.s + adv >= P.holdAt){
+          if(f.s < P.holdAt) f.s = P.holdAt; else f.held += dt;
+        } else f.s += adv;
+        if(f.s >= P.len){ escape(i); continue; }
+        while(f.k < P.cum.length - 2 && P.cum[f.k + 1] < f.s) f.k++;
+        var pa = P.pts[f.k], pb = P.pts[f.k + 1], sl = P.cum[f.k + 1] - P.cum[f.k], u = sl > 0 ? (f.s - P.cum[f.k]) / sl : 0;
+        f.x = pa.x + (pb.x - pa.x) * u; f.y = pa.y + (pb.y - pa.y) * u;
+        /* where the land has grown in, the pattern squeezes into the open space instead of flying through rock */
+        var lx = landExtra(g.scroll + f.x);
+        if(lx.t || lx.b){ var lo = 12 + lx.t, hi = 138 - lx.b; f.y = lo + (f.y - 12) * (hi - lo) / 126; }
+      }
 
       if(playing && f.armed && f.x > 3 && f.x < W - 3 && Math.abs(f.x - s.x) > 8){
         f.fireCd -= dt;
-        if(f.fireCd <= 0){
-          var ax = s.x - f.x, ay = s.y - f.y, ad = Math.hypot(ax, ay) || 1, asp = 34 * loopMult();
-          g.shots.push({x:f.x, y:f.y, vx:ax / ad * asp, vy:ay / ad * asp});
-          f.fireCd = fireEvery();
+        /* a walker only shoots once it has stopped at its spot, and its gun glows first */
+        if(f.walker && f.fireCd <= 0 && !(f.tell > 0) && f.settled) f.tell = 0.4;
+        if(f.walker ? f.tell > 0 && (f.tell -= dt) <= 0 : f.fireCd <= 0){
+          f.tell = 0;
+          var oy = f.walker ? (f.side === "ceil" ? 1.6 : -1.6) : 0;
+          var ax = s.x - f.x, ay = s.y - f.y - oy, ad = Math.hypot(ax, ay) || 1, asp = (f.walker ? 27 : 34) * loopMult();
+          g.shots.push({x:f.x, y:f.y + oy, vx:ax / ad * asp, vy:ay / ad * asp, from:f.type});
+          f.fireCd = fireEvery() * (f.walker ? 1.3 : 1);
         }
       }
       if(g.phase === "playing" && s.inv <= 0 && Math.hypot(f.x - s.x, f.y - s.y) < T.r + 2.2){
@@ -9284,6 +9463,7 @@ window.ARCADE = (function(){
       sh.x += sh.vx * dt; sh.y += sh.vy * dt;
       if(sh.x < -3 || sh.x > W + 3 || sh.y < -3 || sh.y > H + 3){ g.shots.splice(i, 1); continue; }
       if(sh.y <= ceilAt(g.scroll + sh.x) || sh.y >= floorAt(g.scroll + sh.x)){ g.shots.splice(i, 1); continue; }
+      if(podHit(sh.x, sh.y, 0.8)){ g.shots.splice(i, 1); continue; }
       if(g.phase === "playing" && s.inv <= 0 && Math.hypot(sh.x - s.x, sh.y - s.y) <= 2.6){ g.shots.splice(i, 1); hurt(); }
     }
     for(i = g.flames.length - 1; i >= 0; i--){
@@ -9291,6 +9471,7 @@ window.ARCADE = (function(){
       fl.t += dt; fl.x += fl.vx * dt; fl.y += fl.vy * dt;
       if(fl.x > W + 4 || fl.y < -4 || fl.y > H + 4){ g.flames.splice(i, 1); continue; }
       var fr = Math.min(2.8, 1.2 + fl.t * 2);            /* the bright core hurts; the glow around it does not */
+      if(podHit(fl.x, fl.y, fr * 0.75)){ g.flames.splice(i, 1); continue; }
       if(g.phase === "playing" && s.inv <= 0 && Math.hypot(fl.x - s.x, fl.y - s.y) <= fr * 0.75 + 1.6){ g.flames.splice(i, 1); hurt(); }
     }
 
@@ -9298,6 +9479,7 @@ window.ARCADE = (function(){
       var bl = g.blobs[i];
       bl.t += dt; bl.x += bl.vx * dt; bl.y += bl.vy * dt + Math.sin(bl.t * 7 + bl.ph) * 9 * dt;
       if(bl.x < -4 || bl.y < -4 || bl.y > H + 4){ g.blobs.splice(i, 1); continue; }
+      if(podHit(bl.x, bl.y, 1.5)){ g.blobs.splice(i, 1); continue; }
       if(g.phase === "playing" && s.inv <= 0 && Math.hypot(bl.x - s.x, bl.y - s.y) <= 3.1){ g.blobs.splice(i, 1); hurt(); }
     }
     for(i = g.gusts.length - 1; i >= 0; i--){
@@ -9368,8 +9550,16 @@ window.ARCADE = (function(){
     ctx.fillStyle = PAL.flameCore;
     ctx.beginPath(); ctx.moveTo(-4.2, -0.5); ctx.lineTo(-4.2 - len * 0.5, 0); ctx.lineTo(-4.2, 0.5); ctx.closePath(); ctx.fill();
     ctx.fillStyle = PAL.shipDark;
-    if(u.right){ ctx.fillRect(0.6, -2.9, 3.4, 1.1); ctx.fillRect(0.6, 1.8, 3.4, 1.1); }
     if(u.left){ ctx.fillRect(-6, -0.45, 2.2, 0.9); }
+    if(u.upAngle){ ctx.save(); ctx.translate(1.6, -1.3); ctx.rotate(-ANGLE); ctx.fillRect(0, -0.4, 3, 0.8); ctx.restore(); }
+    if(u.downAngle){ ctx.save(); ctx.translate(1.6, 1.3); ctx.rotate(ANGLE); ctx.fillRect(0, -0.4, 3, 0.8); ctx.restore(); }
+    for(var pd = -1; pd <= 1; pd += 2){
+      if(!(pd < 0 ? u.topPod : u.bottomPod)) continue;
+      ctx.fillStyle = PAL.shipDark; ctx.fillRect(1.4, pd * POD_DY - 0.35, 2.2, 0.7);
+      ctx.fillStyle = PAL.flame; ctx.beginPath(); ctx.arc(0.6, pd * POD_DY, POD_R, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = PAL.flameCore; ctx.beginPath(); ctx.arc(0.2, pd * POD_DY - 0.4, POD_R * 0.45, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = PAL.shipDark;
+    }
     ctx.beginPath(); ctx.moveTo(-1.5, 0.6); ctx.lineTo(1.2, 0.6); ctx.lineTo(-2.4, 3); ctx.lineTo(-3.6, 3); ctx.closePath(); ctx.fill();
     ctx.fillStyle = PAL.ship;
     ctx.beginPath();
@@ -9403,6 +9593,20 @@ window.ARCADE = (function(){
         ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(2.8, -1); ctx.lineTo(2.4, 1.1); ctx.closePath(); ctx.fill();
       }
       ctx.fillStyle = "#e8fffb"; ctx.beginPath(); ctx.arc(0, 0, 0.8, 0, Math.PI * 2); ctx.fill();
+    } else if(f.type === "walker"){
+      var flip = f.side === "ceil" ? -1 : 1, legc = f.flash > 0 ? "#ffffff" : "#6b5a2e";
+      ctx.scale(1, flip);
+      var stp = Math.sin(f.stride * 0.9) * 1.1;
+      ctx.strokeStyle = legc; ctx.lineWidth = 0.6;
+      ctx.beginPath(); ctx.moveTo(-1.2, 0.6); ctx.lineTo(-1.8 + stp, 2.7); ctx.moveTo(1.2, 0.6); ctx.lineTo(1.8 - stp, 2.7); ctx.stroke();
+      ctx.save(); ctx.rotate(Math.atan2((g.ship.y - f.y) * flip, g.ship.x - f.x));
+      ctx.fillStyle = legc; ctx.fillRect(0, -0.45, 3.8, 0.9);
+      if(f.tell > 0){ ctx.fillStyle = "#ffd166"; ctx.beginPath(); ctx.arc(3.9, 0, 0.5 + (0.4 - f.tell) * 2.5, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore();
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.arc(0, 0.6, 2.7, Math.PI, 0); ctx.closePath(); ctx.fill();
+      ctx.fillRect(-2.7, 0.4, 5.4, 0.9);
+      ctx.fillStyle = "#ff5f6d"; ctx.beginPath(); ctx.arc(0, -0.6, 0.6, 0, Math.PI * 2); ctx.fill();
     } else if(f.type === "gunner"){
       var aim = Math.atan2(g.ship.y - f.y, g.ship.x - f.x);
       ctx.save(); ctx.rotate(aim); ctx.fillRect(0, -0.55, 4.2, 1.1); ctx.restore();
@@ -9496,6 +9700,61 @@ window.ARCADE = (function(){
     ctx.fillStyle = PAL.beak;
     ctx.beginPath(); ctx.moveTo(-0.7, -2); ctx.lineTo(0.7, -2); ctx.lineTo(0, -0.3); ctx.closePath(); ctx.fill();
     ctx.fillStyle = "#1a140a"; ctx.fillRect(-1.15, -3.3, 0.55, 0.55); ctx.fillRect(0.6, -3.3, 0.55, 0.55);
+    ctx.restore();
+  }
+  function drawEye(B){
+    var r = eyeR(B), hot = B.flash > 0, s = g.ship;
+    var ax = s.x - B.x, ay = s.y - B.y, ad = Math.hypot(ax, ay) || 1, lk = r * 0.3;
+    ctx.save(); ctx.translate(B.x, B.y);
+    ctx.fillStyle = "rgba(59,123,255,.2)"; ctx.beginPath(); ctx.arc(0, 0, r + 1.8, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = hot ? "#ffd8d8" : "#f4f1ea"; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "rgba(200,60,60,.55)"; ctx.lineWidth = 0.25;
+    for(var k = 0; k < 7; k++){
+      var a = k * 0.9 + 0.3;
+      ctx.beginPath(); ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r); ctx.lineTo(Math.cos(a + 0.25) * r * 0.62, Math.sin(a + 0.25) * r * 0.62); ctx.stroke();
+    }
+    ctx.fillStyle = BOSS_COL.eye; ctx.beginPath(); ctx.arc(ax / ad * lk, ay / ad * lk, r * 0.52, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#1c3f9e"; ctx.lineWidth = 0.4; ctx.stroke();
+    ctx.fillStyle = "#0a0a14"; ctx.beginPath(); ctx.arc(ax / ad * lk * 1.2, ay / ad * lk * 1.2, r * 0.24, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,.85)"; ctx.beginPath(); ctx.arc(-r * 0.3, -r * 0.36, r * 0.13, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  function drawBrain(B){
+    var hot = B.flash > 0, j, p;
+    for(j = 0; j < B.parts.length; j++){
+      p = B.parts[j];
+      ctx.fillStyle = hot ? "#ffe0ee" : (p.k % 2 ? "#b04a7c" : "#9a3d6b");
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      if(p.k === 10){
+        ctx.fillStyle = "#f4ecdf";
+        ctx.beginPath(); ctx.moveTo(p.x - 1.4, p.y); ctx.lineTo(p.x - 0.4, p.y - 2.2); ctx.lineTo(p.x + 0.2, p.y - 0.2); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(p.x + 1.4, p.y); ctx.lineTo(p.x + 0.4, p.y - 2.2); ctx.lineTo(p.x - 0.2, p.y - 0.2); ctx.closePath(); ctx.fill();
+      }
+    }
+    ctx.save(); ctx.translate(B.x, B.y);
+    ctx.fillStyle = hot ? "#ffe0ee" : BOSS_COL.brain;
+    ctx.beginPath(); ctx.ellipse(0, 0, 11, 8.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#b85b86"; ctx.lineWidth = 0.6;
+    ctx.beginPath(); ctx.moveTo(0, -8.4); ctx.quadraticCurveTo(1.6, -2, 0, 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-9, -3); ctx.quadraticCurveTo(-6, -7, -3, -4); ctx.quadraticCurveTo(-1, -2, -3, 1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(9, -3); ctx.quadraticCurveTo(6, -7, 3, -4); ctx.quadraticCurveTo(1, -2, 3, 1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-8, 3); ctx.quadraticCurveTo(-5, 1, -4, 5); ctx.moveTo(8, 3); ctx.quadraticCurveTo(5, 1, 4, 5); ctx.stroke();
+    ctx.fillStyle = "#fff1a8"; ctx.beginPath(); ctx.ellipse(-6.4, 2.6, 2.3, 1.6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#2a0a1a"; ctx.fillRect(-6.7, 1.2, 0.6, 2.8);
+    ctx.restore();
+  }
+  function drawCore(B){
+    var hot = B.flash > 0, j, p;
+    for(j = 0; j < B.parts.length; j++){
+      p = B.parts[j];
+      ctx.fillStyle = p.k === 7 ? (hot ? "#fff" : "#c9ced8") : (p.k % 2 ? "#5f7f9c" : "#4a6680");
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.save(); ctx.translate(B.x, B.y);
+    ctx.fillStyle = "#3a4656"; ctx.beginPath(); ctx.arc(0, 0, 6.2, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = hot ? "#ffffff" : BOSS_COL.core; ctx.beginPath(); ctx.arc(0, 0, 4.4, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 0.6 + 0.3 * Math.sin(B.t * 6); ctx.fillStyle = "#fff1c9";
+    ctx.beginPath(); ctx.arc(0, 0, 1.8, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
     ctx.restore();
   }
   function drawDragon(B){
@@ -9610,22 +9869,25 @@ window.ARCADE = (function(){
     if(g.boss) g.boss.list.forEach(function(B){
       if(B.dead) return;
       ctx.globalAlpha = B.dying > 0 ? Math.max(0, B.dying / 1.8) : 1;
-      if(B.kind === "dragon") drawDragon(B); else if(B.kind === "snake") drawSnake(B); else drawBird(B);
+      if(B.kind === "dragon") drawDragon(B); else if(B.kind === "snake") drawSnake(B);
+      else if(B.kind === "bird") drawBird(B); else if(B.kind === "eye") drawEye(B);
+      else if(B.kind === "brain") drawBrain(B); else drawCore(B);
       ctx.globalAlpha = 1;
     });
 
     for(i = 0; i < g.bullets.length; i++){
       var b = g.bullets[i];
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(Math.atan2(b.uy || 0, b.ux === undefined ? b.dir : b.ux));
       if(b.w === "rings"){
         ctx.strokeStyle = PAL.ring; ctx.lineWidth = 0.6;
-        ctx.beginPath(); ctx.ellipse(b.x, b.y, reach(b) * 0.45, reach(b), 0, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(0, 0, reach(b) * 0.45, reach(b), 0, 0, Math.PI * 2); ctx.stroke();
       } else if(b.w === "laser"){
-        ctx.fillStyle = PAL.laser;
-        ctx.fillRect(b.dir > 0 ? b.x - LASER_LEN : b.x, b.y - 0.35, LASER_LEN, 0.7);
-        ctx.fillStyle = "#f4fff0"; ctx.fillRect(b.dir > 0 ? b.x - LASER_LEN : b.x, b.y - 0.12, LASER_LEN, 0.24);
+        ctx.fillStyle = PAL.laser; ctx.fillRect(-LASER_LEN, -0.35, LASER_LEN, 0.7);
+        ctx.fillStyle = "#f4fff0"; ctx.fillRect(-LASER_LEN, -0.12, LASER_LEN, 0.24);
       } else {
-        ctx.fillStyle = PAL.shot; ctx.fillRect(b.x - 1.6, b.y - 0.25, 3.2, 0.5);
+        ctx.fillStyle = PAL.shot; ctx.fillRect(-1.6, -0.25, 3.2, 0.5);
       }
+      ctx.restore();
     }
 
     var s = g.ship;
@@ -9656,16 +9918,16 @@ window.ARCADE = (function(){
     /* each boss's health, side by side along the top */
     var F = g.boss;
     if(F && F.t > 0.8){
-      var nb = F.list.length, slot = 44 / nb;
+      var nb = F.list.length, per = nb > 3 ? 3 : nb, slot = 44 / per;
       ctx.font = "500 2.4px 'JetBrains Mono', monospace";
       F.list.forEach(function(B, bi){
-        var x0 = 28 + bi * slot, bw = slot - (nb > 1 ? 2 : 0);
+        var x0 = 28 + (bi % per) * slot, y0 = 15.5 + Math.floor(bi / per) * 9, bw = slot - (per > 1 ? 2 : 0);
         ctx.globalAlpha = B.dead ? 0.35 : 1;
-        ctx.fillStyle = "rgba(8,6,26,.6)"; ctx.fillRect(x0, 15.5, bw, 3.4);
-        ctx.fillStyle = B.kind === "dragon" ? PAL.fireHot : B.kind === "snake" ? PAL.snake : PAL.bird;
-        ctx.fillRect(x0 + 1, 16.3, (bw - 2) * B.hp / B.max, 1.8);
+        ctx.fillStyle = "rgba(8,6,26,.6)"; ctx.fillRect(x0, y0, bw, 3.4);
+        ctx.fillStyle = BOSS_COL[B.kind];
+        ctx.fillRect(x0 + 1, y0 + 0.8, (bw - 2) * B.hp / B.max, 1.8);
         ctx.fillStyle = "rgba(244,236,223,.75)";
-        ctx.fillText(NAMES[B.kind].toUpperCase(), x0 + bw / 2, 21.6);
+        ctx.fillText(NAMES[B.kind].toUpperCase(), x0 + bw / 2, y0 + 6.1);
       });
       ctx.globalAlpha = 1;
       if(!g.up.left && bossAlive("dragon") && F.t < 14 && Math.floor(F.t * 2) % 2 === 0){
