@@ -317,6 +317,51 @@ button.act:disabled{opacity:.45; cursor:default}
 
 /* Astro's playfield is its own sky */
 #aStage{background:#0a0f1e}
+/* Upriver's board is bright green and blue, so its HUD needs a shadow to read */
+#uStage{background:#3d8f3a}
+#uStage .hud{text-shadow:0 1px 2px rgba(0,0,0,.6), 0 0 6px rgba(0,0,0,.35)}
+/* Forge: the on-board BUILD button and the frozen build menu */
+#gStage .hud{text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.gbuildbtn{
+  position:absolute; right:10px; bottom:10px; z-index:5; pointer-events:auto; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px; min-height:40px; padding:8px 14px;
+  font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  background:rgba(23,19,32,.72); color:rgba(244,236,223,.88);
+  border:1px solid rgba(244,236,223,.28); border-radius:99px;
+}
+.gbuildbtn[hidden]{display:none!important}
+.gbuildbtn b{font-weight:700; color:#ffd166; letter-spacing:0}
+.gbuildbtn.ready{border-color:#ffd166; color:#ffd166; box-shadow:0 0 0 3px rgba(255,209,102,.16)}
+.gbuildbtn:focus-visible,.gtile:focus-visible,.gbresume:focus-visible{outline:2px solid #ffd166; outline-offset:2px}
+.gchip{color:#ffd166}
+.gbuild{
+  position:absolute; inset:0; z-index:7; display:flex; flex-direction:column; gap:10px;
+  padding:16px 14px 14px; overflow:auto; cursor:auto;
+  background:rgba(10,8,24,.9); backdrop-filter:blur(3px); color:#f4ecdf;
+}
+.gbuild[hidden]{display:none!important}
+.gbhead{display:flex; align-items:baseline; justify-content:space-between; gap:10px}
+.gbhead h2{margin:0; font-family:"Bricolage Grotesque",system-ui,sans-serif; font-weight:800; font-size:24px; letter-spacing:-.03em}
+.gbchips{font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.06em}
+.gbchips b{color:#ffd166; font-size:15px}
+.gbnote{margin:0; font-size:12px; line-height:1.4; color:rgba(244,236,223,.62)}
+.gbgrid{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.gtile{
+  display:flex; flex-direction:column; align-items:flex-start; gap:3px; min-height:64px;
+  padding:9px 10px; text-align:left; cursor:pointer; font:inherit; color:inherit;
+  background:rgba(244,236,223,.06); border:1px solid rgba(244,236,223,.18); border-radius:10px;
+}
+.gtile .nm{font-weight:700; font-size:13px}
+.gtile .ds{font-size:11px; line-height:1.3; color:rgba(244,236,223,.66)}
+.gtile .ct{margin-top:auto; font-family:"JetBrains Mono",monospace; font-size:11px; color:#ffd166}
+.gtile.owned{border-color:rgba(127,212,255,.55); background:rgba(127,212,255,.08)}
+.gtile.owned .ct{color:#7fd4ff}
+.gtile:disabled{cursor:default; opacity:.5}
+.gtile.owned:disabled{opacity:.85}
+.gbresume{
+  margin-top:auto; min-height:44px; cursor:pointer; font:inherit; font-weight:700; font-size:14px;
+  color:#171320; background:#ffd166; border:0; border-radius:99px;
+}
 </style>
 
 <header class="topbar" id="topbar">
@@ -349,9 +394,9 @@ button.act:disabled{opacity:.45; cursor:default}
 <section id="menu">
   <div class="wrap menu">
     <h1>Arcade</h1>
-    <p class="lede">Ten small arcade games built to run on a phone. Pick one &mdash; the menu steps aside while you play.</p>
+    <p class="lede">Twelve small arcade games built to run on a phone. Pick one &mdash; the menu steps aside while you play.</p>
     <button class="scoreslink" type="button" id="scoresLink">
-      <span class="pipless"><b>High scores</b><br><span id="scoresSub">Your best run in each of the ten.</span></span>
+      <span class="pipless"><b>High scores</b><br><span id="scoresSub">Your best run in each of the twelve.</span></span>
       <span class="go">View &rarr;</span>
     </button>
     <div class="cards">
@@ -631,6 +676,79 @@ button.act:disabled{opacity:.45; cursor:default}
           <h2>Sortie</h2>
           <p>The cave scrolls by while squadrons fly at you. Dodge the rock, shoot the ships, and keep your three lives.</p>
           <span class="tag">Drag to fly &middot; hold to fire &middot; waves</span>
+        </span>
+      </button>
+      <button class="gamecard" type="button" data-game="upriver">
+        <svg class="art" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A yellow jet flying up a blue river between green banks, toward a bridge, past boats and a fuel depot">
+          <rect width="160" height="100" fill="#3d8f3a"/>
+          <g fill="#255f27">
+            <circle cx="14" cy="16" r="4"/><circle cx="24" cy="58" r="3.2"/><circle cx="10" cy="84" r="3.6"/><circle cx="30" cy="34" r="2.6"/>
+            <circle cx="146" cy="22" r="3.4"/><circle cx="136" cy="70" r="4"/><circle cx="150" cy="90" r="2.8"/><circle cx="128" cy="44" r="2.4"/>
+          </g>
+          <path d="M58 0 L104 0 L106 10 L112 26 L116 44 L110 62 L100 78 L98 100 L44 100 L46 80 L40 62 L46 44 L52 26 L56 10 Z" fill="#2f6fdc"/>
+          <path d="M58 0 L56 10 L52 26 L46 44 L40 62 L46 80 L44 100" fill="none" stroke="#4a86ea" stroke-width="1.6"/>
+          <path d="M104 0 L106 10 L112 26 L116 44 L110 62 L100 78 L98 100" fill="none" stroke="#4a86ea" stroke-width="1.6"/>
+          <path d="M80 40 L88 48 L86 58 L80 64 L74 58 L72 48 Z" fill="#2f7530"/>
+          <rect x="0" y="9" width="160" height="7" fill="#5d5a55"/>
+          <g fill="#e8c45a"><rect x="6" y="12.2" width="8" height=".8"/><rect x="22" y="12.2" width="8" height=".8"/><rect x="38" y="12.2" width="8" height=".8"/><rect x="114" y="12.2" width="8" height=".8"/><rect x="130" y="12.2" width="8" height=".8"/><rect x="146" y="12.2" width="8" height=".8"/></g>
+          <rect x="54" y="9" width="54" height="7" fill="#8c7b5e"/>
+          <rect x="54" y="9" width="54" height="1" fill="#5a4c37"/><rect x="54" y="15" width="54" height="1" fill="#5a4c37"/>
+          <g transform="translate(62 36)"><path d="M-7 -1 L7 -1 L5 3 L-5 3 Z" fill="#2b2f3a"/><rect x="-3" y="-3" width="5" height="2" fill="#c9ced8"/></g>
+          <g transform="translate(98 32)"><path d="M-7 -1 L7 -1 L5 3 L-5 3 Z" fill="#2b2f3a"/><rect x="-2" y="-3" width="5" height="2" fill="#c9ced8"/></g>
+          <g transform="translate(96 70)">
+            <rect x="-4" y="-7" width="8" height="3.5" fill="#e2543c"/><rect x="-4" y="-3.5" width="8" height="3.5" fill="#f4ecdf"/>
+            <rect x="-4" y="0" width="8" height="3.5" fill="#e2543c"/><rect x="-4" y="3.5" width="8" height="3.5" fill="#f4ecdf"/>
+          </g>
+          <g fill="#ffe08a"><rect x="62.6" y="48" width="1" height="5"/><rect x="62.6" y="60" width="1" height="5"/></g>
+          <g transform="translate(63 82) scale(2.2)">
+            <path d="M0 -3.4 L0.9 -1 L3.6 1.2 L3.6 2 L0.9 1.2 L1.6 3.2 L-1.6 3.2 L-0.9 1.2 L-3.6 2 L-3.6 1.2 L-0.9 -1 Z" fill="#f2c14e"/>
+          </g>
+          <circle cx="62" cy="36" r="7" fill="none" stroke="#ff7b4a" stroke-width=".9" opacity=".7"/>
+        </svg>
+        <span class="meta">
+          <h2>Upriver</h2>
+          <p>Fly up a river that never changes. Shoot boats and bridges, and don't run out of fuel.</p>
+          <span class="tag">Drag to fly &middot; hold to fire &middot; fuel</span>
+        </span>
+      </button>
+      <button class="gamecard" type="button" data-game="forge">
+        <svg class="art" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A ship with a force shield fires a laser back at a dragon on the left and rings ahead at a series of drones, beside a gold build chip">
+          <defs><linearGradient id="gArtSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#160a26"/><stop offset=".5" stop-color="#08061a"/><stop offset="1" stop-color="#160a26"/></linearGradient></defs>
+          <rect width="160" height="100" fill="url(#gArtSky)"/>
+          <g fill="#fff"><circle cx="70" cy="30" r=".7" opacity=".5"/><circle cx="120" cy="66" r=".8" opacity=".4"/><circle cx="96" cy="22" r=".6" opacity=".35"/><circle cx="140" cy="40" r=".7" opacity=".4"/></g>
+          <path d="M0 0 L0 6 C10 9 20 4 32 7 C44 10 52 5 66 6 C80 7 90 12 104 8 C118 4 130 7 144 6 C152 5 156 7 160 6 L160 0 Z" fill="#4a1d4f" stroke="#ff7ab8" stroke-width=".8"/>
+          <path d="M0 100 L0 93 C12 90 22 95 36 92 C50 89 60 95 74 94 C88 93 96 88 110 91 C124 94 136 90 148 93 C154 94 158 92 160 93 L160 100 Z" fill="#4a1d4f" stroke="#ff7ab8" stroke-width=".8"/>
+          <g fill="#b8322a">
+            <circle cx="2" cy="70" r="7"/><circle cx="8" cy="62" r="6.4"/><circle cx="13" cy="54" r="5.8"/><circle cx="17" cy="47" r="5.2"/>
+          </g>
+          <g fill="#e8a94a"><ellipse cx="9" cy="65" rx="4" ry="2"/><ellipse cx="14" cy="57" rx="3.6" ry="1.8"/><ellipse cx="18" cy="50" rx="3.2" ry="1.6"/></g>
+          <g transform="translate(24 41) scale(1.25)">
+            <path d="M-1.5 -2.6 L-7.5 -6.8 L-3.2 -1.4 Z" fill="#6e1a16"/>
+            <path d="M1 1 L8.4 1.6 L8 3.2 L0.4 3.4 Z" fill="#8e231d"/>
+            <ellipse cx="0" cy="0" rx="4.8" ry="3.5" fill="#b8322a"/>
+            <path d="M1.6 -2.8 L8.6 -1.3 L8.8 0.4 L1.6 1.4 Z" fill="#b8322a"/>
+            <ellipse cx="2.2" cy="-1.4" rx="1.1" ry=".75" fill="#fff1a8"/>
+          </g>
+          <g><circle cx="40" cy="45" r="4" fill="#ff6b3d" opacity=".55"/><circle cx="40" cy="45" r="2.6" fill="#ffdd57"/>
+             <circle cx="49" cy="49" r="3.2" fill="#ff6b3d" opacity=".55"/><circle cx="49" cy="49" r="2" fill="#ffdd57"/></g>
+          <rect x="54" y="60.2" width="18" height="1.6" fill="#9cff6b"/><rect x="54" y="60.7" width="18" height=".6" fill="#f4fff0"/>
+          <g transform="translate(84 61) scale(1.9)">
+            <ellipse cx=".2" cy="0" rx="6.6" ry="5" fill="#7fd4ff" opacity=".14" stroke="#7fd4ff" stroke-width=".5"/>
+            <polygon points="-4.2,-1 -7.6,0 -4.2,1" fill="#ffb347"/>
+            <rect x="-6" y="-.45" width="2.2" height=".9" fill="#8a97ad"/>
+            <polygon points="4.6,0 1,-1.4 -2,-1.6 -3.6,-3.2 -4.2,-1.4 -4.2,1.4 -2,1.6 1,1.4" fill="#e6edf7"/>
+            <rect x="-3.4" y="-.35" width="4.2" height=".7" fill="#e2543c"/>
+            <ellipse cx=".8" cy="-.5" rx="1.4" ry=".6" fill="#7fd4ff"/>
+          </g>
+          <g fill="none" stroke="#7fd4ff" stroke-width=".9"><ellipse cx="104" cy="61" rx="1.6" ry="3.6"/><ellipse cx="116" cy="61" rx="2" ry="4.6"/></g>
+          <g fill="#4fe3c1"><ellipse cx="128" cy="52" rx="3.4" ry="2.3"/><ellipse cx="138" cy="44" rx="3.4" ry="2.3"/><ellipse cx="148" cy="38" rx="3.4" ry="2.3"/></g>
+          <circle cx="124" cy="62" r="5" fill="none" stroke="#4fe3c1" stroke-width=".8" opacity=".6"/>
+          <g transform="translate(112 32)"><circle r="6" fill="#ffd166" opacity=".22"/><polygon points="4,0 2,3.46 -2,3.46 -4,0 -2,-3.46 2,-3.46" fill="#a8761c"/><polygon points="2.9,0 1.45,2.5 -1.45,2.5 -2.9,0 -1.45,-2.5 1.45,-2.5" fill="#ffd166"/></g>
+        </svg>
+        <span class="meta">
+          <h2>Forge</h2>
+          <p>Down a whole series of ships to win a build chip, then freeze and upgrade. A dragon waits at the end.</p>
+          <span class="tag">Drag to fly &middot; build upgrades &middot; boss</span>
         </span>
       </button>
     </div>
@@ -1459,6 +1577,172 @@ button.act:disabled{opacity:.45; cursor:default}
 </section>
 
 
+<section id="game-upriver" hidden>
+<div class="wrap">
+  <div class="masthead">
+    <h1>Upriver</h1>
+    <p class="tagline">Fly up the river. Blow the bridges. Mind the fuel.</p>
+  </div>
+
+  <div class="stagewrap">
+    <div class="stage" id="uStage">
+      <canvas id="uCv"></canvas>
+      <div class="hud"><div><span class="lbl">Score</span><span class="score" id="uScore">0</span></div><div class="right"><div><span class="lbl">Jets</span><span class="stat" id="uLives">3</span></div><div><span class="lbl">Bridge</span><span class="stat" id="uBridge">0</span></div><div><span class="lbl">Best</span><span class="stat gold" id="uBest">0</span></div></div></div>
+      <button class="fitexit" id="uFitExit" type="button" hidden>Exit full screen</button>
+      <div class="overlay" id="uOverlay"><div class="card" id="uCard"></div></div>
+    </div>
+  </div>
+
+  <section class="console">
+    <div class="console-head">
+      <h2>Settings</h2>
+      <div class="readout"><span>speed <b id="uoSpeed">0</b></span><span>fuel <b id="uoFuel">100</b></span><span>to bridge <b id="uoNext">0</b></span><span>enemies <b id="uoFoes">0</b></span></div>
+    </div>
+    <div class="knobs">
+      <div class="knob">
+        <label for="uSpeed"><span class="name">River speed</span><span class="val" id="vUSpeed">26</span></label>
+        <input type="range" id="uSpeed" min="14" max="38" step="1" value="26">
+        <p class="note">Cruising speed. Fly higher on the screen to go faster, lower to slow down. Each bridge adds 4%.</p>
+      </div>
+      <div class="knob">
+        <label for="uTank"><span class="name">Fuel tank</span><span class="val" id="vUTank">35s</span></label>
+        <input type="range" id="uTank" min="20" max="50" step="1" value="35">
+        <p class="note">Seconds a full tank lasts. Fly over a FUEL depot to top it up.</p>
+      </div>
+      <div class="knob">
+        <label for="uFoes"><span class="name">Traffic</span><span class="val" id="vUFoes">3</span></label>
+        <input type="range" id="uFoes" min="1" max="5" step="1" value="3">
+        <p class="note">How crowded the river is with boats and helicopters. Planes start crossing after the second bridge.</p>
+      </div>
+      <div class="knob">
+        <label for="uRate"><span class="name">Fire rate</span><span class="val" id="vURate">6</span></label>
+        <input type="range" id="uRate" min="2" max="10" step="1" value="6">
+        <p class="note">Your shots per second while you hold.</p>
+      </div>
+      <div class="knob">
+        <label for="uLivesK"><span class="name">Jets</span><span class="val" id="vULives">3</span></label>
+        <input type="range" id="uLivesK" min="1" max="5" step="1" value="3">
+        <p class="note">Applies to your next game. Another every 10,000 points.</p>
+      </div>
+      <div class="knob">
+        <div class="head"><span class="name">Record</span><span class="val" id="vURec">&mdash;</span></div>
+        <p class="note" id="uRecNote">No flights yet.</p>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="act" id="uFitBtn">Fit screen</button>
+      <button class="act" id="uReset">Reset settings</button>
+      <button class="act" id="uClear">Clear record</button>
+      <span class="keys">&larr; &uarr; &darr; &rarr; or W A S D &middot; Space to fire &middot; drag anywhere</span>
+    </div>
+  </section>
+
+  <div class="howto">
+    <div>
+      <h3>The same river every time</h3>
+      <p>The course never changes between games, so each run teaches you the next bend. Lose a jet and you start again at the last bridge you blew up.</p>
+    </div>
+    <div>
+      <h3>Fuel is the real enemy</h3>
+      <p>The tank drains all the time. Fly slowly over a FUEL depot to fill up &mdash; or shoot it for points if you can spare it. The banks, a bridge still standing or anything you touch costs a jet.</p>
+    </div>
+    <div>
+      <h3>Points</h3>
+      <p>Boats <code>30</code>, helicopters <code>60</code>, planes <code>100</code>, fuel depots <code>80</code>, bridges <code>500</code>.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="game-forge" hidden>
+<div class="wrap">
+  <div class="masthead">
+    <h1>Forge</h1>
+    <p class="tagline">Win the chips. Build the ship. Beat the dragon.</p>
+  </div>
+
+  <div class="stagewrap">
+    <div class="stage" id="gStage">
+      <canvas id="gCv"></canvas>
+      <div class="hud"><div><span class="lbl">Score</span><span class="score" id="gScore">0</span></div><div class="right"><div><span class="lbl">Lives</span><span class="stat" id="gLives">3</span></div><div><span class="lbl">Stage</span><span class="stat" id="gLoop">1</span></div><div><span class="lbl">Best</span><span class="stat gold" id="gBest">0</span></div></div></div>
+      <button class="fitexit" id="gFitExit" type="button" hidden>Exit full screen</button>
+      <button class="gbuildbtn" id="gBuildBtn" type="button" hidden>Build <span class="gchip" aria-hidden="true">&#9670;</span><b id="gChipN">0</b></button>
+      <div class="overlay" id="gOverlay"><div class="card" id="gCard"></div></div>
+      <div class="gbuild" id="gBuild" role="dialog" aria-label="Build upgrades" hidden>
+        <div class="gbhead"><h2>Build</h2><span class="gbchips"><span class="gchip" aria-hidden="true">&#9670;</span> <b id="gBuildChips">0</b> chips</span></div>
+        <p class="gbnote">The game is frozen. Upgrades last until you lose a ship; unspent chips are yours to keep.</p>
+        <div class="gbgrid" id="gBuildGrid"></div>
+        <button class="gbresume" id="gResume" type="button">Resume</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="console">
+    <div class="console-head">
+      <h2>Settings</h2>
+      <div class="readout"><span>flown <b id="goDist">0</b></span><span>series won <b id="goSeries">0/0</b></span><span>chips <b id="goChips">0</b></span><span>dragon <b id="goBoss">&mdash;</b></span></div>
+    </div>
+    <div class="knobs">
+      <div class="knob">
+        <label for="gScroll"><span class="name">Scroll speed</span><span class="val" id="vGScroll">16</span></label>
+        <input type="range" id="gScroll" min="8" max="24" step="1" value="16">
+        <p class="note">How fast the stage slides past. It stops for the dragon. Each stage adds 8%.</p>
+      </div>
+      <div class="knob">
+        <label for="gFoe"><span class="name">Enemy speed</span><span class="val" id="vGFoe">30</span></label>
+        <input type="range" id="gFoe" min="16" max="44" step="1" value="30">
+        <p class="note">How fast each series flies its pattern. Each stage adds 12%.</p>
+      </div>
+      <div class="knob">
+        <label for="gShoot"><span class="name">Return fire</span><span class="val" id="vGShoot">2</span></label>
+        <input type="range" id="gShoot" min="0" max="4" step="1" value="2">
+        <p class="note">How often they shoot back. Gunners fire above 0; higher settings arm the others, and the dragon breathes more often.</p>
+      </div>
+      <div class="knob">
+        <label for="gRate"><span class="name">Fire rate</span><span class="val" id="vGRate">5</span></label>
+        <input type="range" id="gRate" min="3" max="7" step="1" value="5">
+        <p class="note">Shots per second before upgrades. Rapid fire takes it to 1.5&times; and 2&times;.</p>
+      </div>
+      <div class="knob">
+        <label for="gBoss"><span class="name">Dragon toughness</span><span class="val" id="vGBoss">3</span></label>
+        <input type="range" id="gBoss" min="1" max="5" step="1" value="3">
+        <p class="note">How many hits the dragon takes. It gets half again tougher each stage.</p>
+      </div>
+      <div class="knob">
+        <label for="gLivesK"><span class="name">Lives</span><span class="val" id="vGLives">3</span></label>
+        <input type="range" id="gLivesK" min="1" max="5" step="1" value="3">
+        <p class="note">Applies to your next game. Another every 20,000 points.</p>
+      </div>
+      <div class="knob">
+        <div class="head"><span class="name">Record</span><span class="val" id="vGRec">&mdash;</span></div>
+        <p class="note" id="gRecNote">No runs yet.</p>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="act" id="gFitBtn">Fit screen</button>
+      <button class="act" id="gReset">Reset settings</button>
+      <button class="act" id="gClear">Clear record</button>
+      <span class="keys">&larr; &uarr; &darr; &rarr; or W A S D &middot; Space to fire &middot; B to build &middot; drag anywhere</span>
+    </div>
+  </section>
+
+  <div class="howto">
+    <div>
+      <h3>Win a whole series</h3>
+      <p>Enemies come in series. Shoot down every ship in one and the last drops a gold build chip &mdash; fly near it and it comes to you. Let one get away and that series pays no chip.</p>
+    </div>
+    <div>
+      <h3>Freeze and build</h3>
+      <p>Tap BUILD (or press B) any time to stop the action and spend chips: speed, left and right shooters, rapid fire, a force shield that takes one hit, ring shot or laser. Better upgrades cost more. Losing a ship loses its upgrades, never your chips.</p>
+    </div>
+    <div>
+      <h3>The same route, then a dragon</h3>
+      <p>The stage never changes, so you can learn it. At the end the screen stops for a fire-breathing dragon on your left. Ships <code>100</code>, a full series <code>500</code>, a chip <code>100</code>, the dragon <code>5,000</code>. Another life every 20,000.</p>
+    </div>
+  </div>
+</div>
+</section>
+
 <script>
 window.ARCADE = (function(){
   "use strict";
@@ -1521,7 +1805,12 @@ window.ARCADE = (function(){
      detail:function(){ var n=num("lander.landed");
        return n ? n + (n===1?" landing":" landings") + " in a run" : "no landings yet"; }},
     {id:"sortie",  name:"Sortie",      pip:"#7fd4ff", key:"sortie.best",  unit:"points",
-     detail:function(){ var w=num("sortie.wave"); return w>1 ? "reached wave "+w : "wave 1"; }}
+     detail:function(){ var w=num("sortie.wave"); return w>1 ? "reached wave "+w : "wave 1"; }},
+    {id:"upriver", name:"Upriver",     pip:"#4f8ff7", key:"upriver.best", unit:"points",
+     detail:function(){ var b=num("upriver.bridges");
+       return b ? b + (b===1?" bridge":" bridges") + " in a run" : "no bridges yet"; }},
+    {id:"forge",   name:"Forge",       pip:"#ffd166", key:"forge.best",   unit:"points",
+     detail:function(){ var s=num("forge.stage"); return s>1 ? "reached stage "+s : "stage 1"; }}
   ];
 
   function num(k){ try { return parseInt(localStorage.getItem(k) || "0", 10) || 0; } catch(e){ return 0; } }
@@ -1733,7 +2022,7 @@ window.ARCADE = (function(){
     fetch(LB_URL, {method:"POST", body:JSON.stringify({game:a.id, initials:ini, score:a.score, detail:a.detail})})
       .then(function(r){ return r.json(); })
       .then(function(d){
-        if(!d || !d.ok) throw new Error("bad reply");
+        if(!d || !d.ok){ var err = new Error("bad reply"); err.server = d && d.error; throw err; }
         if(d.board){ lb.board = d.board; lb.at = Date.now(); lb.state = "ok"; renderCardTops(); }
         lb.mine = d.rank ? {id:a.id, rank:d.rank, initials:ini, score:a.score} : null;
         a.busy = false; a.done = true;
@@ -1744,10 +2033,14 @@ window.ARCADE = (function(){
         el("nameSkip").hidden = true;
         syncNameBtn();
       })
-      .catch(function(){
+      .catch(function(err){
         a.busy = false;
         el("nameInput").disabled = false;
-        el("nameMsg").textContent = "Couldn\u2019t reach the leaderboard. Check the connection and try again.";
+        /* a reply that says no is not a dropped connection: an "unknown game" means the script needs redeploying */
+        el("nameMsg").textContent = err && err.server === "unknown game"
+          ? "The leaderboard doesn\u2019t take " + nameOf(a.id) + " scores yet."
+          : err && err.server ? "The leaderboard turned it down: " + err.server + "."
+          : "Couldn\u2019t reach the leaderboard. Check the connection and try again.";
         el("nameSave").textContent = "Try again";
         syncNameBtn();
       });
@@ -7557,6 +7850,1756 @@ window.ARCADE = (function(){
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("sortie", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
+    boot: boot,
+    snapshot: function(){ return {cfg:cfg, rec:rec}; },
+    mount: function(){
+      live = true; sizeStage();
+      if(raf) cancelAnimationFrame(raf);
+      lastT = 0; raf = requestAnimationFrame(frame);
+    },
+    unmount: function(){
+      live = false; drag = null; keyL = keyR = keyU = keyD = keyFire = false;
+      if(g){ g.firing = false; g.target = null; }
+      if(raf){ cancelAnimationFrame(raf); raf = null; }
+      if(document.body.classList.contains("fit")) setFit(false);
+    }
+  });
+})();
+</script>
+
+<script>
+/* ====================================================================== */
+/* Upriver — fly up a river that never changes                            */
+/* ====================================================================== */
+(function(){
+  "use strict";
+  var W = 100, H = 150;
+  var SEC = 520, STEP = 10, SEED = 1982;      /* one section per bridge; the course is seeded, so it never changes */
+  var SHIP_TOP = 78, SHIP_BOT = 136, SPAWN_Y = 130;
+  var SHIP_SPEED = 120, KEY_SPEED = 80, DRAG_GAIN = 1.25;
+  var BULLET_SPEED = 170, EXTRA_AT = 10000, BRIDGE_H = 5, REFUEL = 60;   /* tank per second over a depot */
+  var HULL = [[0, -3.3], [-3.4, 1.4], [3.4, 1.4], [-1.5, 3], [1.5, 3]];   /* nose up */
+  var BOX = {boat:[4.6, 1.8], heli:[3.6, 2], jet:[3.6, 1.6], fuel:[2.6, 4.6]};
+  var PTS = {boat:30, heli:60, jet:100, fuel:80, bridge:500};
+  var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var stage = document.getElementById("uStage");
+  var cv = document.getElementById("uCv");
+  var ctx = cv.getContext("2d");
+  var overlay = document.getElementById("uOverlay");
+  var card = document.getElementById("uCard");
+
+  var PAL = {
+    land:"#3d8f3a", landDark:"#2f7530", tree:"#255f27", water:"#2f6fdc", waterLit:"#4a86ea",
+    road:"#5d5a55", roadLine:"#e8c45a", bridge:"#8c7b5e", bridgeRail:"#5a4c37",
+    ship:"#f2c14e", shipDark:"#b8872a", shot:"#ffe08a",
+    boat:"#2b2f3a", boatTop:"#c9ced8", heli:"#2a2a2a", heliLit:"#e2543c", jet:"#e9e1d3",
+    fuelA:"#e2543c", fuelB:"#f4ecdf", hurt:"#ff7b4a", gold:"#e8a94a"
+  };
+
+  var DEFAULTS = {speed:26, tank:35, foes:3, rate:6, lives:3};
+  var cfg = {speed:26, tank:35, foes:3, rate:6, lives:3};
+
+  var g = null, rec = {score:0, bridges:0};
+  var raf = null, lastT = 0, live = false, shake = 0, flash = 0;
+
+  try {
+    rec.score   = parseInt(localStorage.getItem("upriver.best") || "0", 10) || 0;
+    rec.bridges = parseInt(localStorage.getItem("upriver.bridges") || "0", 10) || 0;
+  } catch(e){}
+
+  function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+  /* small seeded generator (mulberry32): the same seed gives the same river every game */
+  function rng(seed){
+    return function(){
+      seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ---------- the course ----------
+     Each section is a list of control points every STEP units of distance:
+     the river's centre, half-width, and an island's half-width. Every section
+     starts and ends at a narrow neck where the bridge stands, so they join. */
+  var course = [];
+  function section(k){
+    if(course[k]) return course[k];
+    var r = rng(SEED + k * 7919), n = SEC / STEP, pts = [];
+    var minHw = Math.max(15, 26 - k * 1.5);
+    var c = 50, hw = k === 0 ? 34 : 13, ihw = 0, tc = c, thw = hw, tihw = 0, hold = 0;
+    for(var i = 0; i <= n; i++){
+      if(n - i <= 12){ tc = 50; thw = 13; tihw = 0; }                /* narrow to the neck at the next bridge */
+      else if(k === 0 && i < 8){ tc = 50; thw = 34; tihw = 0; }       /* a calm start */
+      else if(--hold <= 0){
+        hold = 3 + ((r() * 5) | 0);
+        thw = minHw + r() * (44 - minHw);
+        tc = thw + 6 + r() * Math.max(0, 88 - 2 * thw);
+        tihw = (k >= 1 && i >= 6 && thw >= 32 && r() < 0.35) ? 6 + r() * (thw - 20) : 0;   /* none in the neck you restart in */
+      }
+      if(i > 0){
+        hw += clamp(thw - hw, -3, 3);
+        c += clamp(tc - c, -4, 4);
+        ihw += clamp(tihw - ihw, -3, 3);
+      }
+      hw = clamp(hw, 12, 45);
+      c = clamp(c, hw + 5, 95 - hw);
+      ihw = Math.max(0, Math.min(ihw, hw - 13));                     /* both channels stay flyable */
+      if(i === n){ c = 50; hw = 13; ihw = 0; }                        /* so the next section joins exactly */
+      pts.push({c:c, hw:hw, ihw:ihw});
+    }
+    course[k] = pts;
+    return pts;
+  }
+  function riverAt(d){
+    if(d < 0) d = 0;
+    var k = Math.floor(d / SEC), p = section(k), f = (d - k * SEC) / STEP, i = Math.floor(f), t = f - i;
+    if(i >= p.length - 1){ i = p.length - 2; t = 1; }
+    var a = p[i], b = p[i + 1];
+    var c = a.c + (b.c - a.c) * t, hw = a.hw + (b.hw - a.hw) * t, ihw = a.ihw + (b.ihw - a.ihw) * t;
+    return {l:c - hw, r:c + hw, il:c - ihw, ir:c + ihw, island:ihw > 0.5};
+  }
+  function inWater(x, d){
+    var rv = riverAt(d);
+    if(x <= rv.l || x >= rv.r) return false;
+    return !(rv.island && x > rv.il && x < rv.ir);
+  }
+  function channelOf(rv, x){
+    if(!rv.island) return [rv.l, rv.r];
+    return x < (rv.il + rv.ir) / 2 ? [rv.l, rv.il] : [rv.ir, rv.r];
+  }
+
+  /* ---------- state ---------- */
+  function newGame(){
+    return {
+      phase:"ready", score:0, lives:cfg.lives, bridge:0, dist:0, kills:0, fuel:100,
+      ship:{x:50, y:SPAWN_Y, inv:0}, target:null, firing:false, fireCd:0, grace:0,
+      bullets:[], foes:[], secDone:{}, sparks:[], rings:[], pops:[],
+      jetCd:9, pause:0, why:"", nextExtra:EXTRA_AT, refueling:false
+    };
+  }
+  function spawnSection(k){
+    if(g.secDone[k]) return;
+    g.secDone[k] = true;
+    var r = rng(SEED * 3 + k * 104729 + cfg.foes * 13);
+    var gap = 100 / cfg.foes * (k === 0 ? 1.3 : 1);
+    var d = k * SEC + (k === 0 ? 160 : 95), end = (k + 1) * SEC - 60, taken = [];
+    while(d < end){
+      var type = r() < (k >= 1 ? 0.18 + Math.min(0.14, k * 0.02) : 0) ? "heli" : "boat";
+      var rv = riverAt(d), ch = r() < 0.5 || !rv.island ? [rv.l, rv.island ? rv.il : rv.r] : [rv.ir, rv.r];
+      var half = BOX[type][0] + 1;
+      var x = ch[0] + half + r() * Math.max(0, ch[1] - ch[0] - 2 * half);
+      g.foes.push({type:type, d:d, x:x, dir:r() < 0.5 ? -1 : 1, moving:false, trig:45 + r() * 60,
+                   sp:(type === "boat" ? 9 : 16) + r() * 8 + k * 1.2, sec:k, t:r() * 6});
+      taken.push(d);
+      d += gap * (0.6 + r() * 0.8);
+    }
+    /* three fuel depots a section, kept clear of the enemies */
+    for(var f = 0; f < 3; f++){
+      var fd = k * SEC + (k === 0 ? 110 : 120) + f * 130 + r() * 50;
+      if(taken.some(function(t){ return Math.abs(t - fd) < 14; })) fd += 16;
+      /* clear of the banks for the whole stretch you refuel over, so lining up on one is never a trap */
+      var side = r() < 0.5, lo = -1e9, hi = 1e9;
+      for(var a = -14; a <= 14; a += 2){
+        var fr = riverAt(fd + a), fch = side || !fr.island ? [fr.l, fr.island ? fr.il : fr.r] : [fr.ir, fr.r];
+        lo = Math.max(lo, fch[0]); hi = Math.min(hi, fch[1]);
+      }
+      var fx = hi - lo > 14 ? lo + 7 + r() * (hi - lo - 14) : (lo + hi) / 2;
+      g.foes.push({type:"fuel", d:fd, x:fx, sec:k});
+    }
+  }
+  function speedNow(){
+    var t = (SHIP_BOT - g.ship.y) / (SHIP_BOT - SHIP_TOP);           /* higher on the screen = faster */
+    var v = cfg.speed * (0.55 + 0.9 * t) * Math.min(1.6, 1 + g.bridge * 0.04);
+    return g.grace > 0 ? v * (1 - g.grace / 1.5) : v;
+  }
+  function shipD(){ return g.dist + (H - g.ship.y); }
+  function screenY(d){ return H - (d - g.dist); }
+
+  function spark(x, y, n, col){
+    if(RM) return;
+    for(var i = 0; i < n; i++){
+      var a = Math.random() * Math.PI * 2, s = 10 + Math.random() * 34;
+      g.sparks.push({x:x, y:y, vx:Math.cos(a) * s, vy:Math.sin(a) * s, life:.25 + Math.random() * .35, age:0, c:col});
+    }
+  }
+  function pop(x, y, text){ g.pops.push({x:x, y:y, text:text, age:0}); }
+  function popStat(id){ var el = document.getElementById(id); el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
+
+  /* ---------- input ---------- */
+  var keyL = false, keyR = false, keyU = false, keyD = false, keyFire = false, drag = null;
+  function ptW(e){
+    var r = cv.getBoundingClientRect();
+    if(!r.width || !r.height) return null;
+    return {x:(e.clientX - r.left) / r.width * W, y:(e.clientY - r.top) / r.height * H};
+  }
+  function primary(){
+    if(g.phase === "ready" || g.phase === "over"){
+      if(g.phase === "over") g = newGame();
+      g.phase = "playing";
+      ARCADE.begin("upriver");
+      syncHUD();
+      return true;
+    }
+    return false;
+  }
+  stage.addEventListener("pointerdown", function(e){
+    e.preventDefault();
+    try { stage.setPointerCapture(e.pointerId); } catch(err){}
+    if(primary()) return;
+    var p = ptW(e);
+    if(p) drag = {fx:p.x, fy:p.y, lx:p.x, ly:p.y, sx:g.ship.x, sy:g.ship.y};
+    g.firing = true;
+  });
+  stage.addEventListener("pointermove", function(e){
+    if(!drag) return;
+    var p = ptW(e);
+    if(!p) return;
+    drag.lx = p.x; drag.ly = p.y;
+    g.target = {x:drag.sx + (p.x - drag.fx) * DRAG_GAIN, y:drag.sy + (p.y - drag.fy) * DRAG_GAIN};
+  });
+  function release(){ drag = null; if(g){ g.firing = false; g.target = null; } }
+  stage.addEventListener("pointerup", release);
+  stage.addEventListener("pointercancel", release);
+  window.addEventListener("keydown", function(e){
+    if(!live) return;
+    var k = e.key;
+    if(k === "ArrowLeft"  || k === "a" || k === "A"){ keyL = true; e.preventDefault(); }
+    if(k === "ArrowRight" || k === "d" || k === "D"){ keyR = true; e.preventDefault(); }
+    if(k === "ArrowUp"    || k === "w" || k === "W"){ keyU = true; e.preventDefault(); }
+    if(k === "ArrowDown"  || k === "s" || k === "S"){ keyD = true; e.preventDefault(); }
+    if(k === " " || k === "Enter"){ e.preventDefault(); if(!primary()) keyFire = true; }
+    if(k === "Escape" && document.body.classList.contains("fit")) setFit(false);
+  });
+  window.addEventListener("keyup", function(e){
+    if(!live) return;
+    var k = e.key;
+    if(k === "ArrowLeft"  || k === "a" || k === "A") keyL = false;
+    if(k === "ArrowRight" || k === "d" || k === "D") keyR = false;
+    if(k === "ArrowUp"    || k === "w" || k === "W") keyU = false;
+    if(k === "ArrowDown"  || k === "s" || k === "S") keyD = false;
+    if(k === " " || k === "Enter") keyFire = false;
+  });
+
+  /* ---------- simulation ---------- */
+  function afterScore(){
+    while(g.score >= g.nextExtra){
+      g.nextExtra += EXTRA_AT;
+      if(g.lives < 9){ g.lives++; popStat("uLives"); }
+    }
+    syncHUD();
+  }
+  function kill(i, scored){
+    var f = g.foes[i], y = screenY(f.d);
+    g.foes.splice(i, 1);
+    spark(f.x, y, 14, f.type === "fuel" ? PAL.fuelA : PAL.hurt);
+    g.rings.push({x:f.x, y:y, t:0, c:PAL.hurt});
+    if(scored){ g.score += PTS[f.type]; if(f.type !== "fuel") g.kills++; afterScore(); }
+  }
+  function blowBridge(){
+    var bd = (g.bridge + 1) * SEC, y = screenY(bd), rv = riverAt(bd);
+    g.bridge++;
+    g.score += PTS.bridge;
+    for(var x = rv.l; x < rv.r; x += 3) spark(x, y, 2, PAL.bridge);
+    g.rings.push({x:(rv.l + rv.r) / 2, y:y, t:0, c:PAL.gold});
+    pop((rv.l + rv.r) / 2, y - 6, "+" + PTS.bridge);
+    flash = Math.max(flash, 0.7); shake = RM ? 0 : 2.5;
+    popStat("uBridge");
+    afterScore();
+  }
+  function crash(why){
+    var s = g.ship;
+    g.phase = "dying"; g.pause = 1.8; g.lives--; g.why = why;
+    spark(s.x, s.y, 26, PAL.hurt); spark(s.x, s.y, 12, PAL.ship);
+    g.rings.push({x:s.x, y:s.y, t:0, c:PAL.hurt});
+    shake = RM ? 0 : 4; flash = 1;
+    syncHUD();
+  }
+  function respawn(){
+    if(g.lives <= 0) return over();
+    var k = g.bridge;
+    /* back to the last bridge you blew, with that stretch of river reset */
+    g.foes = g.foes.filter(function(f){ return f.sec < k; });
+    Object.keys(g.secDone).forEach(function(s){ if(+s >= k) delete g.secDone[s]; });
+    g.dist = k === 0 ? 0 : k * SEC - (H - SPAWN_Y) + 4;            /* just past the bridge, in its straight neck */
+    g.ship = {x:50, y:SPAWN_Y, inv:2};
+    g.fuel = 100; g.bullets = []; g.grace = 1.5; g.target = null;
+    if(drag){ drag.sx = g.ship.x; drag.sy = g.ship.y; drag.fx = drag.lx; drag.fy = drag.ly; }
+    g.phase = "playing";
+    syncHUD();
+  }
+
+  function step(dt){
+    var i, s = g.ship;
+    for(i = g.sparks.length - 1; i >= 0; i--){
+      var sp = g.sparks[i];
+      sp.age += dt;
+      if(sp.age >= sp.life){ g.sparks.splice(i, 1); continue; }
+      sp.x += sp.vx * dt; sp.y += sp.vy * dt;
+    }
+    for(i = g.rings.length - 1; i >= 0; i--){ g.rings[i].t += dt; if(g.rings[i].t > 0.5) g.rings.splice(i, 1); }
+    for(i = g.pops.length - 1; i >= 0; i--){ g.pops[i].age += dt; if(g.pops[i].age > 1.1) g.pops.splice(i, 1); }
+
+    if(g.phase === "dying"){
+      g.pause -= dt;
+      if(g.pause <= 0) respawn();
+      return;
+    }
+    if(g.phase !== "playing") return;
+
+    if(g.grace > 0) g.grace = Math.max(0, g.grace - dt);
+    if(s.inv > 0) s.inv -= dt;
+    var v = speedNow(), moved = v * dt;
+    var kNow = Math.floor(g.dist / SEC);
+    for(var k = kNow; k <= Math.floor((g.dist + H + 60) / SEC); k++) spawnSection(k);
+
+    g.dist += moved;
+
+    /* steering */
+    if(keyL || keyR || keyU || keyD){
+      g.target = null;
+      var mx = (keyR ? 1 : 0) - (keyL ? 1 : 0), my = (keyD ? 1 : 0) - (keyU ? 1 : 0), len = Math.hypot(mx, my) || 1;
+      s.x += mx / len * KEY_SPEED * dt; s.y += my / len * KEY_SPEED * dt;
+    } else if(g.target){
+      var dx = g.target.x - s.x, dy = g.target.y - s.y, dd = Math.hypot(dx, dy);
+      if(dd > 0.05){ var st = Math.min(dd, SHIP_SPEED * dt); s.x += dx / dd * st; s.y += dy / dd * st; }
+    }
+    s.x = clamp(s.x, 4, W - 4);
+    s.y = clamp(s.y, SHIP_TOP, SHIP_BOT);
+
+    /* fuel */
+    g.fuel -= 100 / cfg.tank * dt;
+    g.refueling = false;
+
+    g.fireCd -= dt;
+    if((g.firing || keyFire) && g.fireCd <= 0){
+      g.bullets.push({x:s.x, y:s.y - 3.4});
+      g.fireCd = 1 / cfg.rate;
+    }
+
+    /* jets cross from bridge two on */
+    if(g.bridge >= 2){
+      g.jetCd -= dt;
+      if(g.jetCd <= 0){
+        var dir = Math.random() < 0.5 ? 1 : -1;
+        g.foes.push({type:"jet", jet:true, x:dir > 0 ? -6 : W + 6, d:g.dist + H - (8 + Math.random() * 50), dir:dir,
+                     sp:42 + g.bridge * 2, sec:g.bridge});
+        g.jetCd = Math.max(3.5, 10 - g.bridge * 0.5) * (0.7 + Math.random() * 0.6);
+      }
+    }
+
+    /* enemies: boats and helicopters sit on the river until you come close, then patrol */
+    var sd = shipD();
+    for(i = g.foes.length - 1; i >= 0; i--){
+      var f = g.foes[i], fy = screenY(f.d);
+      if(fy > H + 20){ g.foes.splice(i, 1); continue; }
+      f.t = (f.t || 0) + dt;
+      if(f.jet){
+        f.x += f.dir * f.sp * dt;
+        if(f.x < -10 || f.x > W + 10){ g.foes.splice(i, 1); continue; }
+      } else if(f.type !== "fuel"){
+        if(!f.moving && f.d - sd < f.trig && fy > -10) f.moving = true;
+        if(f.moving){
+          var rv = riverAt(f.d), ch = channelOf(rv, f.x), half = BOX[f.type][0];
+          f.x += f.dir * f.sp * dt;
+          if(f.x - half < ch[0]){ f.x = ch[0] + half; f.dir = 1; }
+          if(f.x + half > ch[1]){ f.x = ch[1] - half; f.dir = -1; }
+        }
+      }
+      var bx = BOX[f.type];
+      if(Math.abs(f.x - s.x) < bx[0] + 2.6 && Math.abs(fy - s.y) < bx[1] + 2.6){
+        if(f.type === "fuel"){ g.refueling = true; g.fuel = Math.min(100, g.fuel + REFUEL * dt); }
+        else if(s.inv <= 0){ kill(i, false); crash("hit"); return; }
+      }
+    }
+    if(g.fuel <= 0){ g.fuel = 0; crash("fuel"); return; }
+
+    /* the river: every point of the hull must be over water, and the bridge must be down */
+    var nextBridge = (g.bridge + 1) * SEC;
+    for(i = 0; i < HULL.length; i++){
+      var hx = s.x + HULL[i][0], hd = g.dist + (H - (s.y + HULL[i][1]));
+      if(!inWater(hx, hd)){ crash("bank"); return; }
+      if(Math.abs(hd - nextBridge) < BRIDGE_H / 2){ crash("bridge"); return; }
+    }
+
+    /* our shots, substepped */
+    for(i = g.bullets.length - 1; i >= 0; i--){
+      var b = g.bullets[i], dist = (BULLET_SPEED + v) * dt, n = Math.ceil(dist / 1.4), stp = dist / n, gone = false;
+      for(var q = 0; q < n && !gone; q++){
+        b.y -= stp;
+        if(b.y < -4){ gone = true; break; }
+        var bd = g.dist + (H - b.y);
+        if(Math.abs(bd - (g.bridge + 1) * SEC) < BRIDGE_H / 2){
+          var brv = riverAt(bd);
+          if(b.x > brv.l && b.x < brv.r){ blowBridge(); gone = true; break; }
+        }
+        for(var j = g.foes.length - 1; j >= 0; j--){
+          var fo = g.foes[j], foy = screenY(fo.d), fb = BOX[fo.type];
+          if(Math.abs(fo.x - b.x) <= fb[0] + 0.5 && Math.abs(foy - b.y) <= fb[1] + 1){ kill(j, true); gone = true; break; }
+        }
+      }
+      if(gone) g.bullets.splice(i, 1);
+    }
+  }
+
+  function over(){
+    g.phase = "over";
+    ARCADE.note("upriver", g.score, g.bridge + (g.bridge === 1 ? " bridge" : " bridges"));
+    var ch = false;
+    if(g.score > rec.score){ rec.score = g.score; ch = true; }
+    if(g.bridge > rec.bridges){ rec.bridges = g.bridge; ch = true; }
+    if(ch){
+      try { localStorage.setItem("upriver.best", String(rec.score));
+            localStorage.setItem("upriver.bridges", String(rec.bridges)); } catch(e){}
+      syncRecord();
+    }
+    syncHUD();
+  }
+
+  /* ---------- drawing ---------- */
+  function sizeStage(){
+    var fit = document.body.classList.contains("fit");
+    var host = stage.parentElement;
+    var availH = fit ? host.clientHeight : Math.min(window.innerHeight * 0.64, 620);
+    var capW = fit ? host.clientWidth : Math.min(host.clientWidth, 430);
+    var w = Math.min(capW, availH * (W / H)), h = w * (H / W);
+    stage.style.width = Math.round(w) + "px"; stage.style.height = Math.round(h) + "px";
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr * w / W, 0, 0, dpr * w / W, 0, 0);
+  }
+  function hash(a, b){
+    var h = (a * 374761393 + b * 668265263) | 0;
+    h = (h ^ (h >>> 13)) * 1274126177 | 0;
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
+
+  function drawShip(s){
+    ctx.save(); ctx.translate(s.x, s.y);
+    ctx.fillStyle = PAL.shipDark;
+    ctx.fillRect(-1.6, 1.8, 3.2, 1.4);
+    ctx.fillStyle = PAL.ship;
+    ctx.beginPath();
+    ctx.moveTo(0, -3.4); ctx.lineTo(0.9, -1); ctx.lineTo(3.6, 1.2); ctx.lineTo(3.6, 2); ctx.lineTo(0.9, 1.2);
+    ctx.lineTo(1.6, 3.2); ctx.lineTo(-1.6, 3.2); ctx.lineTo(-0.9, 1.2); ctx.lineTo(-3.6, 2); ctx.lineTo(-3.6, 1.2); ctx.lineTo(-0.9, -1);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function drawFoe(f, y){
+    ctx.save(); ctx.translate(f.x, y);
+    if(f.type === "boat"){
+      ctx.fillStyle = PAL.boat;
+      ctx.beginPath(); ctx.moveTo(-4.6, -0.6); ctx.lineTo(4.6, -0.6); ctx.lineTo(3.4, 1.8); ctx.lineTo(-3.4, 1.8); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = PAL.boatTop; ctx.fillRect(-2, -1.8, 3.4, 1.3);
+      ctx.fillStyle = PAL.boat; ctx.fillRect(-0.4, -2.6, 0.8, 0.9);
+    } else if(f.type === "heli"){
+      ctx.fillStyle = PAL.heli;
+      ctx.fillRect(-1.8, -1, 3.6, 2); ctx.fillRect(f.dir > 0 ? -4 : 1.8, -0.4, 2.2, 0.8);
+      ctx.fillStyle = PAL.heliLit; ctx.fillRect(f.dir > 0 ? 0.6 : -1.6, -0.6, 1, 1);
+      var w = Math.abs(Math.sin(f.t * 30)) * 3.6 + 0.4;
+      ctx.fillStyle = "rgba(20,20,20,.75)"; ctx.fillRect(-w, -1.9, w * 2, 0.4);
+    } else if(f.type === "jet"){
+      ctx.scale(f.dir, 1);
+      ctx.fillStyle = PAL.jet;
+      ctx.beginPath(); ctx.moveTo(3.8, 0); ctx.lineTo(-1, -0.7); ctx.lineTo(-2.4, -2); ctx.lineTo(-3.2, -2); ctx.lineTo(-2.6, -0.5);
+      ctx.lineTo(-3.6, 0); ctx.lineTo(-2.6, 0.5); ctx.lineTo(-3.2, 2); ctx.lineTo(-2.4, 2); ctx.lineTo(-1, 0.7); ctx.closePath(); ctx.fill();
+    } else {
+      for(var b = 0; b < 4; b++){
+        ctx.fillStyle = b % 2 ? PAL.fuelB : PAL.fuelA;
+        ctx.fillRect(-2.6, -4.6 + b * 2.3, 5.2, 2.3);
+      }
+      ctx.fillStyle = PAL.fuelA;
+      ctx.font = "800 1.9px 'JetBrains Mono', monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ["F", "U", "E", "L"].forEach(function(ch, b){ ctx.fillStyle = b % 2 ? PAL.fuelA : PAL.fuelB; ctx.fillText(ch, 0, -3.45 + b * 2.3); });
+    }
+    ctx.restore();
+  }
+
+  function paint(){
+    var ox = 0, oy = 0, i, y;
+    if(shake > .01){ ox = (Math.random() - .5) * shake; oy = (Math.random() - .5) * shake; }
+    ctx.save(); ctx.translate(ox, oy);
+    ctx.fillStyle = PAL.land; ctx.fillRect(-4, -4, W + 8, H + 8);
+
+    /* trees on the land: a fixed pattern in world space, so they scroll with it */
+    var d0 = Math.floor(g.dist / 9) - 1;
+    for(var row = d0; row < d0 + 19; row++){
+      for(var col = 0; col < 12; col++){
+        var hv = hash(col, row);
+        if(hv > 0.32) continue;
+        var tx = col * 9 + 2 + hash(row, col) * 5, td = row * 9 + hv * 9;
+        if(inWater(tx, td) || inWater(tx - 2, td) || inWater(tx + 2, td)) continue;
+        ctx.fillStyle = PAL.tree;
+        ctx.beginPath(); ctx.arc(tx, screenY(td), 1.6 + hv * 2, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+
+    /* the river, in 2-unit strips for a blocky, cartridge-era look */
+    var strips = [];
+    for(y = 0; y < H; y += 2){
+      var rv = riverAt(g.dist + (H - y - 1));
+      strips.push(rv);
+      ctx.fillStyle = PAL.water; ctx.fillRect(rv.l, y, rv.r - rv.l, 2.05);
+      ctx.fillStyle = PAL.waterLit; ctx.fillRect(rv.l, y, 0.8, 2.05); ctx.fillRect(rv.r - 0.8, y, 0.8, 2.05);
+    }
+    ctx.fillStyle = PAL.landDark;                                      /* islands on top, so the strips never seam them */
+    for(i = 0; i < strips.length; i++) if(strips[i].island) ctx.fillRect(strips[i].il, i * 2, strips[i].ir - strips[i].il, 2.05);
+
+    /* roads and bridges, one per section boundary */
+    var bFirst = Math.max(1, Math.ceil(g.dist / SEC)), bLast = Math.floor((g.dist + H + 5) / SEC);
+    for(var bi = bFirst; bi <= bLast; bi++){
+      var bdist = bi * SEC, by = screenY(bdist), brv = riverAt(bdist);
+      ctx.fillStyle = PAL.road; ctx.fillRect(-4, by - BRIDGE_H / 2, W + 8, BRIDGE_H);
+      ctx.fillStyle = PAL.roadLine;
+      for(var lx = 0; lx < W; lx += 6) if(lx < brv.l - 2 || lx > brv.r + 2) ctx.fillRect(lx, by - 0.2, 3, 0.4);
+      if(bi > g.bridge){
+        ctx.fillStyle = PAL.bridge; ctx.fillRect(brv.l - 1, by - BRIDGE_H / 2, brv.r - brv.l + 2, BRIDGE_H);
+        ctx.fillStyle = PAL.bridgeRail;
+        ctx.fillRect(brv.l - 1, by - BRIDGE_H / 2, brv.r - brv.l + 2, 0.6); ctx.fillRect(brv.l - 1, by + BRIDGE_H / 2 - 0.6, brv.r - brv.l + 2, 0.6);
+      } else {
+        ctx.fillStyle = PAL.water; ctx.fillRect(brv.l, by - BRIDGE_H / 2, brv.r - brv.l, BRIDGE_H);
+        ctx.fillStyle = PAL.bridge;
+        ctx.fillRect(brv.l - 1, by - BRIDGE_H / 2, 3, BRIDGE_H); ctx.fillRect(brv.r - 2, by - BRIDGE_H / 2, 3, BRIDGE_H);
+      }
+    }
+
+    for(i = 0; i < g.foes.length; i++){
+      var f = g.foes[i], fy = screenY(f.d);
+      if(fy > -8 && fy < H + 8) drawFoe(f, fy);
+    }
+    ctx.fillStyle = PAL.shot;
+    for(i = 0; i < g.bullets.length; i++) ctx.fillRect(g.bullets[i].x - 0.3, g.bullets[i].y - 1.6, 0.6, 3.2);
+
+    var s = g.ship;
+    if(g.phase !== "dying" && g.phase !== "over" && !(s.inv > 0 && Math.floor(s.inv * 12) % 2 === 0)) drawShip(s);
+
+    for(i = 0; i < g.rings.length; i++){
+      var rg = g.rings[i];
+      ctx.globalAlpha = Math.max(0, 1 - rg.t / 0.5);
+      ctx.strokeStyle = rg.c; ctx.lineWidth = 0.6;
+      ctx.beginPath(); ctx.arc(rg.x, rg.y, 1 + rg.t * 14, 0, Math.PI * 2); ctx.stroke();
+    }
+    for(i = 0; i < g.sparks.length; i++){
+      var sp = g.sparks[i];
+      ctx.globalAlpha = Math.max(0, 1 - sp.age / sp.life) * .9;
+      ctx.fillStyle = sp.c; ctx.fillRect(sp.x - .45, sp.y - .45, 0.9, 0.9);
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.font = "800 4.2px 'Bricolage Grotesque', system-ui, sans-serif";
+    for(i = 0; i < g.pops.length; i++){
+      var pp = g.pops[i];
+      ctx.globalAlpha = Math.max(0, 1 - pp.age / 1.1);
+      ctx.fillStyle = "#fff6d8"; ctx.fillText(pp.text, pp.x, pp.y - pp.age * 5);
+    }
+    ctx.globalAlpha = 1;
+
+    /* the fuel gauge along the bottom: E, half, F */
+    var gx = 26, gw = 48, gy = 143.4;
+    ctx.fillStyle = "rgba(10,14,20,.62)"; ctx.fillRect(gx - 7, gy - 1.6, gw + 14, 6);
+    ctx.fillStyle = "rgba(240,232,220,.18)"; ctx.fillRect(gx, gy, gw, 2.6);
+    var low = g.fuel < 25;
+    ctx.fillStyle = low ? PAL.fuelA : PAL.ship;
+    if(!(low && g.phase === "playing" && Math.floor(Date.now() / 250) % 2)) ctx.fillRect(gx, gy, gw * g.fuel / 100, 2.6);
+    ctx.fillStyle = "rgba(240,232,220,.8)";
+    ctx.font = "500 2.6px 'JetBrains Mono', monospace";
+    ctx.fillText("E", gx - 3.4, gy + 1.4); ctx.fillText("F", gx + gw + 3.4, gy + 1.4);
+    ctx.fillRect(gx + gw / 2 - 0.15, gy - 0.6, 0.3, 3.8);
+    if(g.refueling){ ctx.fillStyle = PAL.ship; ctx.fillText("REFUELING", W / 2, gy - 3.6); }
+
+    if(flash > .05){
+      ctx.globalAlpha = flash * .12; ctx.fillStyle = g.phase === "dying" ? PAL.hurt : "#fff";
+      ctx.fillRect(-4, -4, W + 8, H + 8); ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+  }
+
+  var WHY = {bank:"Hit the bank", bridge:"Hit a bridge", hit:"Shot down", fuel:"Out of fuel"};
+  function syncHUD(){
+    document.getElementById("uScore").textContent = g.score;
+    document.getElementById("uLives").textContent = Math.max(0, g.lives);
+    document.getElementById("uBridge").textContent = g.bridge;
+    document.getElementById("uBest").textContent = rec.score;
+    if(g.phase === "ready"){
+      overlay.hidden = false;
+      card.innerHTML = '<h2>Fly upriver</h2>' +
+        '<p>Drag to steer and hold to fire. Higher on the screen flies faster. Keep off the banks, fly over FUEL to refill, and blow up each bridge to go on.</p>' +
+        '<span class="cue">Tap to start</span>';
+    } else if(g.phase === "over"){
+      overlay.hidden = false;
+      card.innerHTML = '<p class="huge">' + g.score + '</p>' +
+        '<h2>' + (g.score >= rec.score && g.score > 0 ? "New best" : (WHY[g.why] || "Game over")) + '</h2>' +
+        '<p>' + g.bridge + (g.bridge === 1 ? ' bridge' : ' bridges') + ' down, ' + g.kills + ' shot &middot; best ' + rec.score + '.</p>' +
+        '<span class="cue">Tap to fly again</span>';
+    } else overlay.hidden = true;
+  }
+  function syncReadout(){
+    document.getElementById("uoSpeed").textContent = g.phase === "playing" ? speedNow().toFixed(0) : "0";
+    document.getElementById("uoFuel").textContent = Math.round(g.fuel);
+    document.getElementById("uoNext").textContent = Math.max(0, Math.round((g.bridge + 1) * SEC - shipD()));
+    document.getElementById("uoFoes").textContent = g.foes.length;
+  }
+  function syncRecord(){
+    document.getElementById("vURec").textContent = rec.score ? rec.score + " pts" : "—";
+    document.getElementById("uRecNote").textContent = rec.score
+      ? "Best " + rec.score + " points; most bridges in a run " + rec.bridges + "."
+      : "No flights yet.";
+  }
+
+  var KNOBS = [["uSpeed", "vUSpeed", "speed"], ["uTank", "vUTank", "tank", "s"], ["uFoes", "vUFoes", "foes"],
+               ["uRate", "vURate", "rate"], ["uLivesK", "vULives", "lives"]];
+  KNOBS.forEach(function(kn){
+    var el = document.getElementById(kn[0]), out = document.getElementById(kn[1]);
+    el.addEventListener("input", function(){
+      cfg[kn[2]] = parseInt(el.value, 10);
+      out.textContent = cfg[kn[2]] + (kn[3] || "");
+      if((g.phase === "ready" || g.phase === "over") && kn[2] === "lives"){ g.lives = cfg.lives; syncHUD(); }
+      syncReadout();
+    });
+  });
+  function applyCfg(){
+    KNOBS.forEach(function(kn){
+      document.getElementById(kn[0]).value = cfg[kn[2]];
+      document.getElementById(kn[1]).textContent = cfg[kn[2]] + (kn[3] || "");
+    });
+  }
+  document.getElementById("uReset").addEventListener("click", function(){
+    cfg = {speed:DEFAULTS.speed, tank:DEFAULTS.tank, foes:DEFAULTS.foes, rate:DEFAULTS.rate, lives:DEFAULTS.lives};
+    applyCfg();
+    if(g.phase === "ready" || g.phase === "over"){ g.lives = cfg.lives; syncHUD(); }
+    syncReadout();
+  });
+  document.getElementById("uClear").addEventListener("click", function(){
+    rec = {score:0, bridges:0};
+    try { localStorage.removeItem("upriver.best"); localStorage.removeItem("upriver.bridges"); } catch(e){}
+    syncRecord(); syncHUD();
+  });
+
+  var fitBtn = document.getElementById("uFitBtn"), fitExit = document.getElementById("uFitExit");
+  function setFit(on){
+    document.body.classList.toggle("fit", on);
+    fitExit.hidden = !on;
+    fitBtn.textContent = on ? "Exit full screen" : "Fit screen";
+    sizeStage();
+  }
+  fitBtn.addEventListener("click", function(){ setFit(!document.body.classList.contains("fit")); });
+  fitExit.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+  fitExit.addEventListener("click", function(e){ e.stopPropagation(); setFit(false); });
+
+  var rf = 0;
+  function frame(t){
+    if(!lastT) lastT = t;
+    var dt = Math.min((t - lastT) / 1000, .04); lastT = t;
+    step(dt);
+    flash = Math.max(0, flash - dt * 4); shake = Math.max(0, shake - dt * 7);
+    paint();
+    if(++rf % 5 === 0){ syncReadout(); if(g.phase === "playing") syncHUD(); }
+    raf = requestAnimationFrame(frame);
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(!live) return;
+    if(raf){ cancelAnimationFrame(raf); raf = null; }
+    if(!document.hidden){ lastT = 0; raf = requestAnimationFrame(frame); }
+  });
+  window.addEventListener("resize", function(){ if(live) sizeStage(); });
+
+  function boot(saved){
+    if(saved && saved.cfg) cfg = saved.cfg;
+    if(saved && saved.rec){
+      if(saved.rec.score > rec.score) rec.score = saved.rec.score;
+      if(saved.rec.bridges > rec.bridges) rec.bridges = saved.rec.bridges;
+    }
+    applyCfg(); g = newGame();
+    syncHUD(); syncReadout(); syncRecord();
+  }
+  ARCADE.register("upriver", {
+    standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
+    fit: function(on){ setFit(!!on); },
+    boot: boot,
+    snapshot: function(){ return {cfg:cfg, rec:rec}; },
+    mount: function(){
+      live = true; sizeStage();
+      if(raf) cancelAnimationFrame(raf);
+      lastT = 0; raf = requestAnimationFrame(frame);
+    },
+    unmount: function(){
+      live = false; drag = null; keyL = keyR = keyU = keyD = keyFire = false;
+      if(g){ g.firing = false; g.target = null; }
+      if(raf){ cancelAnimationFrame(raf); raf = null; }
+      if(document.body.classList.contains("fit")) setFit(false);
+    }
+  });
+})();
+</script>
+
+<script>
+/* ====================================================================== */
+/* Forge — win build chips, upgrade the ship, beat the dragon             */
+/* ====================================================================== */
+(function(){
+  "use strict";
+  var W = 100, H = 150;
+  var SHIP_MIN_X = 6, SHIP_MAX_X = 86, SPAWN_X = 20, BOSS_SPAWN_X = 72;
+  var DRAG_GAIN = 1.25, EXTRA_AT = 20000, SERIES_BONUS = 500, CHIP_PTS = 100, BOSS_PTS = 5000;
+  var STAGE_LEN = 1500, SPACING = 8, NECK = 11, LASER_LEN = 14;
+  var SHIP_SPEEDS = [75, 105, 135], KEY_SPEEDS = [55, 75, 95], RATE_MULT = [1, 1.5, 2];
+  var BULLET = {shot:150, rings:115, laser:200};
+  var HULL = [[4.6, 0], [1, -1.5], [1, 1.5], [-3.6, -3], [-4.2, 1.5]];   /* collision points, ship frame */
+  var SPREAD = [0, -0.12, 0.08, -0.04, 0.12, -0.08, 0.04];
+  var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var stage = document.getElementById("gStage");
+  var cv = document.getElementById("gCv");
+  var ctx = cv.getContext("2d");
+  var overlay = document.getElementById("gOverlay");
+  var card = document.getElementById("gCard");
+  var buildBtn = document.getElementById("gBuildBtn");
+  var panel = document.getElementById("gBuild");
+  var grid = document.getElementById("gBuildGrid");
+
+  var PAL = {
+    bg:"#08061a", bgTop:"#160a26", flesh:"#4a1d4f", fleshDeep:"#2c1030", edge:"#ff7ab8",
+    ship:"#e6edf7", shipDark:"#8a97ad", trim:"#e2543c", cockpit:"#7fd4ff", flame:"#ffb347", flameCore:"#fff1c9",
+    shot:"#f4ecdf", ring:"#7fd4ff", laser:"#9cff6b", foeShot:"#ff6bd6", hurt:"#e2543c", gold:"#ffd166",
+    shield:"#7fd4ff", chip:"#ffd166", chipDark:"#a8761c",
+    drag:"#b8322a", dragDark:"#6e1a16", dragBelly:"#e8a94a", dragEye:"#fff1a8", fire:"#ffdd57", fireHot:"#ff6b3d"
+  };
+  var TYPES = {
+    drone:  {mult:1.0,  pts:100, r:2.4, hp:1, col:"#4fe3c1"},
+    fan:    {mult:1.15, pts:100, r:2.3, hp:1, col:"#7fd4ff"},
+    gunner: {mult:0.8,  pts:150, r:3.0, hp:2, col:"#ff9f43"},
+    ember:  {mult:1.05, pts:100, r:2.2, hp:1, col:"#ff6b3d"}
+  };
+
+  /* ---------- the stage: the same series, in the same places, every run ---------- */
+  var SCRIPT = [
+    {at:40,   kind:"wave",   type:"drone",  n:5, y:50,  A:14, f:0.09},
+    {at:105,  kind:"wave",   type:"drone",  n:5, y:100, A:14, f:0.09},
+    {at:170,  kind:"column", type:"fan",    n:4, y:75,  gap:15},
+    {at:235,  kind:"loop",   type:"drone",  n:5, y:62,  cx:52, r:18, up:true},
+    {at:300,  kind:"rear",   type:"fan",    n:4, y:112, A:8,  f:0.07},
+    {at:360,  kind:"dive",   type:"drone",  n:5, y0:28, y1:122},
+    {at:425,  kind:"hover",  type:"gunner", n:3, y:75,  gap:26, xh:74, dwell:2.6},
+    {at:495,  kind:"zig",    type:"fan",    n:6, top:28, bot:122, P:70},
+    {at:560,  kind:"uturn",  type:"drone",  n:5, y0:42, y1:96, xt:26},
+    {at:625,  kind:"wave",   type:"drone",  n:6, y:75,  A:32, f:0.055},
+    {at:690,  kind:"rear",   type:"drone",  n:5, y:40,  A:10, f:0.08},
+    {at:750,  kind:"dive",   type:"fan",    n:5, y0:122, y1:28},
+    {at:815,  kind:"loop",   type:"drone",  n:6, y:90,  cx:48, r:18, up:false},
+    {at:880,  kind:"hover",  type:"gunner", n:4, y:75,  gap:22, xh:70, dwell:2.4},
+    {at:950,  kind:"column", type:"fan",    n:5, y:75,  gap:16},
+    {at:1010, kind:"uturn",  type:"drone",  n:6, y0:110, y1:52, xt:22},
+    {at:1075, kind:"zig",    type:"drone",  n:6, top:20, bot:130, P:60},
+    {at:1135, kind:"rear",   type:"fan",    n:5, y:75,  A:28, f:0.05},
+    {at:1200, kind:"wave",   type:"drone",  n:5, y:44,  A:10, f:0.1},
+    {at:1200, kind:"wave",   type:"drone",  n:5, y:106, A:10, f:0.1, ph:3.14},
+    {at:1280, kind:"hover",  type:"gunner", n:4, y:75,  gap:24, xh:72, dwell:2.2},
+    {at:1350, kind:"dive",   type:"drone",  n:6, y0:30, y1:120},
+    {at:1420, kind:"loop",   type:"fan",    n:6, y:62,  cx:56, r:20, up:true}
+  ];
+  /* the dragon's embers keep coming during the fight, so there are always chips to win */
+  var EMBERS = [
+    {kind:"wave",  type:"ember", n:5, y:40,  A:14, f:0.08},
+    {kind:"uturn", type:"ember", n:5, y0:112, y1:62, xt:44},
+    {kind:"wave",  type:"ember", n:5, y:110, A:14, f:0.08},
+    {kind:"uturn", type:"ember", n:5, y0:38, y1:88, xt:46}
+  ];
+  var UPG = [
+    {id:"speed",  name:"Speed boost",   costs:[1, 2], desc:["Fly faster", "Fly faster still"]},
+    {id:"left",   name:"Left shooter",  costs:[1],    desc:["Fires backward, to the left"]},
+    {id:"right",  name:"Right shooter", costs:[2],    desc:["A second forward cannon"]},
+    {id:"rapid",  name:"Rapid fire",    costs:[2, 3], desc:["Shoot 50% faster", "Shoot twice as fast"]},
+    {id:"shield", name:"Force shield",  costs:[3],    desc:["Takes one hit for you"]},
+    {id:"rings",  name:"Ring shot",     costs:[3],    desc:["Wide rings instead of bullets"]},
+    {id:"laser",  name:"Laser",         costs:[4],    desc:["Long beams that pierce"]}
+  ];
+
+  var DEFAULTS = {scroll:16, foe:30, shoot:2, rate:5, boss:3, lives:3};
+  var cfg = {scroll:16, foe:30, shoot:2, rate:5, boss:3, lives:3};
+
+  var g = null, rec = {score:0, stage:1};
+  var raf = null, lastT = 0, live = false, shake = 0, flash = 0;
+  var stars = [];
+  for(var si = 0; si < 56; si++) stars.push({x:Math.random() * W, y:Math.random() * H, r:.2 + Math.random() * .4,
+                                             a:.1 + Math.random() * .45, depth:si % 2 ? 0.15 : 0.4});
+
+  try {
+    rec.score = parseInt(localStorage.getItem("forge.best") || "0", 10) || 0;
+    rec.stage = parseInt(localStorage.getItem("forge.stage") || "1", 10) || 1;
+  } catch(e){}
+
+  function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+
+  /* ---------- terrain: thin, fixed bands along the very top and bottom ---------- */
+  function ceilAt(wx){
+    var b = Math.sin(wx * 0.017); b = b > 0 ? Math.pow(b, 6) : 0;
+    return 5 + 2.2 * Math.sin(wx * 0.045) + 1.6 * Math.sin(wx * 0.11 + 2) + 5 * b;
+  }
+  function floorAt(wx){
+    var b = Math.sin(wx * 0.019 + 1.3); b = b > 0 ? Math.pow(b, 6) : 0;
+    return H - (5 + 2.2 * Math.sin(wx * 0.05 + 1) + 1.6 * Math.sin(wx * 0.13) + 5 * b);
+  }
+
+  /* ---------- flight paths: polylines in screen space, flown at a steady speed ---------- */
+  function addPt(out, x, y){ out.push({x:x, y:clamp(y, 12, 138)}); }
+  function line(out, x0, y0, x1, y1){
+    var n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 1.5));
+    for(var i = out.length ? 1 : 0; i <= n; i++) addPt(out, x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n);
+  }
+  function arc(out, cx, cy, r, a0, a1){
+    var n = Math.max(2, Math.ceil(Math.abs(a1 - a0) * r / 1.5));
+    for(var i = 1; i <= n; i++){ var a = a0 + (a1 - a0) * i / n; addPt(out, cx + r * Math.cos(a), cy + r * Math.sin(a)); }
+  }
+  function makePath(sp, i){
+    var out = [], x, hold = -1, mid = (sp.n - 1) / 2;
+    if(sp.kind === "wave"){
+      for(x = W + 8; x >= -10; x -= 1.5) addPt(out, x, sp.y + sp.A * Math.sin((W + 8 - x) * sp.f + (sp.ph || 0)));
+    } else if(sp.kind === "column"){
+      var cy = sp.y + (i - mid) * sp.gap;
+      for(x = W + 8; x >= -10; x -= 1.5) addPt(out, x, cy + 3 * Math.sin((W + 8 - x) * 0.08 + i));
+    } else if(sp.kind === "rear"){
+      for(x = -8; x <= W + 8; x += 1.5) addPt(out, x, sp.y + sp.A * Math.sin((x + 8) * sp.f));
+    } else if(sp.kind === "zig"){
+      for(x = W + 8; x >= -10; x -= 1.5){
+        var u = (W + 8 - x) / sp.P + 0.25, tri = 1 - Math.abs(2 * (u - Math.floor(u)) - 1);
+        addPt(out, x, sp.top + (sp.bot - sp.top) * tri);
+      }
+    } else if(sp.kind === "loop"){
+      line(out, W + 8, sp.y, sp.cx, sp.y);
+      if(sp.up) arc(out, sp.cx, sp.y - sp.r, sp.r, Math.PI / 2, Math.PI * 2.5);
+      else arc(out, sp.cx, sp.y + sp.r, sp.r, -Math.PI / 2, -Math.PI * 2.5);
+      line(out, sp.cx, sp.y, -10, sp.y);
+    } else if(sp.kind === "uturn"){
+      line(out, W + 8, sp.y0, sp.xt, sp.y0);
+      var ucy = (sp.y0 + sp.y1) / 2, ur = Math.abs(sp.y1 - sp.y0) / 2;
+      if(sp.y1 > sp.y0) arc(out, sp.xt, ucy, ur, -Math.PI / 2, -Math.PI * 1.5);
+      else arc(out, sp.xt, ucy, ur, Math.PI / 2, Math.PI * 1.5);
+      line(out, sp.xt, sp.y1, W + 8, sp.y1);
+    } else if(sp.kind === "dive"){
+      for(var q = 0; q <= 140; q++){
+        var t = q / 140, m = 1 - t;
+        addPt(out, m * m * m * (W + 8) + 3 * m * m * t * 40 + 3 * m * t * t * 60 - t * t * t * 10,
+                   (m * m * m + 3 * m * m * t) * sp.y0 + (3 * m * t * t + t * t * t) * sp.y1);
+      }
+    } else {                                        /* hover: fly in, hold and shoot, then go */
+      var hy = sp.y + (i - mid) * sp.gap;
+      line(out, W + 8, hy, sp.xh, hy);
+      hold = out.length - 1;
+      line(out, sp.xh, hy, -10, hy + (hy < 75 ? -12 : 12));
+    }
+    var cum = [0];
+    for(var k = 1; k < out.length; k++) cum.push(cum[k - 1] + Math.hypot(out[k].x - out[k - 1].x, out[k].y - out[k - 1].y));
+    return {pts:out, cum:cum, len:cum[cum.length - 1], holdAt:hold >= 0 ? cum[hold] : -1, hold:sp.dwell || 0};
+  }
+
+  /* ---------- state ---------- */
+  function freshUp(){ return {speed:0, left:0, right:0, rapid:0, shield:0, weapon:"shot"}; }
+  function newGame(){
+    return {
+      phase:"ready", score:0, lives:cfg.lives, loop:1, dist:0, scroll:0, sv:cfg.scroll,
+      ship:{x:SPAWN_X, y:75, inv:0}, target:null, firing:false, fireCd:0,
+      bullets:[], foes:[], shots:[], flames:[], chipsOut:[], sparks:[], rings:[], pops:[],
+      chips:0, up:freshUp(), series:{}, seriesId:0, track:0, scriptIdx:0, boss:null,
+      banner:null, pause:0, nextExtra:EXTRA_AT, kills:0, cleared:0, spawned:0, dragons:0, frozen:false
+    };
+  }
+  function loopMult(){ return 1 + 0.1 * (g.loop - 1); }
+  function scrollSpeed(){ return cfg.scroll * Math.min(1.8, 1 + 0.08 * (g.loop - 1)); }
+  function foeSpeed(){ return cfg.foe * Math.min(1.8, 1 + 0.12 * (g.loop - 1)); }
+  function fireEvery(){ return Math.max(0.8, 3.4 - cfg.shoot * 0.55) / loopMult(); }
+  function breathEvery(){ return Math.max(1.4, 3.8 - cfg.shoot * 0.35 - 0.25 * (g.loop - 1)); }
+  function bossHp(){ return Math.round(60 * cfg.boss / 3 * (1 + 0.5 * (g.loop - 1))); }
+  function hasUpgrades(){ var u = g.up; return u.speed || u.left || u.right || u.rapid || u.shield || u.weapon !== "shot"; }
+
+  function spark(x, y, n, col){
+    if(RM) return;
+    for(var i = 0; i < n; i++){
+      var a = Math.random() * Math.PI * 2, s = 10 + Math.random() * 36;
+      g.sparks.push({x:x, y:y, vx:Math.cos(a) * s, vy:Math.sin(a) * s, life:.25 + Math.random() * .35, age:0, c:col});
+    }
+  }
+  function pop(x, y, text, col){ g.pops.push({x:x, y:y, text:text, age:0, c:col || PAL.gold}); }
+  function popStat(id){
+    var el = document.getElementById(id);
+    el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop");
+  }
+
+  /* ---------- series ---------- */
+  function spawnSeries(sp){
+    var id = ++g.seriesId, T = TYPES[sp.type], v = foeSpeed() * T.mult;
+    g.series[id] = {total:sp.n, killed:0, escaped:0, broken:false, won:false, showT:1.4};
+    g.track = id; g.spawned++;
+    for(var i = 0; i < sp.n; i++){
+      var delay = sp.kind === "column" ? 0 : sp.kind === "hover" ? i * 0.3 : i * SPACING / v;
+      var armed = sp.type === "gunner" ? cfg.shoot > 0
+                : sp.type === "ember" ? cfg.shoot >= 2 && i === 2
+                : cfg.shoot >= 3 && i % (cfg.shoot >= 4 ? 2 : 3) === 1;
+      var path = makePath(sp, i);
+      g.foes.push({type:sp.type, series:id, path:path, s:0, k:0, t:-delay, held:0, v:v,
+                   x:path.pts[0].x, y:path.pts[0].y, on:false, hp:T.hp, flash:0, rot:i,
+                   armed:armed, fireCd:0.9 + (i * 0.61) % 1.4});
+    }
+  }
+  function settle(ser){
+    if(ser && ser.killed + ser.escaped >= ser.total) ser.over = true;
+  }
+  function foeDown(i, scored){
+    var f = g.foes[i], T = TYPES[f.type], ser = g.series[f.series];
+    g.foes.splice(i, 1);
+    spark(f.x, f.y, 12, T.col);
+    g.rings.push({x:f.x, y:f.y, t:0, c:T.col});
+    if(!scored){ if(ser){ ser.broken = true; ser.escaped++; settle(ser); } return; }
+    g.score += T.pts; g.kills++;
+    if(ser){
+      ser.killed++;
+      if(!ser.broken && ser.killed === ser.total){
+        /* the whole series is down: the last one drops a build chip */
+        ser.won = true; g.cleared++;
+        g.score += SERIES_BONUS;
+        g.chipsOut.push({x:f.x, y:f.y, t:0});
+        pop(f.x, f.y - 5, "+" + SERIES_BONUS);
+      }
+      settle(ser);
+    }
+    afterScore();
+  }
+  function escape(i){
+    var f = g.foes[i], ser = g.series[f.series];
+    g.foes.splice(i, 1);
+    if(ser){ ser.broken = true; ser.escaped++; settle(ser); }
+  }
+  function afterScore(){
+    while(g.score >= g.nextExtra){
+      g.nextExtra += EXTRA_AT;
+      if(g.lives < 9){ g.lives++; popStat("gLives"); }
+    }
+    syncHUD();
+  }
+
+  /* ---------- build: freeze the game and spend chips ---------- */
+  function levelOf(id){
+    if(id === "rings" || id === "laser") return g.up.weapon === id ? 1 : 0;
+    return g.up[id];
+  }
+  function costOf(u){ var lv = levelOf(u.id); return lv < u.costs.length ? u.costs[lv] : 0; }
+  function canBuy(u){ var c = costOf(u); return c > 0 && g.chips >= c; }
+  function anyAffordable(){ return UPG.some(canBuy); }
+  function buy(id){
+    var u = UPG.filter(function(x){ return x.id === id; })[0];
+    if(!u || !canBuy(u)) return false;
+    g.chips -= costOf(u);
+    if(id === "rings" || id === "laser") g.up.weapon = id;
+    else g.up[id]++;
+    renderBuild(); syncHUD();
+    return true;
+  }
+  function canBuild(){ return g.phase === "playing" || g.phase === "dying"; }
+  function openBuild(){
+    if(!canBuild() || g.frozen) return;
+    g.frozen = true;
+    release();
+    renderBuild();
+    panel.hidden = false;
+    syncHUD();
+  }
+  function closeBuild(){
+    if(!g.frozen) return;
+    g.frozen = false;
+    panel.hidden = true;
+    syncHUD();
+  }
+  var tiles = {};
+  UPG.forEach(function(u, n){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "gtile"; b.dataset.up = u.id;
+    b.innerHTML = '<span class="nm"></span><span class="ds"></span><span class="ct"></span>';
+    b.addEventListener("click", function(){ buy(u.id); });
+    grid.appendChild(b);
+    tiles[u.id] = b;
+  });
+  function renderBuild(){
+    document.getElementById("gBuildChips").textContent = g.chips;
+    UPG.forEach(function(u){
+      var b = tiles[u.id], lv = levelOf(u.id), max = lv >= u.costs.length, c = costOf(u);
+      var other = u.id === "rings" ? "laser" : u.id === "laser" ? "rings" : null;
+      b.querySelector(".nm").textContent = u.name;
+      b.querySelector(".ds").textContent = max ? u.desc[u.desc.length - 1]
+        : u.desc[lv] + (other && g.up.weapon === other ? " (replaces " + (other === "laser" ? "the laser" : "rings") + ")" : "");
+      b.querySelector(".ct").textContent = max ? (u.costs.length > 1 ? "Maxed" : "Fitted")
+        : (u.costs.length > 1 ? "Level " + (lv + 1) + " \u00B7 " : "") + "\u25C6 " + c;
+      b.classList.toggle("owned", lv > 0);
+      b.disabled = max || g.chips < c;
+    });
+  }
+  panel.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+  document.getElementById("gResume").addEventListener("click", closeBuild);
+  buildBtn.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+  buildBtn.addEventListener("click", function(e){ e.stopPropagation(); openBuild(); });
+
+  /* ---------- input ---------- */
+  var keyL = false, keyR = false, keyU = false, keyD = false, keyFire = false;
+  var drag = null;
+  function ptW(e){
+    var r = cv.getBoundingClientRect();
+    if(!r.width || !r.height) return null;
+    return {x:(e.clientX - r.left) / r.width * W, y:(e.clientY - r.top) / r.height * H};
+  }
+  function primary(){
+    if(g.phase === "ready" || g.phase === "over"){
+      if(g.phase === "over") g = newGame();
+      g.phase = "playing";
+      ARCADE.begin("forge");
+      syncHUD();
+      return true;
+    }
+    return false;
+  }
+  stage.addEventListener("pointerdown", function(e){
+    e.preventDefault();
+    if(g.frozen) return;
+    try { stage.setPointerCapture(e.pointerId); } catch(err){}
+    if(primary()) return;
+    var p = ptW(e);
+    if(p) drag = {fx:p.x, fy:p.y, lx:p.x, ly:p.y, sx:g.ship.x, sy:g.ship.y};
+    g.firing = true;
+  });
+  stage.addEventListener("pointermove", function(e){
+    if(!drag) return;
+    var p = ptW(e);
+    if(!p) return;
+    drag.lx = p.x; drag.ly = p.y;
+    g.target = {x:drag.sx + (p.x - drag.fx) * DRAG_GAIN, y:drag.sy + (p.y - drag.fy) * DRAG_GAIN};
+  });
+  function release(){ drag = null; keyFire = false; if(g){ g.firing = false; g.target = null; } }
+  stage.addEventListener("pointerup", function(){ drag = null; if(g){ g.firing = false; g.target = null; } });
+  stage.addEventListener("pointercancel", function(){ drag = null; if(g){ g.firing = false; g.target = null; } });
+  window.addEventListener("keydown", function(e){
+    if(!live) return;
+    var k = e.key;
+    if(g.frozen){
+      if(k === "b" || k === "B" || k === "Escape"){ e.preventDefault(); closeBuild(); }
+      else if(k >= "1" && k <= String(UPG.length)){ e.preventDefault(); buy(UPG[+k - 1].id); }
+      return;
+    }
+    if(k === "b" || k === "B"){ e.preventDefault(); openBuild(); return; }
+    if(k === "ArrowLeft"  || k === "a" || k === "A"){ keyL = true; e.preventDefault(); }
+    if(k === "ArrowRight" || k === "d" || k === "D"){ keyR = true; e.preventDefault(); }
+    if(k === "ArrowUp"    || k === "w" || k === "W"){ keyU = true; e.preventDefault(); }
+    if(k === "ArrowDown"  || k === "s" || k === "S"){ keyD = true; e.preventDefault(); }
+    if(k === " " || k === "Enter"){ e.preventDefault(); if(!primary()) keyFire = true; }
+    if(k === "Escape" && document.body.classList.contains("fit")) setFit(false);
+  });
+  window.addEventListener("keyup", function(e){
+    if(!live) return;
+    var k = e.key;
+    if(k === "ArrowLeft"  || k === "a" || k === "A") keyL = false;
+    if(k === "ArrowRight" || k === "d" || k === "D") keyR = false;
+    if(k === "ArrowUp"    || k === "w" || k === "W") keyU = false;
+    if(k === "ArrowDown"  || k === "s" || k === "S") keyD = false;
+    if(k === " " || k === "Enter") keyFire = false;
+  });
+
+  /* ---------- the ship ---------- */
+  function addBullet(x, y, dir){
+    g.bullets.push({x:x, y:y, dir:dir, w:g.up.weapon, t:0, hit:g.up.weapon === "laser" ? [] : null});
+  }
+  function volley(){
+    var s = g.ship;
+    if(g.up.right){ addBullet(s.x + 3.4, s.y - 2.2, 1); addBullet(s.x + 3.4, s.y + 2.2, 1); }
+    else addBullet(s.x + 4.6, s.y, 1);
+    if(g.up.left) addBullet(s.x - 4.2, s.y, -1);
+  }
+  function hurt(){
+    var s = g.ship;
+    if(g.phase !== "playing" || s.inv > 0) return;
+    if(g.up.shield){
+      g.up.shield = 0; s.inv = 1;
+      g.rings.push({x:s.x, y:s.y, t:0, c:PAL.shield});
+      spark(s.x, s.y, 14, PAL.shield);
+      pop(s.x, s.y - 7, "Shield gone", PAL.shield);
+      return;
+    }
+    crash();
+  }
+  function crash(){
+    var s = g.ship;
+    g.phase = "dying"; g.pause = 1.6; g.lives--;
+    g.lost = hasUpgrades();
+    g.up = freshUp();                              /* a lost ship takes its upgrades with it */
+    spark(s.x, s.y, 26, PAL.flame); spark(s.x, s.y, 14, PAL.ship);
+    g.rings.push({x:s.x, y:s.y, t:0, c:PAL.flame});
+    shake = RM ? 0 : 4; flash = 1;
+    syncHUD();
+  }
+  function respawn(){
+    if(g.lives <= 0){ closeBuild(); return over(); }
+    var sx = g.boss ? BOSS_SPAWN_X : SPAWN_X;
+    g.ship = {x:sx, y:75, inv:2.2};
+    g.shots = []; g.flames = [];
+    /* give the new ship some room */
+    for(var i = g.foes.length - 1; i >= 0; i--){
+      var f = g.foes[i];
+      if(f.on && Math.abs(f.x - sx) < 26) foeDown(i, false);
+    }
+    g.target = null;
+    if(drag){ drag.sx = g.ship.x; drag.sy = g.ship.y; drag.fx = drag.lx; drag.fy = drag.ly; }
+    if(g.lost) pop(sx, 66, "Upgrades lost", PAL.hurt);
+    g.phase = "playing";
+    syncHUD();
+  }
+
+  /* ---------- the dragon ---------- */
+  function headY(t){ return 75 + 46 * Math.sin(t * 0.5) + 6 * Math.sin(t * 1.7); }
+  function neckAt(B, j){ return {x:B.x - 1 - j * 2.9, y:headY(B.t - j * 0.13), r:3.1 + j * 0.13}; }
+  function startBoss(){
+    var hp = bossHp();
+    g.boss = {hp:hp, max:hp, t:0, enter:0, x:-30, y:75, breathCd:2.6, windup:0, burst:0, burstCd:0, breaths:0,
+              flash:0, mouth:0, dying:0, emberCd:3.5, emberIdx:0};
+    g.banner = {text:"Warning", sub:"a dragon, behind you", t:2.8, warn:true};
+  }
+  function flame(x, y, a){
+    var sp = 40 + 4 * (g.loop - 1);
+    g.flames.push({x:x, y:y, vx:Math.cos(a) * sp, vy:Math.sin(a) * sp, t:0});
+  }
+  function hitBoss(dmg, x, y){
+    var B = g.boss;
+    B.hp -= dmg; B.flash = 0.08;
+    g.score += 10 * dmg;
+    spark(x, y, 4, PAL.fire);
+    if(B.hp <= 0){
+      B.hp = 0; B.dying = 1.8;
+      var pts = BOSS_PTS * g.loop;
+      g.score += pts; g.dragons++;
+      g.flames = [];
+      pop(B.x + 12, B.y - 8, "+" + pts);
+      g.banner = {text:"Dragon down", sub:"+" + pts, t:2};
+      shake = RM ? 0 : 5; flash = 1;
+    }
+    afterScore();
+  }
+  function bossDone(){
+    g.boss = null;
+    g.loop++; g.dist = 0; g.scriptIdx = 0;
+    g.banner = {text:"Stage " + g.loop, sub:"the same pattern, faster", t:2.4};
+    popStat("gLoop");
+    syncHUD();
+  }
+  function stepBoss(dt){
+    var B = g.boss, s = g.ship;
+    B.t += dt;
+    if(B.flash > 0) B.flash -= dt;
+    if(B.mouth > 0) B.mouth -= dt;
+    if(B.dying > 0){
+      B.dying -= dt;
+      if(!RM && Math.random() < dt * 16){
+        var p = neckAt(B, (Math.random() * NECK) | 0);
+        spark(p.x, p.y, 10, Math.random() < .5 ? PAL.fire : PAL.drag);
+        g.rings.push({x:p.x, y:p.y, t:0, c:PAL.fireHot});
+      }
+      if(B.dying <= 0) bossDone();
+      return;
+    }
+    B.enter = Math.min(1, B.enter + dt / 2.5);
+    var e = 1 - Math.pow(1 - B.enter, 3);
+    B.x = -30 + (17 + 3 * Math.sin(B.t * 1.1) + 30) * e;
+    B.y = headY(B.t);
+    if(B.enter < 1) return;
+
+    /* breath: a glow in the jaws first, then an aimed burst; below half health every other breath is a fan */
+    var mx = B.x + 8.5, my = B.y + 1.2;
+    var aim = clamp(Math.atan2(s.y - my, s.x - mx), -1.1, 1.1);
+    B.breathCd -= dt;
+    if(B.breathCd <= 0 && B.burst <= 0 && B.windup <= 0){ B.windup = 0.5; B.breathCd = 1e9; }
+    if(B.windup > 0 && (B.windup -= dt) <= 0){
+      B.windup = 0;
+      B.breaths++;
+      if(B.hp < B.max / 2 && B.breaths % 2 === 0){
+        for(var k = -2; k <= 2; k++) flame(mx, my, aim * 0.5 + k * 0.28);
+        B.mouth = 0.4;
+      } else { B.burst = 7; B.burstCd = 0; }
+      B.breathCd = breathEvery();
+    }
+    if(B.burst > 0){
+      B.burstCd -= dt;
+      if(B.burstCd <= 0){ flame(mx, my, aim + SPREAD[B.burst % SPREAD.length]); B.burst--; B.burstCd = 0.11; B.mouth = 0.25; }
+    }
+    B.emberCd -= dt;
+    if(B.emberCd <= 0){ spawnSeries(EMBERS[B.emberIdx++ % EMBERS.length]); B.emberCd = 8; }
+
+    /* touching the head or the neck */
+    if(g.phase === "playing" && s.inv <= 0){
+      var touch = Math.hypot(s.x - (B.x + 2), s.y - B.y) < 7.2;
+      for(var j = 1; j <= NECK && !touch; j++){ var n = neckAt(B, j); touch = Math.hypot(s.x - n.x, s.y - n.y) < n.r + 2.4; }
+      if(touch){ hurt(); if(g.phase === "playing") s.x = Math.min(SHIP_MAX_X, s.x + 8); }
+    }
+  }
+
+  /* ---------- shots ---------- */
+  function reach(b){ return b.w === "rings" ? Math.min(5.5, 1.2 + b.t * 16) : 0.8; }
+  function touches(b, x, y, r){
+    if(b.w === "laser"){
+      var x0 = b.dir > 0 ? b.x - LASER_LEN : b.x, x1 = b.dir > 0 ? b.x : b.x + LASER_LEN;
+      return Math.abs(y - b.y) <= r + 0.7 && x >= x0 - r && x <= x1 + r;
+    }
+    return Math.hypot(x - b.x, y - b.y) <= r + reach(b);
+  }
+  /* true when the shot is used up */
+  function bulletHits(b){
+    for(var q = g.foes.length - 1; q >= 0; q--){
+      var f = g.foes[q];
+      if(!f.on || !touches(b, f.x, f.y, TYPES[f.type].r)) continue;
+      if(b.hit){ if(b.hit.indexOf(f) >= 0) continue; b.hit.push(f); }
+      if(--f.hp <= 0) foeDown(q, true);
+      else { f.flash = 0.15; spark(f.x, f.y, 4, TYPES[f.type].col); }
+      if(!b.hit) return true;                       /* lasers carry on through */
+    }
+    var B = g.boss;
+    if(B && B.dying <= 0 && B.enter >= 1){
+      if(touches(b, B.x + 2, B.y, 5.2)){
+        if(!b.hit){ hitBoss(1, b.x, b.y); return true; }
+        if(b.hit.indexOf(B) < 0){ b.hit.push(B); hitBoss(2, b.x, b.y); }
+      } else if(!b.hit){
+        for(var j = 1; j <= NECK; j++){
+          var n = neckAt(B, j);
+          if(touches(b, n.x, n.y, n.r)){ spark(b.x, b.y, 3, PAL.dragBelly); return true; }
+        }
+      }
+    }
+    return false;
+  }
+
+  /* ---------- simulation ---------- */
+  function step(dt){
+    var i, s = g.ship;
+    if(g.frozen) return;
+    for(i = g.sparks.length - 1; i >= 0; i--){
+      var sp = g.sparks[i];
+      sp.age += dt;
+      if(sp.age >= sp.life){ g.sparks.splice(i, 1); continue; }
+      sp.x += sp.vx * dt - g.sv * dt * 0.5; sp.y += sp.vy * dt;
+    }
+    for(i = g.rings.length - 1; i >= 0; i--){ g.rings[i].t += dt; if(g.rings[i].t > 0.5) g.rings.splice(i, 1); }
+    for(i = g.pops.length - 1; i >= 0; i--){ g.pops[i].age += dt; if(g.pops[i].age > 1.2) g.pops.splice(i, 1); }
+    if(g.banner){ g.banner.t -= dt; if(g.banner.t <= 0) g.banner = null; }
+    var tr = g.series[g.track];
+    if(tr && tr.over) tr.showT -= dt;
+
+    /* the scroll brakes to a stop for the dragon over two seconds, and picks up again after it */
+    var want = g.boss && g.phase !== "ready" ? 0 : scrollSpeed(), rate = scrollSpeed() / 2 * dt;
+    g.sv = g.sv < want ? Math.min(want, g.sv + rate) : Math.max(want, g.sv - rate);
+    g.scroll += g.sv * dt;
+
+    if(g.phase === "ready"){
+      s.y += (75 - s.y) * Math.min(1, dt * 3);
+      return;
+    }
+    var playing = g.phase === "playing";
+    if(playing){
+      g.dist += g.sv * dt;
+      while(g.scriptIdx < SCRIPT.length && g.dist >= SCRIPT[g.scriptIdx].at) spawnSeries(SCRIPT[g.scriptIdx++]);
+      if(!g.boss && g.dist >= STAGE_LEN) startBoss();
+
+      if(s.inv > 0) s.inv -= dt;
+      var spd = SHIP_SPEEDS[g.up.speed];
+      if(keyL || keyR || keyU || keyD){
+        g.target = null;
+        var mx = (keyR ? 1 : 0) - (keyL ? 1 : 0), my = (keyD ? 1 : 0) - (keyU ? 1 : 0);
+        var len = Math.hypot(mx, my) || 1, ks = KEY_SPEEDS[g.up.speed];
+        s.x += mx / len * ks * dt; s.y += my / len * ks * dt;
+      } else if(g.target){
+        var dx = g.target.x - s.x, dy = g.target.y - s.y, d = Math.hypot(dx, dy);
+        if(d > 0.05){ var st = Math.min(d, spd * dt); s.x += dx / d * st; s.y += dy / d * st; }
+      }
+      s.x = clamp(s.x, SHIP_MIN_X, SHIP_MAX_X);
+      s.y = clamp(s.y, 2, H - 2);
+
+      g.fireCd -= dt;
+      if((g.firing || keyFire) && g.fireCd <= 0){ volley(); g.fireCd = 1 / (cfg.rate * RATE_MULT[g.up.rapid]); }
+
+      /* the walls are thin, but still fatal, shield or not */
+      for(i = 0; i < HULL.length; i++){
+        var hx = s.x + HULL[i][0], hy = s.y + HULL[i][1];
+        if(hy <= ceilAt(g.scroll + hx) || hy >= floorAt(g.scroll + hx)){ crash(); break; }
+      }
+    } else if(g.phase === "dying"){
+      g.pause -= dt;
+      if(g.pause <= 0) respawn();
+    }
+
+    /* our shots, substepped */
+    for(i = g.bullets.length - 1; i >= 0; i--){
+      var b = g.bullets[i], dist = BULLET[b.w] * dt, n = Math.ceil(dist / 1.4), sd = dist / n, gone = false;
+      var tail = b.w === "laser" ? LASER_LEN : 0;
+      b.t += dt;
+      for(var k = 0; k < n && !gone; k++){
+        b.x += sd * b.dir;
+        if(b.x > W + 4 + tail || b.x < -4 - tail){ gone = true; break; }
+        if(b.x > 0 && b.x < W && (b.y <= ceilAt(g.scroll + b.x) || b.y >= floorAt(g.scroll + b.x))){
+          spark(b.x, b.y, 4, PAL.edge); gone = true; break;
+        }
+        gone = bulletHits(b);
+      }
+      if(gone) g.bullets.splice(i, 1);
+    }
+
+    /* the enemy, along its path */
+    for(i = g.foes.length - 1; i >= 0; i--){
+      var f = g.foes[i], T = TYPES[f.type], P = f.path;
+      f.t += dt; f.rot += dt * 5;
+      if(f.flash > 0) f.flash -= dt;
+      if(f.t < 0) continue;
+      f.on = true;
+      var adv = f.v * dt;
+      if(P.holdAt >= 0 && f.held < P.hold && f.s + adv >= P.holdAt){
+        if(f.s < P.holdAt) f.s = P.holdAt; else f.held += dt;
+      } else f.s += adv;
+      if(f.s >= P.len){ escape(i); continue; }
+      while(f.k < P.cum.length - 2 && P.cum[f.k + 1] < f.s) f.k++;
+      var pa = P.pts[f.k], pb = P.pts[f.k + 1], sl = P.cum[f.k + 1] - P.cum[f.k], u = sl > 0 ? (f.s - P.cum[f.k]) / sl : 0;
+      f.x = pa.x + (pb.x - pa.x) * u; f.y = pa.y + (pb.y - pa.y) * u;
+
+      if(playing && f.armed && f.x > 3 && f.x < W - 3 && Math.abs(f.x - s.x) > 8){
+        f.fireCd -= dt;
+        if(f.fireCd <= 0){
+          var ax = s.x - f.x, ay = s.y - f.y, ad = Math.hypot(ax, ay) || 1, asp = 34 * loopMult();
+          g.shots.push({x:f.x, y:f.y, vx:ax / ad * asp, vy:ay / ad * asp});
+          f.fireCd = fireEvery();
+        }
+      }
+      if(g.phase === "playing" && s.inv <= 0 && Math.hypot(f.x - s.x, f.y - s.y) < T.r + 2.2){
+        var shielded = !!g.up.shield;
+        hurt();
+        foeDown(i, shielded);                     /* a shield rams it for the points; a crash does not */
+      }
+    }
+
+    for(i = g.shots.length - 1; i >= 0; i--){
+      var sh = g.shots[i];
+      sh.x += sh.vx * dt; sh.y += sh.vy * dt;
+      if(sh.x < -3 || sh.x > W + 3 || sh.y < -3 || sh.y > H + 3){ g.shots.splice(i, 1); continue; }
+      if(sh.y <= ceilAt(g.scroll + sh.x) || sh.y >= floorAt(g.scroll + sh.x)){ g.shots.splice(i, 1); continue; }
+      if(g.phase === "playing" && s.inv <= 0 && Math.hypot(sh.x - s.x, sh.y - s.y) <= 2.6){ g.shots.splice(i, 1); hurt(); }
+    }
+    for(i = g.flames.length - 1; i >= 0; i--){
+      var fl = g.flames[i];
+      fl.t += dt; fl.x += fl.vx * dt; fl.y += fl.vy * dt;
+      if(fl.x > W + 4 || fl.y < -4 || fl.y > H + 4){ g.flames.splice(i, 1); continue; }
+      var fr = Math.min(2.8, 1.2 + fl.t * 2);            /* the bright core hurts; the glow around it does not */
+      if(g.phase === "playing" && s.inv <= 0 && Math.hypot(fl.x - s.x, fl.y - s.y) <= fr * 0.75 + 1.6){ g.flames.splice(i, 1); hurt(); }
+    }
+
+    /* chips drift back, and come to you once you are close */
+    for(i = g.chipsOut.length - 1; i >= 0; i--){
+      var c = g.chipsOut[i], cx = s.x - c.x, cy = s.y - c.y, cd = Math.hypot(cx, cy);
+      c.t += dt;
+      if(g.phase === "playing" && cd < 26){ var pull = Math.min(cd, 70 * dt); if(cd > 0){ c.x += cx / cd * pull; c.y += cy / cd * pull; } }
+      else { c.x -= (g.sv * 0.6 + 5) * dt; c.y += Math.sin(c.t * 3) * 4 * dt; }
+      if(g.phase === "playing" && Math.hypot(s.x - c.x, s.y - c.y) < 5.5){
+        g.chipsOut.splice(i, 1);
+        g.chips++; g.score += CHIP_PTS;
+        pop(c.x, c.y - 5, "Build chip");
+        g.rings.push({x:c.x, y:c.y, t:0, c:PAL.chip});
+        popStat("gBuildBtn");
+        afterScore();
+      } else if(c.x < -6) g.chipsOut.splice(i, 1);
+    }
+
+    if(g.boss) stepBoss(dt);
+  }
+
+  function over(){
+    g.phase = "over";
+    ARCADE.note("forge", g.score, "stage " + g.loop);
+    var ch = false;
+    if(g.score > rec.score){ rec.score = g.score; ch = true; }
+    if(g.loop > rec.stage){ rec.stage = g.loop; ch = true; }
+    if(ch){
+      try { localStorage.setItem("forge.best", String(rec.score));
+            localStorage.setItem("forge.stage", String(rec.stage)); } catch(e){}
+      syncRecord();
+    }
+    syncHUD();
+  }
+
+  /* ---------- drawing ---------- */
+  function sizeStage(){
+    var fit = document.body.classList.contains("fit");
+    var host = stage.parentElement;
+    var availH = fit ? host.clientHeight : Math.min(window.innerHeight * 0.64, 620);
+    var capW = fit ? host.clientWidth : Math.min(host.clientWidth, 430);
+    var w = Math.min(capW, availH * (W / H)), h = w * (H / W);
+    stage.style.width = Math.round(w) + "px"; stage.style.height = Math.round(h) + "px";
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr * w / W, 0, 0, dpr * w / W, 0, 0);
+  }
+  function hash(a){ var h = (a * 374761393) | 0; h = (h ^ (h >>> 13)) * 1274126177 | 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; }
+
+  function drawShip(s){
+    var u = g.up;
+    ctx.save(); ctx.translate(s.x, s.y);
+    var len = (2.2 + Math.random() * 1.8) * (1 + u.speed * 0.35);
+    ctx.fillStyle = PAL.flame;
+    ctx.beginPath(); ctx.moveTo(-4.2, -1); ctx.lineTo(-4.2 - len, 0); ctx.lineTo(-4.2, 1); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.flameCore;
+    ctx.beginPath(); ctx.moveTo(-4.2, -0.5); ctx.lineTo(-4.2 - len * 0.5, 0); ctx.lineTo(-4.2, 0.5); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.shipDark;
+    if(u.right){ ctx.fillRect(0.6, -2.9, 3.4, 1.1); ctx.fillRect(0.6, 1.8, 3.4, 1.1); }
+    if(u.left){ ctx.fillRect(-6, -0.45, 2.2, 0.9); }
+    ctx.beginPath(); ctx.moveTo(-1.5, 0.6); ctx.lineTo(1.2, 0.6); ctx.lineTo(-2.4, 3); ctx.lineTo(-3.6, 3); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.ship;
+    ctx.beginPath();
+    ctx.moveTo(4.6, 0); ctx.lineTo(1, -1.4); ctx.lineTo(-2, -1.6); ctx.lineTo(-3.6, -3.2);
+    ctx.lineTo(-4.2, -1.4); ctx.lineTo(-4.2, 1.4); ctx.lineTo(-2, 1.6); ctx.lineTo(1, 1.4);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.trim; ctx.fillRect(-3.4, -0.35, 4.2, 0.7);
+    ctx.fillStyle = PAL.cockpit;
+    ctx.beginPath(); ctx.ellipse(0.8, -0.5, 1.4, 0.6, 0, 0, Math.PI * 2); ctx.fill();
+    if(u.shield){
+      var pulse = 0.55 + 0.25 * Math.sin(Date.now() / 160);
+      ctx.globalAlpha = pulse; ctx.strokeStyle = PAL.shield; ctx.lineWidth = 0.6;
+      ctx.beginPath(); ctx.ellipse(0.2, 0, 6.6, 5, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.globalAlpha = pulse * 0.18; ctx.fillStyle = PAL.shield; ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+  }
+  function drawFoe(f){
+    var T = TYPES[f.type], col = f.flash > 0 ? "#ffffff" : T.col;
+    ctx.save(); ctx.translate(f.x, f.y);
+    ctx.fillStyle = col;
+    if(f.type === "drone"){
+      ctx.beginPath(); ctx.ellipse(0, 0, 2.8, 1.9, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "rgba(8,6,26,.7)"; ctx.beginPath(); ctx.arc(-0.6, 0, 1, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(-0.8, -0.2, 0.35, 0, Math.PI * 2); ctx.fill();
+    } else if(f.type === "fan"){
+      ctx.rotate(f.rot);
+      for(var b = 0; b < 3; b++){
+        ctx.rotate(Math.PI * 2 / 3);
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(2.8, -1); ctx.lineTo(2.4, 1.1); ctx.closePath(); ctx.fill();
+      }
+      ctx.fillStyle = "#e8fffb"; ctx.beginPath(); ctx.arc(0, 0, 0.8, 0, Math.PI * 2); ctx.fill();
+    } else if(f.type === "gunner"){
+      var aim = Math.atan2(g.ship.y - f.y, g.ship.x - f.x);
+      ctx.save(); ctx.rotate(aim); ctx.fillRect(0, -0.55, 4.2, 1.1); ctx.restore();
+      ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "rgba(8,6,26,.55)"; ctx.beginPath(); ctx.arc(0, 0, 1.4, 0, Math.PI * 2); ctx.fill();
+    } else {
+      var flap = Math.sin(f.rot * 3) * 1.4;
+      ctx.beginPath(); ctx.moveTo(-0.5, 0); ctx.lineTo(-3, -2 - flap); ctx.lineTo(-1.6, 0.4); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(0.5, 0); ctx.lineTo(3, -2 - flap); ctx.lineTo(1.6, 0.4); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = f.flash > 0 ? "#fff" : PAL.fire;
+      ctx.beginPath(); ctx.arc(0, 0.2, 1.5, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
+  function drawChip(c){
+    ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.t * 1.6);
+    ctx.globalAlpha = 0.25 + 0.15 * Math.sin(c.t * 8);
+    ctx.fillStyle = PAL.chip; ctx.beginPath(); ctx.arc(0, 0, 4.6, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = PAL.chipDark;
+    ctx.beginPath();
+    for(var k = 0; k < 6; k++){ var a = k * Math.PI / 3; ctx[k ? "lineTo" : "moveTo"](Math.cos(a) * 3, Math.sin(a) * 3); }
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.chip;
+    ctx.beginPath();
+    for(k = 0; k < 6; k++){ a = k * Math.PI / 3; ctx[k ? "lineTo" : "moveTo"](Math.cos(a) * 2.2, Math.sin(a) * 2.2); }
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function drawDragon(B){
+    var hot = B.flash > 0;
+    for(var j = NECK; j >= 1; j--){
+      var n = neckAt(B, j);
+      if(n.x < -6) continue;
+      ctx.fillStyle = hot ? "#ffd0c8" : (j % 2 ? PAL.drag : "#a52c25");
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = PAL.dragBelly;
+      ctx.beginPath(); ctx.ellipse(n.x + 0.6, n.y + n.r * 0.45, n.r * 0.7, n.r * 0.35, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = PAL.dragDark;
+      ctx.beginPath(); ctx.moveTo(n.x - 1.2, n.y - n.r + 0.4); ctx.lineTo(n.x - 0.2, n.y - n.r - 2); ctx.lineTo(n.x + 1, n.y - n.r + 0.4); ctx.closePath(); ctx.fill();
+    }
+    var jaw = B.mouth > 0 ? 0.5 : B.windup > 0 ? 0.3 : 0.1;
+    ctx.save(); ctx.translate(B.x, B.y);
+    /* horns */
+    ctx.fillStyle = PAL.dragDark;
+    ctx.beginPath(); ctx.moveTo(-1.5, -2.6); ctx.lineTo(-7.5, -6.8); ctx.lineTo(-3.2, -1.4); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(0, -3); ctx.lineTo(-4.4, -8); ctx.lineTo(-1.4, -2.4); ctx.closePath(); ctx.fill();
+    /* lower jaw, hinged behind the eye */
+    ctx.save(); ctx.translate(1, 1); ctx.rotate(jaw);
+    ctx.fillStyle = hot ? "#ffd0c8" : "#8e231d";
+    ctx.beginPath(); ctx.moveTo(0, -0.2); ctx.lineTo(7.4, 0.2); ctx.lineTo(7, 1.6); ctx.lineTo(-0.6, 2.2); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#f4ecdf";
+    for(var t = 2; t < 7; t += 1.6){ ctx.beginPath(); ctx.moveTo(t, 0.1); ctx.lineTo(t + 0.4, -0.8); ctx.lineTo(t + 0.8, 0.1); ctx.closePath(); ctx.fill(); }
+    ctx.restore();
+    /* skull and snout */
+    ctx.fillStyle = hot ? "#ffd0c8" : PAL.drag;
+    ctx.beginPath(); ctx.ellipse(0, 0, 4.8, 3.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(1.6, -2.8); ctx.lineTo(8.6, -1.3); ctx.lineTo(8.8, 0.4); ctx.lineTo(1.6, 1.4); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#f4ecdf";
+    for(t = 3; t < 8; t += 1.6){ ctx.beginPath(); ctx.moveTo(t, 1.05); ctx.lineTo(t + 0.4, 1.9); ctx.lineTo(t + 0.8, 0.95); ctx.closePath(); ctx.fill(); }
+    ctx.fillStyle = PAL.dragDark; ctx.beginPath(); ctx.arc(7.6, -1.1, 0.35, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = PAL.dragEye; ctx.beginPath(); ctx.ellipse(2.2, -1.4, 1.1, 0.75, -0.2, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#1a0d0a"; ctx.fillRect(2.3, -2, 0.4, 1.2);
+    if(B.mouth > 0){
+      ctx.globalAlpha = 0.8; ctx.fillStyle = PAL.fire;
+      ctx.beginPath(); ctx.arc(9.2, 1.4, 1.6 + Math.random() * 0.8, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
+    }
+    if(B.windup > 0){                                  /* the tell: fire gathering in its jaws */
+      var wu = 1 - B.windup / 0.5;
+      ctx.globalAlpha = 0.35 + 0.5 * wu; ctx.fillStyle = PAL.fireHot;
+      ctx.beginPath(); ctx.arc(8.4, 0.9, 1 + wu * 2.4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = PAL.fire; ctx.beginPath(); ctx.arc(8.4, 0.9, 0.5 + wu * 1.2, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+  }
+
+  function paint(){
+    var ox = 0, oy = 0, i, x;
+    if(shake > .01){ ox = (Math.random() - .5) * shake; oy = (Math.random() - .5) * shake; }
+    ctx.save(); ctx.translate(ox, oy);
+    var sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, PAL.bgTop); sky.addColorStop(0.5, PAL.bg); sky.addColorStop(1, PAL.bgTop);
+    ctx.fillStyle = sky; ctx.fillRect(-4, -4, W + 8, H + 8);
+    for(i = 0; i < stars.length; i++){
+      var st = stars[i];
+      x = ((st.x - g.scroll * st.depth) % W + W) % W;
+      ctx.globalAlpha = st.a; ctx.fillStyle = "#fff"; ctx.fillRect(x, st.y, st.r, st.r);
+    }
+    ctx.globalAlpha = 1;
+
+    /* the walls: living bands along the top and bottom edges */
+    ctx.fillStyle = PAL.flesh;
+    ctx.beginPath(); ctx.moveTo(-4, -4);
+    for(x = -4; x <= W + 4; x += 2) ctx.lineTo(x, ceilAt(g.scroll + x));
+    ctx.lineTo(W + 4, -4); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-4, H + 4);
+    for(x = -4; x <= W + 4; x += 2) ctx.lineTo(x, floorAt(g.scroll + x));
+    ctx.lineTo(W + 4, H + 4); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.fleshDeep;
+    for(var wx = Math.floor(g.scroll / 7) * 7; wx < g.scroll + W + 7; wx += 7){
+      var hv = hash(wx / 7 | 0), px = wx - g.scroll + hv * 4;
+      var top = ceilAt(wx), bot = floorAt(wx);
+      if(top > 4) { ctx.beginPath(); ctx.ellipse(px, top * 0.45, 1.2 + hv, 0.8 + hv * 0.6, 0, 0, Math.PI * 2); ctx.fill(); }
+      if(H - bot > 4) { ctx.beginPath(); ctx.ellipse(px + 3, bot + (H - bot) * 0.55, 1.2 + hv, 0.8 + hv * 0.6, 0, 0, Math.PI * 2); ctx.fill(); }
+    }
+    ctx.strokeStyle = PAL.edge; ctx.lineWidth = 0.6; ctx.lineJoin = "round";
+    ctx.beginPath();
+    for(x = -4; x <= W + 4; x += 2){ if(x > -4) ctx.lineTo(x, ceilAt(g.scroll + x)); else ctx.moveTo(x, ceilAt(g.scroll + x)); }
+    ctx.stroke();
+    ctx.beginPath();
+    for(x = -4; x <= W + 4; x += 2){ if(x > -4) ctx.lineTo(x, floorAt(g.scroll + x)); else ctx.moveTo(x, floorAt(g.scroll + x)); }
+    ctx.stroke();
+
+    for(i = 0; i < g.chipsOut.length; i++) drawChip(g.chipsOut[i]);
+    for(i = 0; i < g.foes.length; i++) if(g.foes[i].on) drawFoe(g.foes[i]);
+
+    ctx.fillStyle = PAL.foeShot;
+    for(i = 0; i < g.shots.length; i++){ ctx.beginPath(); ctx.arc(g.shots[i].x, g.shots[i].y, 0.8, 0, Math.PI * 2); ctx.fill(); }
+    for(i = 0; i < g.flames.length; i++){
+      var fl = g.flames[i], fr = Math.min(2.8, 1.2 + fl.t * 2);
+      ctx.fillStyle = PAL.fireHot; ctx.globalAlpha = 0.55;
+      ctx.beginPath(); ctx.arc(fl.x - fl.vx * 0.03, fl.y - fl.vy * 0.03, fr * 1.25, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1; ctx.fillStyle = PAL.fire;
+      ctx.beginPath(); ctx.arc(fl.x, fl.y, fr * 0.75, 0, Math.PI * 2); ctx.fill();
+    }
+    if(g.boss) drawDragon(g.boss);
+
+    for(i = 0; i < g.bullets.length; i++){
+      var b = g.bullets[i];
+      if(b.w === "rings"){
+        ctx.strokeStyle = PAL.ring; ctx.lineWidth = 0.6;
+        ctx.beginPath(); ctx.ellipse(b.x, b.y, reach(b) * 0.45, reach(b), 0, 0, Math.PI * 2); ctx.stroke();
+      } else if(b.w === "laser"){
+        ctx.fillStyle = PAL.laser;
+        ctx.fillRect(b.dir > 0 ? b.x - LASER_LEN : b.x, b.y - 0.35, LASER_LEN, 0.7);
+        ctx.fillStyle = "#f4fff0"; ctx.fillRect(b.dir > 0 ? b.x - LASER_LEN : b.x, b.y - 0.12, LASER_LEN, 0.24);
+      } else {
+        ctx.fillStyle = PAL.shot; ctx.fillRect(b.x - 1.6, b.y - 0.25, 3.2, 0.5);
+      }
+    }
+
+    var s = g.ship;
+    if(g.phase !== "dying" && g.phase !== "over" && !(s.inv > 0 && Math.floor(s.inv * 12) % 2 === 0)) drawShip(s);
+
+    for(i = 0; i < g.rings.length; i++){
+      var rg = g.rings[i];
+      ctx.globalAlpha = Math.max(0, 1 - rg.t / 0.5);
+      ctx.strokeStyle = rg.c; ctx.lineWidth = 0.6;
+      ctx.beginPath(); ctx.arc(rg.x, rg.y, 1 + rg.t * 14, 0, Math.PI * 2); ctx.stroke();
+    }
+    for(i = 0; i < g.sparks.length; i++){
+      var sp = g.sparks[i];
+      ctx.globalAlpha = Math.max(0, 1 - sp.age / sp.life) * .9;
+      ctx.fillStyle = sp.c; ctx.fillRect(sp.x - .45, sp.y - .45, 0.9, 0.9);
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.font = "800 4px 'Bricolage Grotesque', system-ui, sans-serif";
+    for(i = 0; i < g.pops.length; i++){
+      var pp = g.pops[i];
+      ctx.globalAlpha = Math.max(0, 1 - pp.age / 1.2);
+      ctx.fillStyle = pp.c; ctx.fillText(pp.text, pp.x, pp.y - pp.age * 5);
+    }
+    ctx.globalAlpha = 1;
+
+    /* the dragon's health, top centre */
+    var B = g.boss;
+    if(B && B.enter > 0.3){
+      ctx.fillStyle = "rgba(8,6,26,.6)"; ctx.fillRect(28, 15.5, 44, 3.4);
+      ctx.fillStyle = PAL.fireHot; ctx.fillRect(29, 16.3, 42 * B.hp / B.max, 1.8);
+      ctx.font = "500 2.4px 'JetBrains Mono', monospace"; ctx.fillStyle = "rgba(244,236,223,.75)";
+      ctx.fillText("DRAGON", W / 2, 21.6);
+      if(!g.up.left && B.t < 14 && B.dying <= 0 && Math.floor(B.t * 2) % 2 === 0){
+        ctx.font = "600 2.9px 'JetBrains Mono', monospace"; ctx.fillStyle = PAL.gold;    /* clear of the head's reach */
+        ctx.fillText("IT'S BEHIND YOU", 54, 28.5);
+        ctx.fillText("BUILD A LEFT SHOOTER", 54, 32.5);
+      }
+    }
+
+    /* the series you are working on: one pip per ship */
+    var ser = g.series[g.track];
+    if(ser && g.phase !== "ready" && (!ser.over || ser.showT > 0)){
+      var px0 = 6, py = 132.5;
+      ctx.font = "500 2.3px 'JetBrains Mono', monospace"; ctx.textAlign = "left";
+      ctx.fillStyle = ser.won ? PAL.gold : ser.broken ? "rgba(244,236,223,.4)" : "rgba(244,236,223,.7)";
+      ctx.fillText(ser.won ? "SERIES \u2713 CHIP" : ser.broken ? "SERIES MISSED" : "SERIES", px0, py - 3.4);
+      for(i = 0; i < ser.total; i++){
+        var done = i < ser.killed;
+        ctx.fillStyle = done ? PAL.gold : ser.broken ? "rgba(226,84,60,.6)" : "rgba(244,236,223,.25)";
+        ctx.beginPath(); ctx.arc(px0 + 1 + i * 3.2, py, 1, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.textAlign = "center";
+    }
+
+    if(g.banner){
+      var bn = g.banner;
+      ctx.globalAlpha = Math.min(1, bn.t * 2) * (bn.warn ? 0.65 + 0.35 * Math.sin(bn.t * 14) : 1);
+      ctx.fillStyle = bn.warn ? PAL.fireHot : "#f4ecdf";
+      ctx.font = "800 7px 'Bricolage Grotesque', system-ui, sans-serif";
+      ctx.fillText(bn.text, W / 2, 68);
+      ctx.font = "500 3.4px 'JetBrains Mono', monospace";
+      ctx.fillStyle = PAL.gold; ctx.fillText(bn.sub, W / 2, 75);
+      ctx.globalAlpha = 1;
+    }
+    if(flash > .05){
+      ctx.globalAlpha = flash * .12; ctx.fillStyle = g.phase === "dying" ? PAL.hurt : "#fff";
+      ctx.fillRect(-4, -4, W + 8, H + 8); ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+  }
+
+  function syncHUD(){
+    document.getElementById("gScore").textContent = g.score;
+    document.getElementById("gLives").textContent = Math.max(0, g.lives);
+    document.getElementById("gLoop").textContent = g.loop;
+    document.getElementById("gBest").textContent = rec.score;
+    document.getElementById("gChipN").textContent = g.chips;
+    buildBtn.hidden = !canBuild();
+    buildBtn.classList.toggle("ready", anyAffordable());
+    if(g.frozen) renderBuild();
+    if(g.phase === "ready"){
+      overlay.hidden = false;
+      card.innerHTML = '<h2>Win chips, build the ship</h2>' +
+        '<p>Drag to fly and hold to fire. Shoot down a whole series of ships to win a build chip, then tap BUILD to spend it. A dragon waits at the end.</p>' +
+        '<span class="cue">Tap to start</span>';
+    } else if(g.phase === "over"){
+      overlay.hidden = false;
+      card.innerHTML = '<p class="huge">' + g.score + '</p>' +
+        '<h2>' + (g.score >= rec.score && g.score > 0 ? "New best" : "Stage " + g.loop) + '</h2>' +
+        '<p>' + g.kills + ' shot down, ' + g.cleared + ' series won' +
+        (g.dragons ? ', ' + g.dragons + (g.dragons === 1 ? ' dragon' : ' dragons') : '') +
+        ' &middot; best ' + rec.score + '.</p>' +
+        '<span class="cue">Tap to fly again</span>';
+    } else overlay.hidden = true;
+  }
+  function syncReadout(){
+    document.getElementById("goDist").textContent = Math.round(g.dist) + "/" + STAGE_LEN;
+    document.getElementById("goSeries").textContent = g.cleared + "/" + g.spawned;
+    document.getElementById("goChips").textContent = g.chips;
+    document.getElementById("goBoss").textContent = g.boss ? Math.ceil(g.boss.hp) + "/" + g.boss.max : "\u2014";
+  }
+  function syncRecord(){
+    document.getElementById("vGRec").textContent = rec.score ? rec.score + " pts" : "\u2014";
+    document.getElementById("gRecNote").textContent = rec.score
+      ? "Best " + rec.score + " points; reached stage " + rec.stage + "."
+      : "No runs yet.";
+  }
+
+  var KNOBS = [["gScroll", "vGScroll", "scroll"], ["gFoe", "vGFoe", "foe"], ["gShoot", "vGShoot", "shoot"],
+               ["gRate", "vGRate", "rate"], ["gBoss", "vGBoss", "boss"], ["gLivesK", "vGLives", "lives"]];
+  KNOBS.forEach(function(kn){
+    var el = document.getElementById(kn[0]), out = document.getElementById(kn[1]);
+    el.addEventListener("input", function(){
+      cfg[kn[2]] = parseInt(el.value, 10);
+      out.textContent = cfg[kn[2]];
+      if((g.phase === "ready" || g.phase === "over") && kn[2] === "lives"){ g.lives = cfg.lives; syncHUD(); }
+      syncReadout();
+    });
+  });
+  function applyCfg(){
+    KNOBS.forEach(function(kn){
+      document.getElementById(kn[0]).value = cfg[kn[2]];
+      document.getElementById(kn[1]).textContent = cfg[kn[2]];
+    });
+  }
+  document.getElementById("gReset").addEventListener("click", function(){
+    cfg = {scroll:DEFAULTS.scroll, foe:DEFAULTS.foe, shoot:DEFAULTS.shoot, rate:DEFAULTS.rate, boss:DEFAULTS.boss, lives:DEFAULTS.lives};
+    applyCfg();
+    if(g.phase === "ready" || g.phase === "over"){ g.lives = cfg.lives; syncHUD(); }
+    syncReadout();
+  });
+  document.getElementById("gClear").addEventListener("click", function(){
+    rec = {score:0, stage:1};
+    try { localStorage.removeItem("forge.best"); localStorage.removeItem("forge.stage"); } catch(e){}
+    syncRecord(); syncHUD();
+  });
+
+  var fitBtn = document.getElementById("gFitBtn"), fitExit = document.getElementById("gFitExit");
+  function setFit(on){
+    document.body.classList.toggle("fit", on);
+    fitExit.hidden = !on;
+    fitBtn.textContent = on ? "Exit full screen" : "Fit screen";
+    sizeStage();
+  }
+  fitBtn.addEventListener("click", function(){ setFit(!document.body.classList.contains("fit")); });
+  fitExit.addEventListener("pointerdown", function(e){ e.stopPropagation(); });
+  fitExit.addEventListener("click", function(e){ e.stopPropagation(); setFit(false); });
+
+  var rf = 0;
+  function frame(t){
+    if(!lastT) lastT = t;
+    var dt = Math.min((t - lastT) / 1000, .04); lastT = t;
+    step(dt);
+    if(!g.frozen){ flash = Math.max(0, flash - dt * 4); shake = Math.max(0, shake - dt * 7); }
+    paint();
+    if(++rf % 5 === 0){ syncReadout(); if(g.phase === "playing") syncHUD(); }
+    raf = requestAnimationFrame(frame);
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(!live) return;
+    if(raf){ cancelAnimationFrame(raf); raf = null; }
+    if(!document.hidden){ lastT = 0; raf = requestAnimationFrame(frame); }
+  });
+  window.addEventListener("resize", function(){ if(live) sizeStage(); });
+
+  function boot(saved){
+    if(saved && saved.cfg) cfg = saved.cfg;
+    if(saved && saved.rec){
+      if(saved.rec.score > rec.score) rec.score = saved.rec.score;
+      if(saved.rec.stage > rec.stage) rec.stage = saved.rec.stage;
+    }
+    applyCfg(); g = newGame();
+    syncHUD(); syncReadout(); syncRecord();
+  }
+  ARCADE.register("forge", {
     standard: function(){ return ARCADE.isDefault(cfg, DEFAULTS); },
     fit: function(on){ setFit(!!on); },
     boot: boot,

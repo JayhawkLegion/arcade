@@ -1,6 +1,6 @@
 # Arcade
 
-Ten small arcade games that run in a browser, built to be played with one thumb on a phone.
+Twelve small arcade games that run in a browser, built to be played with one thumb on a phone.
 
 Everything lives in **one self-contained `index.html`** — no build step, no package manager,
 no dependencies. The only thing fetched from the network is a Google Fonts stylesheet, and
@@ -8,7 +8,7 @@ the games play fine without it in fallback fonts.
 
 ## The games
 
-A menu offers all ten, each card showing the shared top score and initials under its picture.
+A menu offers all twelve, each card showing the shared top score and initials under its picture.
 Picking a game, from its card or from the ☰ menu in the top-left corner, opens it **full screen**:
 the board fills the screen under a slim bar holding the ☰ games menu, `← Games` and an
 `Exit full screen` toggle that brings the settings back.
@@ -133,6 +133,48 @@ between the ceiling and the floor while squadrons fly at you from the right.
   scrolls a little faster with a narrower cave. Another ship every 20,000.
 
 Tunable: scroll speed, cave height, squadrons per wave, enemy speed, fire rate, return fire, ships.
+
+### Upriver
+
+A vertical river run in the spirit of the early-80s classics. The river scrolls down the screen
+while you fly up it, between green banks, toward a bridge you have to blow up to go on.
+
+- The course is built from a fixed seed, so the river (its bends, islands and where the boats
+  and fuel depots sit) is the same every game. Each stretch between bridges narrows to a neck
+  at the bridge.
+- Drag anywhere to steer (relative drag) and hold to fire. Higher on the screen flies faster,
+  lower slows you down.
+- Fuel drains all the time; fly over a FUEL depot to refill, or shoot it for points. Running dry,
+  touching the bank, a standing bridge or anything else costs a jet, and you restart at the last
+  bridge you blew with that stretch reset.
+- Boats from the start, helicopters after the first bridge, planes crossing the screen after the
+  second. Boats 30, helicopters 60, planes 100, fuel depots 80, bridges 500. Each bridge makes
+  the river 4% faster. You start with three jets, and get another every 10,000.
+
+Tunable: river speed, fuel tank, traffic, fire rate, jets.
+
+### Forge
+
+A side-scrolling shooter in the spirit of the late-80s power-up classics. Thin living walls run
+along the very top and bottom, and the stage is scripted: the same series of enemies flies the
+same patterns at the same points on every run, so it can be learned.
+
+- Enemies come in series (a snake, a loop, a dive, a column, a U-turn, gunners that stop and
+  shoot, ships from behind). Shoot down every ship in a series and the last one drops a gold
+  build chip that drifts to you when you get close. Let one escape and the series pays nothing.
+- Tap **BUILD** (or press B) at any time to freeze the game and spend chips. Speed boost 1 then
+  2, left shooter (fires backward) 1, right shooter (a second forward cannon) 2, rapid fire 2
+  then 3, force shield (absorbs one hit) 3, ring shot (wide) 3, laser (long, pierces) 4. Rings
+  and laser are alternative bullet types; buying one replaces the other.
+- Losing a ship loses every upgrade, but unspent chips are kept. Three lives, another every
+  20,000.
+- At the end of the stage the scroll stops for a dragon on the left that breathes bursts and,
+  below half health, fans of fire. It is behind you, so a left shooter is the natural answer;
+  it also sends ember series that pay chips, so you can rebuild mid-fight. The dragon pays
+  5,000 times the stage, then the stage repeats, faster.
+- Ships 100 (gunners 150, two hits), a full series 500, a chip 100.
+
+Tunable: scroll speed, enemy speed, return fire, fire rate, dragon toughness, lives.
 
 ## High scores
 
