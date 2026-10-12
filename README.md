@@ -168,13 +168,19 @@ same patterns at the same points on every run, so it can be learned.
   and laser are alternative bullet types; buying one replaces the other.
 - Losing a ship loses every upgrade, but unspent chips are kept. Three lives, another every
   20,000.
-- At the end of the stage the scroll stops for a dragon on the left that breathes bursts and,
-  below half health, fans of fire. It is behind you, so a left shooter is the natural answer;
-  it also sends ember series that pay chips, so you can rebuild mid-fight. The dragon pays
-  5,000 times the stage, then the stage repeats, faster.
+- At the end of the stage the scroll stops until every boss is down. Stage 1 is a dragon on the
+  left that breathes bursts and, below half health, fans of fire. It is behind you, so a left
+  shooter is the natural answer. Stage 2 adds a green snake on the right that spits spreads of
+  purple blobs, so you are caught between them. Stage 3 adds a yellow bird hovering above whose
+  wingbeats send out rings of wind: they never hurt, but they shove the ship (and your finger's
+  anchor with it) toward fire, walls and teeth. Every boss telegraphs its attack first. Embers
+  keep coming during the fight and pay chips, so you can rebuild mid-fight.
+- Each stage repeats the same pattern faster, and every group flies one more ship than the
+  stage before (a group of 4 becomes 5, then 6), embers included. Each boss pays 5,000 times
+  the stage and is a quarter tougher than the stage before.
 - Ships 100 (gunners 150, two hits), a full series 500, a chip 100.
 
-Tunable: scroll speed, enemy speed, return fire, fire rate, dragon toughness, lives.
+Tunable: scroll speed, enemy speed, return fire, fire rate, boss toughness, lives.
 
 ## High scores
 

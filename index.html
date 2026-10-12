@@ -1720,7 +1720,7 @@ button.act:disabled{opacity:.45; cursor:default}
   <section class="console">
     <div class="console-head">
       <h2>Settings</h2>
-      <div class="readout"><span>flown <b id="goDist">0</b></span><span>series won <b id="goSeries">0/0</b></span><span>chips <b id="goChips">0</b></span><span>dragon <b id="goBoss">&mdash;</b></span></div>
+      <div class="readout"><span>flown <b id="goDist">0</b></span><span>series won <b id="goSeries">0/0</b></span><span>chips <b id="goChips">0</b></span><span>bosses <b id="goBoss">&mdash;</b></span></div>
     </div>
     <div class="knobs">
       <div class="knob">
@@ -1744,9 +1744,9 @@ button.act:disabled{opacity:.45; cursor:default}
         <p class="note">Shots per second before upgrades. Rapid fire takes it to 1.5&times; and 2&times;.</p>
       </div>
       <div class="knob">
-        <label for="gBoss"><span class="name">Dragon toughness</span><span class="val" id="vGBoss">3</span></label>
+        <label for="gBoss"><span class="name">Boss toughness</span><span class="val" id="vGBoss">3</span></label>
         <input type="range" id="gBoss" min="1" max="5" step="1" value="3">
-        <p class="note">How many hits the dragon takes. It gets half again tougher each stage.</p>
+        <p class="note">How many hits the bosses take: the dragon this many times 20, the snake 80% of that, the bird 60%. A quarter tougher each stage.</p>
       </div>
       <div class="knob">
         <label for="gLivesK"><span class="name">Lives</span><span class="val" id="vGLives">3</span></label>
@@ -1776,8 +1776,8 @@ button.act:disabled{opacity:.45; cursor:default}
       <p>Tap BUILD (or press B) any time to stop the action and spend chips: speed, left and right shooters, rapid fire, a force shield that takes one hit, ring shot or laser. Better upgrades cost more. Losing a ship loses its upgrades, never your chips.</p>
     </div>
     <div>
-      <h3>The same route, then a dragon</h3>
-      <p>The stage never changes, so you can learn it. At the end the screen stops for a fire-breathing dragon on your left. Ships <code>100</code>, a full series <code>500</code>, a chip <code>100</code>, the dragon <code>5,000</code>. Another life every 20,000.</p>
+      <h3>The same route, then the bosses</h3>
+      <p>The stage never changes, so you can learn it, but every group flies one more ship each stage. At the end the screen stops for a fire-breathing dragon on your left; from stage 2 a snake on the right spits purple blobs, and from stage 3 a bird above beats out rings of wind that shove you around. Ships <code>100</code>, a full series <code>500</code>, a chip <code>100</code>, each boss <code>5,000</code> times the stage. Another life every 20,000.</p>
     </div>
   </div>
 </div>
@@ -8606,8 +8606,11 @@ window.ARCADE = (function(){
     ship:"#e6edf7", shipDark:"#8a97ad", trim:"#e2543c", cockpit:"#7fd4ff", flame:"#ffb347", flameCore:"#fff1c9",
     shot:"#f4ecdf", ring:"#7fd4ff", laser:"#9cff6b", foeShot:"#ff6bd6", hurt:"#e2543c", gold:"#ffd166",
     shield:"#7fd4ff", chip:"#ffd166", chipDark:"#a8761c",
-    drag:"#b8322a", dragDark:"#6e1a16", dragBelly:"#e8a94a", dragEye:"#fff1a8", fire:"#ffdd57", fireHot:"#ff6b3d"
+    drag:"#b8322a", dragDark:"#6e1a16", dragBelly:"#e8a94a", dragEye:"#fff1a8", fire:"#ffdd57", fireHot:"#ff6b3d",
+    snake:"#3fae4a", snakeDark:"#23702b", snakeBelly:"#c9e58a", blob:"#b45cff", blobLit:"#e2b6ff",
+    bird:"#ffd84a", birdDark:"#e0a92a", beak:"#ff8a3d"
   };
+  var NAMES = {dragon:"Dragon", snake:"Snake", bird:"Bird"};
   var TYPES = {
     drone:  {mult:1.0,  pts:100, r:2.4, hp:1, col:"#4fe3c1"},
     fan:    {mult:1.15, pts:100, r:2.3, hp:1, col:"#7fd4ff"},
@@ -8742,9 +8745,9 @@ window.ARCADE = (function(){
     return {
       phase:"ready", score:0, lives:cfg.lives, loop:1, dist:0, scroll:0, sv:cfg.scroll,
       ship:{x:SPAWN_X, y:75, inv:0}, target:null, firing:false, fireCd:0,
-      bullets:[], foes:[], shots:[], flames:[], chipsOut:[], sparks:[], rings:[], pops:[],
+      bullets:[], foes:[], shots:[], flames:[], blobs:[], gusts:[], push:{vx:0, vy:0}, chipsOut:[], sparks:[], rings:[], pops:[],
       chips:0, up:freshUp(), series:{}, seriesId:0, track:0, scriptIdx:0, boss:null,
-      banner:null, pause:0, nextExtra:EXTRA_AT, kills:0, cleared:0, spawned:0, dragons:0, frozen:false
+      banner:null, pause:0, nextExtra:EXTRA_AT, kills:0, cleared:0, spawned:0, downed:0, frozen:false
     };
   }
   function loopMult(){ return 1 + 0.1 * (g.loop - 1); }
@@ -8752,7 +8755,10 @@ window.ARCADE = (function(){
   function foeSpeed(){ return cfg.foe * Math.min(1.8, 1 + 0.12 * (g.loop - 1)); }
   function fireEvery(){ return Math.max(0.8, 3.4 - cfg.shoot * 0.55) / loopMult(); }
   function breathEvery(){ return Math.max(1.4, 3.8 - cfg.shoot * 0.35 - 0.25 * (g.loop - 1)); }
-  function bossHp(){ return Math.round(60 * cfg.boss / 3 * (1 + 0.5 * (g.loop - 1))); }
+  function spitEvery(){ return Math.max(1.5, 3.4 - cfg.shoot * 0.3 - 0.2 * (g.loop - 1)); }
+  function gustEvery(){ return Math.max(1.6, 3.0 - cfg.shoot * 0.25 - 0.15 * (g.loop - 1)); }
+  /* more bosses each stage, so each one only toughens by a quarter */
+  function bossHp(){ return Math.round(60 * cfg.boss / 3 * (1 + 0.25 * (g.loop - 1))); }
   function hasUpgrades(){ var u = g.up; return u.speed || u.left || u.right || u.rapid || u.shield || u.weapon !== "shot"; }
 
   function spark(x, y, n, col){
@@ -8769,7 +8775,12 @@ window.ARCADE = (function(){
   }
 
   /* ---------- series ---------- */
-  function spawnSeries(sp){
+  function spawnSeries(base){
+    /* every group flies one more ship each stage: 4, then 5, then 6... */
+    var sp = {}, k0;
+    for(k0 in base) sp[k0] = base[k0];
+    sp.n = Math.min(14, base.n + g.loop - 1);
+    if(sp.gap && sp.n > 1) sp.gap = Math.min(base.gap, 104 / (sp.n - 1));     /* columns squeeze to stay on screen */
     var id = ++g.seriesId, T = TYPES[sp.type], v = foeSpeed() * T.mult;
     g.series[id] = {total:sp.n, killed:0, escaped:0, broken:false, won:false, showT:1.4};
     g.track = id; g.spawned++;
@@ -8977,9 +8988,9 @@ window.ARCADE = (function(){
   }
   function respawn(){
     if(g.lives <= 0){ closeBuild(); return over(); }
-    var sx = g.boss ? BOSS_SPAWN_X : SPAWN_X;
+    var sx = !g.boss ? SPAWN_X : bossAlive("snake") ? 50 : BOSS_SPAWN_X;
     g.ship = {x:sx, y:75, inv:2.2};
-    g.shots = []; g.flames = [];
+    g.shots = []; g.flames = []; g.blobs = []; g.gusts = []; g.push = {vx:0, vy:0};
     /* give the new ship some room */
     for(var i = g.foes.length - 1; i >= 0; i--){
       var f = g.foes[i];
@@ -8992,89 +9003,167 @@ window.ARCADE = (function(){
     syncHUD();
   }
 
-  /* ---------- the dragon ---------- */
+  /* ---------- the bosses: a dragon behind you, then a snake ahead, then a bird above ---------- */
   function headY(t){ return 75 + 46 * Math.sin(t * 0.5) + 6 * Math.sin(t * 1.7); }
-  function neckAt(B, j){ return {x:B.x - 1 - j * 2.9, y:headY(B.t - j * 0.13), r:3.1 + j * 0.13}; }
+  function snakeY(t){ return 75 + 40 * Math.sin(t * 0.62 + 2.1) + 8 * Math.sin(t * 1.9); }
+  function neckAt(B, j){
+    if(B.kind === "snake") return {x:B.x + 1.5 + j * 2.7, y:snakeY(B.t - j * 0.11), r:2.6 + j * 0.06};
+    return {x:B.x - 1 - j * 2.9, y:headY(B.t - j * 0.13), r:3.1 + j * 0.13};
+  }
+  /* the part you can hurt */
+  function headOf(B){
+    if(B.kind === "dragon") return {x:B.x + 2, y:B.y, r:5.2};
+    if(B.kind === "snake") return {x:B.x - 1.5, y:B.y, r:4.4};
+    return {x:B.x, y:B.y, r:4.2};
+  }
+  function bossAlive(kind){
+    return !!g.boss && g.boss.list.some(function(B){ return B.kind === kind && !B.dead && B.dying <= 0; });
+  }
+  function makeBoss(kind){
+    var hp = Math.round(bossHp() * (kind === "dragon" ? 1 : kind === "snake" ? 0.8 : 0.6));
+    return {kind:kind, hp:hp, max:hp, t:0, enter:0, flash:0, mouth:0, dying:0, dead:false,
+            x:kind === "dragon" ? -30 : kind === "snake" ? W + 30 : 50, y:kind === "bird" ? -20 : 75,
+            cd:kind === "dragon" ? 2.6 : kind === "snake" ? 3.4 : 3, windup:0, burst:0, burstCd:0, breaths:0};
+  }
   function startBoss(){
-    var hp = bossHp();
-    g.boss = {hp:hp, max:hp, t:0, enter:0, x:-30, y:75, breathCd:2.6, windup:0, burst:0, burstCd:0, breaths:0,
-              flash:0, mouth:0, dying:0, emberCd:3.5, emberIdx:0};
-    g.banner = {text:"Warning", sub:"a dragon, behind you", t:2.8, warn:true};
+    var kinds = ["dragon"];
+    if(g.loop >= 2) kinds.push("snake");
+    if(g.loop >= 3) kinds.push("bird");
+    g.boss = {t:0, list:kinds.map(makeBoss), emberCd:3.5, emberIdx:0};
+    g.banner = {text:"Warning", t:2.8, warn:true,
+                sub:g.loop >= 3 ? "dragon behind, snake ahead, bird above" : g.loop >= 2 ? "a dragon behind, a snake ahead" : "a dragon, behind you"};
   }
   function flame(x, y, a){
     var sp = 40 + 4 * (g.loop - 1);
     g.flames.push({x:x, y:y, vx:Math.cos(a) * sp, vy:Math.sin(a) * sp, t:0});
   }
-  function hitBoss(dmg, x, y){
-    var B = g.boss;
+  function blob(x, y, a){
+    var sp = 30 + 3 * (g.loop - 1);
+    g.blobs.push({x:x, y:y, vx:Math.cos(a) * sp, vy:Math.sin(a) * sp, t:0, ph:Math.random() * 6});
+  }
+  function hitBoss(B, dmg, x, y){
     B.hp -= dmg; B.flash = 0.08;
     g.score += 10 * dmg;
-    spark(x, y, 4, PAL.fire);
+    spark(x, y, 4, B.kind === "dragon" ? PAL.fire : B.kind === "snake" ? PAL.snakeBelly : PAL.bird);
     if(B.hp <= 0){
       B.hp = 0; B.dying = 1.8;
-      var pts = BOSS_PTS * g.loop;
-      g.score += pts; g.dragons++;
-      g.flames = [];
-      pop(B.x + 12, B.y - 8, "+" + pts);
-      g.banner = {text:"Dragon down", sub:"+" + pts, t:2};
+      var pts = BOSS_PTS * g.loop, h = headOf(B);
+      g.score += pts; g.downed++;
+      if(B.kind === "dragon") g.flames = []; else if(B.kind === "snake") g.blobs = [];
+      pop(h.x, h.y - 8, "+" + pts);
+      g.banner = {text:NAMES[B.kind] + " down", sub:"+" + pts, t:2};
       shake = RM ? 0 : 5; flash = 1;
     }
     afterScore();
   }
   function bossDone(){
-    g.boss = null;
+    g.boss = null; g.gusts = [];
     g.loop++; g.dist = 0; g.scriptIdx = 0;
-    g.banner = {text:"Stage " + g.loop, sub:"the same pattern, faster", t:2.4};
+    g.banner = {text:"Stage " + g.loop, sub:"every group one ship bigger", t:2.4};
     popStat("gLoop");
     syncHUD();
   }
-  function stepBoss(dt){
-    var B = g.boss, s = g.ship;
-    B.t += dt;
-    if(B.flash > 0) B.flash -= dt;
-    if(B.mouth > 0) B.mouth -= dt;
-    if(B.dying > 0){
-      B.dying -= dt;
-      if(!RM && Math.random() < dt * 16){
-        var p = neckAt(B, (Math.random() * NECK) | 0);
-        spark(p.x, p.y, 10, Math.random() < .5 ? PAL.fire : PAL.drag);
-        g.rings.push({x:p.x, y:p.y, t:0, c:PAL.fireHot});
-      }
-      if(B.dying <= 0) bossDone();
-      return;
-    }
-    B.enter = Math.min(1, B.enter + dt / 2.5);
-    var e = 1 - Math.pow(1 - B.enter, 3);
+  function enterEase(B, secs, dt){
+    B.enter = Math.min(1, B.enter + dt / secs);
+    return 1 - Math.pow(1 - B.enter, 3);
+  }
+  /* a tell before every attack: the boss winds up for this long, then lets go */
+  function windup(B, dt, tell){
+    B.cd -= dt;
+    if(B.cd <= 0 && B.windup <= 0 && B.burst <= 0){ B.windup = tell; B.cd = 1e9; }
+    if(B.windup > 0 && (B.windup -= dt) <= 0){ B.windup = 0; B.breaths++; return true; }
+    return false;
+  }
+  function stepDragon(B, dt){
+    var s = g.ship, e = enterEase(B, 2.5, dt);
     B.x = -30 + (17 + 3 * Math.sin(B.t * 1.1) + 30) * e;
     B.y = headY(B.t);
     if(B.enter < 1) return;
-
-    /* breath: a glow in the jaws first, then an aimed burst; below half health every other breath is a fan */
+    /* an aimed burst; below half health every other breath is a fan */
     var mx = B.x + 8.5, my = B.y + 1.2;
     var aim = clamp(Math.atan2(s.y - my, s.x - mx), -1.1, 1.1);
-    B.breathCd -= dt;
-    if(B.breathCd <= 0 && B.burst <= 0 && B.windup <= 0){ B.windup = 0.5; B.breathCd = 1e9; }
-    if(B.windup > 0 && (B.windup -= dt) <= 0){
-      B.windup = 0;
-      B.breaths++;
+    if(windup(B, dt, 0.5)){
       if(B.hp < B.max / 2 && B.breaths % 2 === 0){
         for(var k = -2; k <= 2; k++) flame(mx, my, aim * 0.5 + k * 0.28);
         B.mouth = 0.4;
       } else { B.burst = 7; B.burstCd = 0; }
-      B.breathCd = breathEvery();
+      B.cd = breathEvery();
     }
     if(B.burst > 0){
       B.burstCd -= dt;
       if(B.burstCd <= 0){ flame(mx, my, aim + SPREAD[B.burst % SPREAD.length]); B.burst--; B.burstCd = 0.11; B.mouth = 0.25; }
     }
-    B.emberCd -= dt;
-    if(B.emberCd <= 0){ spawnSeries(EMBERS[B.emberIdx++ % EMBERS.length]); B.emberCd = 8; }
-
-    /* touching the head or the neck */
-    if(g.phase === "playing" && s.inv <= 0){
-      var touch = Math.hypot(s.x - (B.x + 2), s.y - B.y) < 7.2;
-      for(var j = 1; j <= NECK && !touch; j++){ var n = neckAt(B, j); touch = Math.hypot(s.x - n.x, s.y - n.y) < n.r + 2.4; }
-      if(touch){ hurt(); if(g.phase === "playing") s.x = Math.min(SHIP_MAX_X, s.x + 8); }
+  }
+  function stepSnake(B, dt){
+    var s = g.ship, e = enterEase(B, 2.5, dt);
+    B.x = W + 30 - (W + 30 - (82 + 2.5 * Math.sin(B.t * 1.2))) * e;
+    B.y = snakeY(B.t);
+    if(B.enter < 1) return;
+    /* a spread of purple blobs, aimed back up the screen at you; wider below half health */
+    var mx = B.x - 7.4, my = B.y + 0.6;
+    var aim = Math.atan2(s.y - my, s.x - mx);
+    if(aim < 0) aim += Math.PI * 2;
+    aim = clamp(aim, Math.PI - 1.1, Math.PI + 1.1);
+    if(windup(B, dt, 0.45)){
+      var n = B.hp < B.max / 2 ? 5 : 3;
+      for(var k = 0; k < n; k++) blob(mx, my, aim + (k - (n - 1) / 2) * 0.22);
+      B.mouth = 0.35;
+      B.cd = spitEvery();
+    }
+  }
+  function stepBird(B, dt){
+    var e = enterEase(B, 2.2, dt);
+    B.x = 50 + 18 * Math.sin(B.t * 0.45);
+    B.y = -20 + (34 + 4 * Math.sin(B.t * 2.2) + 20) * e;
+    if(B.enter < 1) return;
+    /* a beat of the wings sends out a ring of wind: it shoves, it never hurts */
+    if(windup(B, dt, 0.45)){
+      g.gusts.push({x:B.x, y:B.y + 2, r:3, hit:false});
+      B.mouth = 0.3;
+      B.cd = gustEvery();
+    }
+  }
+  function touchBoss(B){
+    var s = g.ship;
+    if(g.phase !== "playing" || s.inv > 0) return;
+    var h = headOf(B), touch = Math.hypot(s.x - h.x, s.y - h.y) < h.r + 2;
+    for(var j = 1; j <= NECK && !touch && B.kind !== "bird"; j++){ var n = neckAt(B, j); touch = Math.hypot(s.x - n.x, s.y - n.y) < n.r + 2.4; }
+    if(!touch) return;
+    hurt();
+    if(g.phase !== "playing") return;
+    if(B.kind === "bird") s.y = clamp(s.y + 9, 2, H - 2);
+    else s.x = clamp(s.x + (B.kind === "snake" ? -8 : 8), SHIP_MIN_X, SHIP_MAX_X);
+  }
+  function stepBoss(dt){
+    var F = g.boss, alive = 0;
+    F.t += dt;
+    for(var i = 0; i < F.list.length; i++){
+      var B = F.list[i];
+      if(B.dead) continue;
+      B.t += dt;
+      if(B.flash > 0) B.flash -= dt;
+      if(B.mouth > 0) B.mouth -= dt;
+      if(B.dying > 0){
+        B.dying -= dt;
+        if(!RM && Math.random() < dt * 16){
+          var p = B.kind === "bird" ? {x:B.x + (Math.random() - .5) * 10, y:B.y + (Math.random() - .5) * 6} : neckAt(B, (Math.random() * NECK) | 0);
+          var col = B.kind === "dragon" ? PAL.fire : B.kind === "snake" ? PAL.snake : PAL.bird;
+          spark(p.x, p.y, 10, col);
+          g.rings.push({x:p.x, y:p.y, t:0, c:col});
+        }
+        if(B.dying <= 0) B.dead = true;
+        continue;
+      }
+      alive++;
+      if(B.kind === "dragon") stepDragon(B, dt);
+      else if(B.kind === "snake") stepSnake(B, dt);
+      else stepBird(B, dt);
+      if(B.enter >= 1) touchBoss(B);
+    }
+    if(F.list.every(function(B){ return B.dead; })){ bossDone(); return; }
+    if(alive){
+      F.emberCd -= dt;
+      if(F.emberCd <= 0){ spawnSeries(EMBERS[F.emberIdx++ % EMBERS.length]); F.emberCd = 8; }
     }
   }
 
@@ -9097,16 +9186,20 @@ window.ARCADE = (function(){
       else { f.flash = 0.15; spark(f.x, f.y, 4, TYPES[f.type].col); }
       if(!b.hit) return true;                       /* lasers carry on through */
     }
-    var B = g.boss;
-    if(B && B.dying <= 0 && B.enter >= 1){
-      if(touches(b, B.x + 2, B.y, 5.2)){
-        if(!b.hit){ hitBoss(1, b.x, b.y); return true; }
-        if(b.hit.indexOf(B) < 0){ b.hit.push(B); hitBoss(2, b.x, b.y); }
-      } else if(!b.hit){
-        for(var j = 1; j <= NECK; j++){
-          var n = neckAt(B, j);
-          if(touches(b, n.x, n.y, n.r)){ spark(b.x, b.y, 3, PAL.dragBelly); return true; }
-        }
+    var F = g.boss;
+    for(var bi = 0; F && bi < F.list.length; bi++){
+      var B = F.list[bi];
+      if(B.dead || B.dying > 0 || B.enter < 1) continue;
+      var h = headOf(B);
+      if(touches(b, h.x, h.y, h.r)){
+        if(!b.hit){ hitBoss(B, 1, b.x, b.y); return true; }
+        if(b.hit.indexOf(B) < 0){ b.hit.push(B); hitBoss(B, 2, b.x, b.y); }
+        continue;
+      }
+      /* bodies soak up shots without taking damage; only the head counts */
+      for(var j = 1; j <= NECK && !b.hit && B.kind !== "bird"; j++){
+        var n = neckAt(B, j);
+        if(touches(b, n.x, n.y, n.r)){ spark(b.x, b.y, 3, B.kind === "snake" ? PAL.snakeBelly : PAL.dragBelly); return true; }
       }
     }
     return false;
@@ -9153,6 +9246,15 @@ window.ARCADE = (function(){
       } else if(g.target){
         var dx = g.target.x - s.x, dy = g.target.y - s.y, d = Math.hypot(dx, dy);
         if(d > 0.05){ var st = Math.min(d, spd * dt); s.x += dx / d * st; s.y += dy / d * st; }
+      }
+      if(g.push.vx || g.push.vy){
+        /* shoved by the bird's wind: your finger's anchor moves with the ship, so you have to steer back */
+        var px = g.push.vx * dt, py = g.push.vy * dt, dk = Math.exp(-3.5 * dt);
+        s.x += px; s.y += py;
+        if(g.target){ g.target.x += px; g.target.y += py; }
+        if(drag){ drag.sx += px; drag.sy += py; }
+        g.push.vx *= dk; g.push.vy *= dk;
+        if(Math.abs(g.push.vx) + Math.abs(g.push.vy) < 0.5) g.push.vx = g.push.vy = 0;
       }
       s.x = clamp(s.x, SHIP_MIN_X, SHIP_MAX_X);
       s.y = clamp(s.y, 2, H - 2);
@@ -9230,6 +9332,24 @@ window.ARCADE = (function(){
       if(fl.x > W + 4 || fl.y < -4 || fl.y > H + 4){ g.flames.splice(i, 1); continue; }
       var fr = Math.min(2.8, 1.2 + fl.t * 2);            /* the bright core hurts; the glow around it does not */
       if(g.phase === "playing" && s.inv <= 0 && Math.hypot(fl.x - s.x, fl.y - s.y) <= fr * 0.75 + 1.6){ g.flames.splice(i, 1); hurt(); }
+    }
+
+    for(i = g.blobs.length - 1; i >= 0; i--){
+      var bl = g.blobs[i];
+      bl.t += dt; bl.x += bl.vx * dt; bl.y += bl.vy * dt + Math.sin(bl.t * 7 + bl.ph) * 9 * dt;
+      if(bl.x < -4 || bl.y < -4 || bl.y > H + 4){ g.blobs.splice(i, 1); continue; }
+      if(g.phase === "playing" && s.inv <= 0 && Math.hypot(bl.x - s.x, bl.y - s.y) <= 3.1){ g.blobs.splice(i, 1); hurt(); }
+    }
+    for(i = g.gusts.length - 1; i >= 0; i--){
+      var gu = g.gusts[i];
+      gu.r += 36 * dt;
+      if(gu.r > 180){ g.gusts.splice(i, 1); continue; }
+      var gx = s.x - gu.x, gy = s.y - gu.y, gd = Math.hypot(gx, gy);
+      if(!gu.hit && g.phase === "playing" && gd > 0 && Math.abs(gd - gu.r) < 2.8){
+        gu.hit = true;
+        g.push.vx += gx / gd * 75; g.push.vy += gy / gd * 75;
+        g.rings.push({x:s.x, y:s.y, t:0, c:PAL.bird});
+      }
     }
 
     /* chips drift back, and come to you once you are close */
@@ -9352,6 +9472,72 @@ window.ARCADE = (function(){
     ctx.closePath(); ctx.fill();
     ctx.restore();
   }
+  function drawSnake(B){
+    var hot = B.flash > 0;
+    for(var j = NECK; j >= 1; j--){
+      var n = neckAt(B, j);
+      if(n.x > W + 6) continue;
+      ctx.fillStyle = hot ? "#e6ffd8" : (j % 2 ? PAL.snake : "#349a3f");
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = PAL.snakeBelly;
+      ctx.beginPath(); ctx.ellipse(n.x, n.y + n.r * 0.45, n.r * 0.65, n.r * 0.32, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = PAL.snakeDark;
+      ctx.beginPath(); ctx.moveTo(n.x, n.y - n.r * 0.85); ctx.lineTo(n.x + 1, n.y - n.r * 0.3); ctx.lineTo(n.x, n.y + 0.1); ctx.lineTo(n.x - 1, n.y - n.r * 0.3); ctx.closePath(); ctx.fill();
+    }
+    var gape = B.mouth > 0 ? 0.45 : B.windup > 0 ? 0.25 : 0.06;
+    ctx.save(); ctx.translate(B.x, B.y);
+    /* it faces left, back up the screen at you */
+    ctx.save(); ctx.translate(-1, 0.8); ctx.rotate(-gape);
+    ctx.fillStyle = hot ? "#e6ffd8" : PAL.snakeDark;
+    ctx.beginPath(); ctx.moveTo(0, -0.2); ctx.lineTo(-6.4, 0.1); ctx.lineTo(-6, 1.3); ctx.lineTo(0.4, 1.8); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#f4ecdf";
+    ctx.beginPath(); ctx.moveTo(-5.6, 0.1); ctx.lineTo(-5.2, -0.9); ctx.lineTo(-4.8, 0.1); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = hot ? "#e6ffd8" : PAL.snake;
+    ctx.beginPath(); ctx.ellipse(0, 0, 4.2, 3, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-1, -2.4); ctx.lineTo(-7, -1); ctx.lineTo(-7.2, 0.4); ctx.lineTo(-1, 1.2); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#f4ecdf";
+    ctx.beginPath(); ctx.moveTo(-6.6, 0.3); ctx.lineTo(-6.2, 1.3); ctx.lineTo(-5.8, 0.3); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = PAL.snakeDark; ctx.beginPath(); ctx.arc(-6.3, -0.7, 0.3, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#ffe24a"; ctx.beginPath(); ctx.ellipse(-2.6, -1.2, 1, 0.7, 0.2, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#14200f"; ctx.fillRect(-2.8, -1.8, 0.35, 1.2);
+    if(B.windup <= 0 && B.mouth <= 0 && Math.sin(B.t * 5) > 0.55){        /* the tongue flicks between spits */
+      ctx.strokeStyle = "#e2543c"; ctx.lineWidth = 0.35;
+      ctx.beginPath(); ctx.moveTo(-7.2, 0.3); ctx.lineTo(-9.6, 0.3); ctx.lineTo(-10.4, -0.4); ctx.moveTo(-9.6, 0.3); ctx.lineTo(-10.4, 1); ctx.stroke();
+    }
+    if(B.windup > 0){                                    /* the tell: purple welling in its mouth */
+      var wu = 1 - B.windup / 0.45;
+      ctx.globalAlpha = 0.4 + 0.5 * wu; ctx.fillStyle = PAL.blob;
+      ctx.beginPath(); ctx.arc(-7.6, 0.6, 0.8 + wu * 2, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+  }
+  function drawBird(B){
+    var hot = B.flash > 0, flap = Math.sin(B.t * (B.windup > 0 ? 20 : 9)), spread = B.windup > 0 || B.mouth > 0 ? 1.35 : 1;
+    ctx.save(); ctx.translate(B.x, B.y);
+    if(B.windup > 0){                                    /* the tell: the wings flare and the air shimmers */
+      var wu = 1 - B.windup / 0.45;
+      ctx.globalAlpha = 0.25 + 0.4 * wu; ctx.strokeStyle = PAL.bird; ctx.lineWidth = 0.5;
+      ctx.beginPath(); ctx.arc(0, 2, 5 + wu * 4, 0, Math.PI * 2); ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    ctx.fillStyle = hot ? "#fffbe0" : PAL.birdDark;
+    for(var sg = -1; sg <= 1; sg += 2){
+      ctx.beginPath(); ctx.moveTo(sg * 1.5, -0.6);
+      ctx.lineTo(sg * 7 * spread, -2.6 - flap * 3); ctx.lineTo(sg * 8.6 * spread, -0.6 - flap * 2);
+      ctx.lineTo(sg * 5 * spread, 0.8 - flap); ctx.lineTo(sg * 1.8, 1.3);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.fillStyle = hot ? "#fffbe0" : PAL.bird;
+    ctx.beginPath(); ctx.ellipse(0, 0.6, 2.4, 3.2, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(-1.5, 3.2); ctx.lineTo(0, 6.2); ctx.lineTo(1.5, 3.2); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(0, -2.6, 1.9, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = PAL.beak;
+    ctx.beginPath(); ctx.moveTo(-0.7, -2); ctx.lineTo(0.7, -2); ctx.lineTo(0, -0.3); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#1a140a"; ctx.fillRect(-1.15, -3.3, 0.55, 0.55); ctx.fillRect(0.6, -3.3, 0.55, 0.55);
+    ctx.restore();
+  }
   function drawDragon(B){
     var hot = B.flash > 0;
     for(var j = NECK; j >= 1; j--){
@@ -9449,7 +9635,24 @@ window.ARCADE = (function(){
       ctx.globalAlpha = 1; ctx.fillStyle = PAL.fire;
       ctx.beginPath(); ctx.arc(fl.x, fl.y, fr * 0.75, 0, Math.PI * 2); ctx.fill();
     }
-    if(g.boss) drawDragon(g.boss);
+    for(i = 0; i < g.gusts.length; i++){
+      var gu = g.gusts[i];
+      ctx.globalAlpha = Math.max(0, 0.6 - gu.r / 260); ctx.strokeStyle = PAL.bird;
+      ctx.lineWidth = 1.1; ctx.beginPath(); ctx.arc(gu.x, gu.y, gu.r, 0, Math.PI * 2); ctx.stroke();
+      ctx.lineWidth = 0.4; ctx.beginPath(); ctx.arc(gu.x, gu.y, Math.max(0, gu.r - 2.2), 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    for(i = 0; i < g.blobs.length; i++){
+      var bl = g.blobs[i], br = 1.9 + Math.sin(bl.t * 9 + bl.ph) * 0.25;
+      ctx.fillStyle = PAL.blob; ctx.beginPath(); ctx.arc(bl.x, bl.y, br, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = PAL.blobLit; ctx.beginPath(); ctx.arc(bl.x - 0.6, bl.y - 0.6, br * 0.35, 0, Math.PI * 2); ctx.fill();
+    }
+    if(g.boss) g.boss.list.forEach(function(B){
+      if(B.dead) return;
+      ctx.globalAlpha = B.dying > 0 ? Math.max(0, B.dying / 1.8) : 1;
+      if(B.kind === "dragon") drawDragon(B); else if(B.kind === "snake") drawSnake(B); else drawBird(B);
+      ctx.globalAlpha = 1;
+    });
 
     for(i = 0; i < g.bullets.length; i++){
       var b = g.bullets[i];
@@ -9490,17 +9693,25 @@ window.ARCADE = (function(){
     }
     ctx.globalAlpha = 1;
 
-    /* the dragon's health, top centre */
-    var B = g.boss;
-    if(B && B.enter > 0.3){
-      ctx.fillStyle = "rgba(8,6,26,.6)"; ctx.fillRect(28, 15.5, 44, 3.4);
-      ctx.fillStyle = PAL.fireHot; ctx.fillRect(29, 16.3, 42 * B.hp / B.max, 1.8);
-      ctx.font = "500 2.4px 'JetBrains Mono', monospace"; ctx.fillStyle = "rgba(244,236,223,.75)";
-      ctx.fillText("DRAGON", W / 2, 21.6);
-      if(!g.up.left && B.t < 14 && B.dying <= 0 && Math.floor(B.t * 2) % 2 === 0){
-        ctx.font = "600 2.9px 'JetBrains Mono', monospace"; ctx.fillStyle = PAL.gold;    /* clear of the head's reach */
-        ctx.fillText("IT'S BEHIND YOU", 54, 28.5);
-        ctx.fillText("BUILD A LEFT SHOOTER", 54, 32.5);
+    /* each boss's health, side by side along the top */
+    var F = g.boss;
+    if(F && F.t > 0.8){
+      var nb = F.list.length, slot = 44 / nb;
+      ctx.font = "500 2.4px 'JetBrains Mono', monospace";
+      F.list.forEach(function(B, bi){
+        var x0 = 28 + bi * slot, bw = slot - (nb > 1 ? 2 : 0);
+        ctx.globalAlpha = B.dead ? 0.35 : 1;
+        ctx.fillStyle = "rgba(8,6,26,.6)"; ctx.fillRect(x0, 15.5, bw, 3.4);
+        ctx.fillStyle = B.kind === "dragon" ? PAL.fireHot : B.kind === "snake" ? PAL.snake : PAL.bird;
+        ctx.fillRect(x0 + 1, 16.3, (bw - 2) * B.hp / B.max, 1.8);
+        ctx.fillStyle = "rgba(244,236,223,.75)";
+        ctx.fillText(NAMES[B.kind].toUpperCase(), x0 + bw / 2, 21.6);
+      });
+      ctx.globalAlpha = 1;
+      if(!g.up.left && bossAlive("dragon") && F.t < 14 && Math.floor(F.t * 2) % 2 === 0){
+        ctx.font = "600 2.9px 'JetBrains Mono', monospace"; ctx.fillStyle = PAL.gold;    /* clear of the heads and the bird */
+        ctx.fillText("IT'S BEHIND YOU", 54, 46);
+        ctx.fillText("BUILD A LEFT SHOOTER", 54, 50);
       }
     }
 
@@ -9555,7 +9766,7 @@ window.ARCADE = (function(){
       card.innerHTML = '<p class="huge">' + g.score + '</p>' +
         '<h2>' + (g.score >= rec.score && g.score > 0 ? "New best" : "Stage " + g.loop) + '</h2>' +
         '<p>' + g.kills + ' shot down, ' + g.cleared + ' series won' +
-        (g.dragons ? ', ' + g.dragons + (g.dragons === 1 ? ' dragon' : ' dragons') : '') +
+        (g.downed ? ', ' + g.downed + (g.downed === 1 ? ' boss' : ' bosses') : '') +
         ' &middot; best ' + rec.score + '.</p>' +
         '<span class="cue">Tap to fly again</span>';
     } else overlay.hidden = true;
@@ -9564,7 +9775,9 @@ window.ARCADE = (function(){
     document.getElementById("goDist").textContent = Math.round(g.dist) + "/" + STAGE_LEN;
     document.getElementById("goSeries").textContent = g.cleared + "/" + g.spawned;
     document.getElementById("goChips").textContent = g.chips;
-    document.getElementById("goBoss").textContent = g.boss ? Math.ceil(g.boss.hp) + "/" + g.boss.max : "\u2014";
+    var F = g.boss, hp = 0, mx = 0;
+    if(F) F.list.forEach(function(B){ hp += B.hp; mx += B.max; });
+    document.getElementById("goBoss").textContent = F ? Math.ceil(hp) + "/" + mx : "\u2014";
   }
   function syncRecord(){
     document.getElementById("vGRec").textContent = rec.score ? rec.score + " pts" : "\u2014";
