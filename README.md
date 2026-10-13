@@ -1,6 +1,6 @@
 # Arcade
 
-Twelve small arcade games that run in a browser, built to be played with one thumb on a phone.
+Fourteen small arcade games that run in a browser, built to be played with one thumb on a phone.
 
 Everything lives in **one self-contained `index.html`** — no build step, no package manager,
 no dependencies. The only thing fetched from the network is a Google Fonts stylesheet, and
@@ -8,7 +8,7 @@ the games play fine without it in fallback fonts.
 
 ## The games
 
-A menu offers all twelve, each card showing the shared top score and initials under its picture.
+A menu offers all fourteen, each card showing the shared top score and initials under its picture.
 Picking a game, from its card or from the ☰ menu in the top-left corner, opens it **full screen**:
 the board fills the screen under a slim bar holding the ☰ games menu, `← Games` and an
 `Exit full screen` toggle that brings the settings back.
@@ -196,6 +196,48 @@ same patterns at the same points on every run, so it can be learned.
 - Ships 100 (gunners 150 and walkers 200, two hits each), a full series 500, a chip 100.
 
 Tunable: scroll speed, enemy speed, return fire, fire rate, boss toughness, lives.
+
+### Breach
+
+A portrait take on the early-80s shield-breaking classic. A creature sits at the top behind an
+arch of shield cells, drifting side to side; you fly a fly-like ship below.
+
+- Drag to fly (relative drag) and hold to shoot in the direction you are flying. Shots and
+  bites both clear cells, 69 points each.
+- Fly into the shield to eat a cell, or touch the creature, and the cannon appears at the
+  bottom, following you along. Lift your thumb to fire it straight up (Enter or X on a
+  keyboard). The blast stops at the first cell it meets, so carve a gap and time the shot. In
+  this version the blast does not hurt your own ship.
+- A slow homing missile chases you all the time. The shimmering neutral zone across the middle
+  hides you from it, but you cannot shoot from inside it. Every few seconds the creature spins
+  into a swirl and hurls itself at you; from level 3 it bends toward you in flight.
+- The creature pays 1,000, the swirl 2,000 as it spins up and 6,000 in flight (plus a life).
+  Odd levels have a fixed arch, even levels a shield whose cells flow round it. Another life
+  every 10,000.
+
+Tunable: flying speed, missile speed, swirl attacks, shield depth, lives.
+
+### Swoop
+
+A take on the late-70s formation shooter. Forty-six aliens sway in formation at the top: two
+yellow flagships, six red escorts, eight purples and thirty blue drones.
+
+- Drag to slide (relative drag) and hold to fire. Only so many of your shots can be in the air
+  at once (two by default; the original allowed one), and the next one waits on the nose.
+- Aliens peel off from the edges of the formation, loop out and swoop down at you, dropping
+  bombs, then come back in from the top to their place. A flagship dives with up to two escorts.
+- In formation: drones 30, purples 40, escorts 50, flagships 60; diving, double. A diving
+  flagship pays 150 alone, 200 with one escort still beside it, 300 with two, and 800 if you shot
+  both escorts first. The last few aliens dive twice as often. Another life every 10,000.
+- **The tractor beam**, borrowed from the sequel. A flagship sometimes dives alone, hovers over
+  you and lowers a beam. Caught, your ship is hauled up to sit above it (a life gone). Shoot that
+  flagship while it is out of the formation and your ship drops back and docks beside yours as a
+  **dual ship**: two shots per volley, double the shot cap, and twice as wide a target, where a
+  hit costs one half rather than a life. Shoot the flagship in formation instead and the captured
+  ship turns hostile (500 in formation, 1,000 diving); hitting the captive itself destroys it.
+  Shooting the flagship mid-capture saves the ship outright. No beams while you fly the dual ship.
+
+Tunable: dive rate, alien speed, return fire, shots on screen, lives.
 
 ## High scores
 

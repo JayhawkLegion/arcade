@@ -17,7 +17,7 @@
  * Nothing here can prove a score was really earned; it only checks the shape.
  * The sheet is the place to delete anything that looks wrong.
  */
-var GAMES = ["rally", "astro", "snake", "drift", "battery", "hopper", "invaders", "blocks", "lander", "sortie", "upriver", "forge"];
+var GAMES = ["rally", "astro", "snake", "drift", "battery", "hopper", "invaders", "blocks", "lander", "sortie", "upriver", "forge", "breach", "swoop"];
 var KEEP = 5;
 var SHEET = "Leaderboard";
 var TZ = "America/Chicago";
