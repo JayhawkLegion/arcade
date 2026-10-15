@@ -1,6 +1,6 @@
 # Arcade
 
-Fourteen small arcade games that run in a browser, built to be played with one thumb on a phone.
+Fifteen small arcade games that run in a browser, built to be played with one thumb on a phone.
 
 Everything lives in **one self-contained `index.html`** — no build step, no package manager,
 no dependencies. The only thing fetched from the network is a Google Fonts stylesheet, and
@@ -8,7 +8,7 @@ the games play fine without it in fallback fonts.
 
 ## The games
 
-A menu offers all fourteen, each card showing the shared top score and initials under its picture.
+A menu offers all fifteen, each card showing the shared top score and initials under its picture.
 Picking a game, from its card or from the ☰ menu in the top-left corner, opens it **full screen**:
 the board fills the screen under a slim bar holding the ☰ games menu, `← Games` and an
 `Exit full screen` toggle that brings the settings back.
@@ -213,7 +213,7 @@ arch of shield cells, drifting side to side; you fly a fly-like ship below.
   into a swirl and hurls itself at you; from level 3 it bends toward you in flight.
 - The creature pays 1,000, the swirl 2,000 as it spins up and 6,000 in flight (plus a life).
   Odd levels have a fixed arch, even levels a shield whose cells flow round it. Another life
-  every 10,000.
+  every 20,000.
 
 Tunable: flying speed, missile speed, swirl attacks, shield depth, lives.
 
@@ -238,6 +238,28 @@ yellow flagships, six red escorts, eight purples and thirty blue drones.
   Shooting the flagship mid-capture saves the ship outright. No beams while you fly the dual ship.
 
 Tunable: dive rate, alien speed, return fire, shots on screen, lives.
+
+### Crawler
+
+A take on the early-80s centipede shooter. A centipede winds down through a field of mushrooms
+toward your shooter, which moves freely in a patch at the bottom.
+
+- Drag to move (relative drag, both ways) and hold to fire. One very fast shot at a time, so you
+  fire faster the closer the target. Mushrooms block your shooter as well as your shots.
+- The centipede crawls sideways until it meets a mushroom or the wall, then drops a row and
+  turns. Once it reaches the bottom it climbs back up through your patch, and fresh heads start
+  crawling in from the sides.
+- Hit a segment and it becomes a mushroom; the piece behind it grows a head and goes its own way.
+  Heads 100, body segments 10, mushrooms 1 (four hits each). From wave 2 one segment at a time
+  breaks off as a separate head, and every wave brings new colours and 5% more speed.
+- The spider zigzags through your patch eating mushrooms: 300, 600 or 900, more the closer it is
+  to you when hit. From wave 2 a flea drops when your patch runs low on mushrooms, sowing more
+  (two hits, 200). From wave 3 a scorpion crosses the upper field poisoning mushrooms (1,000); a
+  centipede that meets a poisoned mushroom plunges straight down.
+- Lose a shooter and the damaged and poisoned mushrooms grow back, 5 points each, before the
+  centipede starts again from the top. Another life every 12,000.
+
+Tunable: crawl speed, segments, mushrooms, spider, lives.
 
 ## High scores
 

@@ -4,9 +4,9 @@ Guidance for Claude Code working in this repository.
 
 ## What this is
 
-Fourteen browser arcade games — Rally, Astro Smash, Snake, Drift, Battery, Hopper, Invaders,
-Blocks, Lander, Sortie, Upriver, Forge, Breach and Swoop — living in a single self-contained
-`index.html`. No build system, no package manager, no dependencies.
+Fifteen browser arcade games — Rally, Astro Smash, Snake, Drift, Battery, Hopper, Invaders,
+Blocks, Lander, Sortie, Upriver, Forge, Breach, Swoop and Crawler — living in a single
+self-contained `index.html`. No build system, no package manager, no dependencies.
 The only network fetch is a Google Fonts stylesheet, and the page is designed to work without it.
 
 ## The one rule
@@ -64,7 +64,7 @@ Each game is an independent module. In `index.html` you need three things:
    (`stage`, `hud`, `overlay`, `card`, `console`, `knobs`, `knob`, `foot`, `howto`) so it
    matches without new CSS. Prefix element ids — Rally uses bare ids; Astro `a`, Snake `s`,
    Drift `d`, Battery `m`, Hopper `f`, Invaders `i`, Blocks `b`, Lander `l`, Sortie `x`,
-   Upriver `u`, Forge `g`, Breach `r`, Swoop `w`.
+   Upriver `u`, Forge `g`, Breach `r`, Swoop `w`, Crawler `c`.
    Pick an unused letter.
 2. A `<button class="gamecard" data-game="yourname">` in the menu, with an inline SVG preview.
 3. A module that registers itself:
