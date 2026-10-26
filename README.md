@@ -1,6 +1,6 @@
 # Arcade
 
-Fifteen small arcade games that run in a browser, built to be played with one thumb on a phone.
+Seventeen small arcade games that run in a browser, built to be played with one thumb on a phone.
 
 Everything lives in **one self-contained `index.html`** — no build step, no package manager,
 no dependencies. The only thing fetched from the network is a Google Fonts stylesheet, and
@@ -8,7 +8,7 @@ the games play fine without it in fallback fonts.
 
 ## The games
 
-A menu offers all fifteen, each card showing the shared top score and initials under its picture.
+A menu offers all seventeen, each card showing the shared top score and initials under its picture.
 Picking a game, from its card or from the ☰ menu in the top-left corner, opens it **full screen**:
 the board fills the screen under a slim bar holding the ☰ games menu, `← Games` and an
 `Exit full screen` toggle that brings the settings back.
@@ -260,6 +260,48 @@ toward your shooter, which moves freely in a patch at the bottom.
   centipede starts again from the top. Another life every 12,000.
 
 Tunable: crawl speed, segments, mushrooms, spider, lives.
+
+### Lance
+
+A take on the early-80s flying joust. You ride a flightless bird over ledges and a lava pit,
+and the arena wraps at the sides.
+
+- Tap to flap, on the side of your rider you want to go; hold to keep steering that way. On a
+  ledge you run; walk off and you glide. Arrow keys steer and Space flaps on a keyboard.
+- When two riders meet, the higher one unseats the other; level lances bounce apart. Bounders
+  500, Hunters 750, Shadow Lords 1,500.
+- An unseated rider drops an egg. Collect it for 250, 500, 750 and then 1,000 each, plus 500 if
+  you catch it in the air. Leave it and it hatches into a rider one rank tougher; touch the
+  hatchling before its buzzard arrives for 1,000.
+- Take too long over a wave and a pterodactyl comes hunting. Only a lance straight into its open
+  beak kills it (1,000); after it takes a life it leaves for a while. From wave 3 a hand reaches
+  out of the lava for anyone flying low over it; five hard flaps break its grip.
+- Every fourth wave is a survival wave: clear it without a fall for 3,000. Another life every
+  20,000.
+
+Tunable: rider speed, hatch time, gravity, how long before the pterodactyl, lives.
+
+### Burrow
+
+A take on the early-80s digging game. You start in the middle of four layers of dirt with
+monsters waiting in tunnels of their own.
+
+- Drag the way you want to go (a stick that follows your thumb) and you dig as you walk, 10 a
+  tile. You turn at tile centres, so a sideways nudge lines you up on the next row first.
+- Tap to fire your pump down the tunnel (it can't pass through dirt), then keep tapping, or hold
+  still, to blow the monster up: four pumps pop it. Leave it and it shrinks back and comes on
+  again. Pops pay 200 near the surface up to 500 in the deepest layer, double for a Fygar pumped
+  from the side.
+- Pookas and Fygars follow your tunnels; now and then one turns into a pair of drifting eyes that
+  pass through the dirt toward you. Fygars breathe fire along their row, through dirt too.
+- Dig out from under a rock and step away: it wobbles and drops, crushing anything below,
+  you included. One monster 1,000, two 2,500, three 4,000. Drop two rocks and a vegetable appears
+  in the middle for ten seconds.
+- The last monster left makes a run for the top-left corner, and the round ends when it gets
+  away. Each round adds speed, and every other round one more monster. Another life every
+  20,000.
+
+Tunable: monster speed, monsters, ghosting, rocks, lives.
 
 ## High scores
 
