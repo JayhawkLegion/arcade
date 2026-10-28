@@ -264,7 +264,8 @@ Tunable: crawl speed, segments, mushrooms, spider, lives.
 ### Lance
 
 A take on the early-80s flying joust. You ride a flightless bird over ledges and a lava pit,
-and the arena wraps at the sides.
+and the arena wraps at the sides. Riders materialise on four low raised pads, which you can run
+straight up onto and off again.
 
 - Tap to flap, on the side of your rider you want to go; hold to keep steering that way. On a
   ledge you run; walk off and you glide. Arrow keys steer and Space flaps on a keyboard.
@@ -294,8 +295,8 @@ monsters waiting in tunnels of their own.
   from the side.
 - Pookas and Fygars follow your tunnels; now and then one turns into a pair of drifting eyes that
   pass through the dirt toward you. Fygars breathe fire along their row, through dirt too.
-- Dig out from under a rock and step away: it wobbles and drops, crushing anything below,
-  you included. One monster 1,000, two 2,500, three 4,000. Drop two rocks and a vegetable appears
+- Dig out from under a rock and step away: it wobbles and drops, crushing any monster it touches
+  on the way down, drifting eyes included, and you if you are under it. One monster 1,000, two 2,500, three 4,000. Drop two rocks and a vegetable appears
   in the middle for ten seconds.
 - The last monster left makes a run for the top-left corner, and the round ends when it gets
   away. Each round adds speed, and every other round one more monster. Another life every

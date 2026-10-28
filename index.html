@@ -2297,7 +2297,7 @@ button.act:disabled{opacity:.45; cursor:default}
     </div>
     <div>
       <h3>Rocks</h3>
-      <p>Dig out from under a rock and step away: it wobbles, then drops, crushing anything below (you too). One monster <code>1,000</code>, two <code>2,500</code>, three <code>4,000</code>. Drop two rocks and a vegetable appears in the middle for a while.</p>
+      <p>Dig out from under a rock and step away: it wobbles, then drops, crushing any monster it touches on the way down, even drifting eyes (and you, if you're under it). One monster <code>1,000</code>, two <code>2,500</code>, three <code>4,000</code>. Drop two rocks and a vegetable appears in the middle for a while.</p>
     </div>
     <div>
       <h3>Watch for</h3>
@@ -12768,7 +12768,10 @@ window.ARCADE = (function(){
     [38, 62, 62, 3],
     [10, 30, 50, 3], [70, 90, 50, 3]
   ];
-  var PADS = [[50, 134], [50, 96], [12, 78], [80, 50]];
+  /* spawn pads: low raised slabs on four of the ledges, where riders materialise; they are ledges too */
+  var PAD_H = 1.6, PAD_HW = 5, STEP = 2.2;
+  var PADS = [[50, 134 - PAD_H], [50, 96 - PAD_H], [12, 78 - PAD_H], [80, 50 - PAD_H]];
+  PADS.forEach(function(pd){ PLATS.push([pd[0] - PAD_HW, pd[0] + PAD_HW, pd[1], PAD_H, true]); });
   var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var stage = document.getElementById("jStage");
@@ -12778,7 +12781,7 @@ window.ARCADE = (function(){
   var card = document.getElementById("jCard");
   var PAL = {bg:"#090a12", rock:"#5d4a3a", rockTop:"#a98a64", rockDark:"#3d3027", lava:"#ff5a1f", lavaTop:"#ffb347",
              bird:"#f2c14e", wing:"#c99a2e", knight:"#7fd4ff", buzzard:"#8a6a4a", buzzWing:"#5e4632", lance:"#e8e2d0",
-             egg:"#f4ecdf", ptero:"#3fae8f", pteroWing:"#2a7a63", mouth:"#ff4f4f", hand:"#e2543c", hurt:"#e2543c", gold:"#e8a94a"};
+             egg:"#f4ecdf", pad:"#8f7a64", padGlow:"#7fd4ff", ptero:"#3fae8f", pteroWing:"#2a7a63", mouth:"#ff4f4f", hand:"#e2543c", hurt:"#e2543c", gold:"#e8a94a"};
 
   var DEFAULTS = {speed:3, hatch:7, grav:60, ptero:60, lives:3};
   var cfg = {speed:3, hatch:7, grav:60, ptero:60, lives:3};
@@ -12817,6 +12820,7 @@ window.ARCADE = (function(){
       var head = r.y - h;
       if(r.vy < 0 && py - h >= bot - 0.01 && head < bot){ r.y = bot + h; r.vy = Math.abs(r.vy) * 0.35; continue; }
       if(head < bot && r.y > top + 0.01){
+        if(r.y - top <= STEP && r.vy >= -5){ r.y = top; r.vy = 0; r.ground = i; continue; }   /* a low step is climbed, not bounced off */
         var d = wrapD(r.x - (p[0] + p[1]) / 2);
         if(d < 0){ r.x = wrapX(p[0] - RW - 0.01); r.vx = -Math.abs(r.vx) * 0.6; }
         else { r.x = wrapX(p[1] + RW + 0.01); r.vx = Math.abs(r.vx) * 0.6; }
@@ -12839,7 +12843,14 @@ window.ARCADE = (function(){
         r.ground = null;
         for(var q = 0; q < PLATS.length; q++) if(PLATS[q][2] === p[2] && feetOn(r.x, PLATS[q])){ r.ground = q; break; }
       }
-      if(r.ground !== null) return;
+      if(r.ground !== null){
+        /* run straight up onto a low step such as a spawn pad */
+        for(var u = 0; u < PLATS.length; u++){
+          var st = PLATS[u];
+          if(u !== r.ground && st[2] < r.y && r.y - st[2] <= STEP && overlapX(r.x, st)){ r.y = st[2]; r.ground = u; break; }
+        }
+        return;
+      }
       py = r.y;
     } else {
       if(steer){ r.vx += steer * AIR_ACC * dt; r.face = steer; }
@@ -12891,7 +12902,7 @@ window.ARCADE = (function(){
   }
 
   function newGame(){
-    return {phase:"ready", score:0, lives:cfg.lives, wave:1, t:0, player:rider(50, 134, 1), steer:0, hold:null,
+    return {phase:"ready", score:0, lives:cfg.lives, wave:1, t:0, player:rider(PADS[0][0], PADS[0][1], 1), steer:0, hold:null,
             enemies:[], eggs:[], hatch:[], loose:[], ptero:null, hand:null, handCd:4, pending:[], spawnCd:0, waveT:0, pteroCd:0,
             eggStreak:0, deathsThisWave:0, kills:0, sparks:[], rings:[], pops:[], banner:null, pause:0, nextExtra:EXTRA_AT};
   }
@@ -13360,11 +13371,16 @@ window.ARCADE = (function(){
     ctx.save(); ctx.translate(ox, oy);
     ctx.fillStyle = PAL.bg; ctx.fillRect(-4, -4, W + 8, H + 8);
     ctx.fillStyle = "rgba(255,255,255,0.05)"; ctx.fillRect(0, CEIL - 0.15, W, 0.3);
-    /* spawn pads glow faintly */
-    for(i = 0; i < PADS.length; i++){ ctx.fillStyle = "rgba(127,212,255,0.12)"; ctx.fillRect(PADS[i][0] - 3.5, PADS[i][1] - 0.6, 7, 0.6); }
     /* ledges */
     for(i = 0; i < PLATS.length; i++){
       var pl = PLATS[i], pw = pl[1] - pl[0];
+      if(pl[4]){
+        /* a spawn pad: a paler raised slab with a glowing top */
+        ctx.fillStyle = PAL.pad; ctx.fillRect(pl[0], pl[2], pw, pl[3] + 0.2);
+        ctx.fillStyle = PAL.rockDark; ctx.fillRect(pl[0], pl[2] + pl[3] - 0.3, pw, 0.5); ctx.fillRect(pl[0] + pw / 2 - 0.2, pl[2] + 0.6, 0.4, 1);
+        ctx.globalAlpha = 0.55 + 0.25 * Math.sin(g.t * 3 + i); ctx.fillStyle = PAL.padGlow; ctx.fillRect(pl[0] + 0.4, pl[2], pw - 0.8, 0.45); ctx.globalAlpha = 1;
+        continue;
+      }
       ctx.fillStyle = PAL.rock; ctx.fillRect(pl[0], pl[2], pw, i === 0 ? LAVA_Y - pl[2] + 2 : pl[3]);
       ctx.fillStyle = PAL.rockTop; ctx.fillRect(pl[0], pl[2], pw, 0.8);
       ctx.fillStyle = PAL.rockDark;
@@ -13515,7 +13531,7 @@ window.ARCADE = (function(){
       if(saved.rec.score > rec.score) rec.score = saved.rec.score;
       if(saved.rec.wave > rec.wave) rec.wave = saved.rec.wave;
     }
-    applyCfg(); g = newGame(); g.player.ground = 0;
+    applyCfg(); g = newGame(); g.player.ground = PLATS.length - PADS.length;
     syncHUD(); syncReadout(); syncRecord();
   }
   ARCADE.register("lance", {
@@ -13547,7 +13563,7 @@ window.ARCADE = (function(){
   var COLS = 13, CELL = W / COLS, TOP = 36, ROWS = 14, BOTTOM = TOP + ROWS * CELL;   /* row 0 is the surface; rows 1-13 are dirt */
   var START_C = 6, START_R = 6;
   var TUN = CELL * 0.86, PSPEED = 24, BASE_SPEED = 13, HARP_RANGE = CELL * 2.8, HARP_SPEED = 170, FIRE_LEN = CELL * 2.6;
-  var ROCK_FALL = 42, EXTRA_AT = 20000, DIG_PTS = 10, VEG_TIME = 10;
+  var ROCK_FALL = 42, ROCK_HW = 3.6, ROCK_UP = 3.0, ROCK_DOWN = 3.5, EXTRA_AT = 20000, DIG_PTS = 10, VEG_TIME = 10;   /* the rock picture's reach */
   var LAYER_PTS = [200, 300, 400, 500], CRUSH_PTS = [0, 1000, 2500, 4000, 6000, 8000, 10000, 12000, 15000];
   var VEG = [{pts:400, col:"#ff8a3c", leaf:"#5fd35f"}, {pts:600, col:"#ff5f6d", leaf:"#5fd35f"}, {pts:800, col:"#c77dff", leaf:"#7ee04f"},
              {pts:1000, col:"#ffd84a", leaf:"#5fd35f"}, {pts:2000, col:"#f4ecdf", leaf:"#5fd35f"}, {pts:3000, col:"#7ee04f", leaf:"#2f8f3a"}];
@@ -13946,10 +13962,11 @@ window.ARCADE = (function(){
       k.y += ROCK_FALL * dt;
       var r = Math.floor((k.y - TOP) / CELL);
       if(k.y >= cy(r) && (r + 1 >= ROWS || !isOpen(r + 1, k.c))){ k.y = cy(r); land(k); return; }
-      /* anything under it is carried down and crushed */
+      /* any monster whose picture it touches, drifting eyes included, is carried down and crushed */
       g.enemies.forEach(function(e){
-        if(e.state === "ghost" || e.state === "crushed" || e.state === "pop" || e.state === "escape") return;
-        if(Math.abs(e.x - k.x) < CELL * 0.6 && e.y > k.y - CELL * 0.2 && e.y < k.y + CELL * 0.8){ e.state = "crushed"; k.crush.push(e); }
+        if(e.state === "crushed" || e.state === "pop") return;
+        var b = spriteBox(e);
+        if(Math.abs(e.x - k.x) < ROCK_HW + b.hw && e.y + b.bot > k.y - ROCK_UP && e.y + b.top < k.y + ROCK_DOWN){ e.state = "crushed"; k.crush.push(e); }
       });
       k.crush.forEach(function(e){ e.x = k.x; e.y = k.y + CELL * 0.45; });
       if(g.phase === "playing" && Math.abs(p.x - k.x) < CELL * 0.6 && p.y > k.y - CELL * 0.2 && p.y < k.y + CELL * 0.8) die("rock");
@@ -13957,6 +13974,12 @@ window.ARCADE = (function(){
       k.t += dt;
       if(k.t >= 0.6) g.rocks.splice(g.rocks.indexOf(k), 1);
     }
+  }
+  /* how far a monster's picture reaches from its centre: eyes only for a ghost, bigger when pumped up */
+  function spriteBox(e){
+    if(e.state === "ghost") return {hw:1.9, top:-1.3, bot:0.5};
+    var s = 1 + (e.state === "inflated" ? e.inflate * 0.28 : 0);
+    return e.kind === "pooka" ? {hw:2.6 * s, top:-2.6 * s, bot:2.8 * s} : {hw:3.7 * s, top:-3.6 * s, bot:2.7 * s};
   }
   function land(k){
     k.state = "crumble"; k.t = 0; k.r = rowAt(k.y);
