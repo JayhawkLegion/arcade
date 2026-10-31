@@ -236,6 +236,11 @@ yellow flagships, six red escorts, eight purples and thirty blue drones.
   hit costs one half rather than a life. Shoot the flagship in formation instead and the captured
   ship turns hostile (500 in formation, 1,000 diving); hitting the captive itself destroys it.
   Shooting the flagship mid-capture saves the ship outright. No beams while you fly the dual ship.
+- **Bonus rounds**, also from the sequel. After every fifth wave, five groups of eight fly a single
+  curving pass across the screen, one group after another, and whatever survives leaves at the
+  far end. They don't shoot or dive. Each hit is 100, and shooting the last ship of a group you
+  shot down completely pays a group bonus: 1,000 in the first bonus round, 500 more in each one
+  after, up to 3,000. A tally follows, then the next wave in formation as before.
 
 Tunable: dive rate, alien speed, return fire, shots on screen, lives.
 

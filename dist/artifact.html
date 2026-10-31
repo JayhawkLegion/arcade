@@ -2032,6 +2032,10 @@ button.act:disabled{opacity:.45; cursor:default}
       <h3>The tractor beam</h3>
       <p>A flagship may hover above you and lower a beam. Get caught and your ship is hauled up to sit above it, costing a life. Shoot that flagship while it is out of the formation and your ship comes back as a dual ship: two guns, but a wider target. Shoot it in formation and your ship turns on you (<code>500</code>, <code>1,000</code> diving).</p>
     </div>
+    <div>
+      <h3>Bonus rounds</h3>
+      <p>After every fifth wave, five groups of eight fly one pass across the screen and leave. They don't shoot or dive. <code>100</code> each, and shooting the last of a group you've wiped out completely pays <code>1,000</code>, more in later bonus rounds. Then the formation comes back.</p>
+    </div>
   </div>
 </div>
 </section>
@@ -11276,6 +11280,36 @@ window.ARCADE = (function(){
     captive:{pts:500, dive:1000, col:"#f4ecdf", r:2.6}       /* your own captured ship, turned against you */
   };
   var DUAL_DX = 3.8, BEAM_TIME = 3.2, PULL_TIME = 1.6, DOCK_TIME = 1.4;
+  /* bonus rounds: after every fifth board, five groups of eight each fly one pass and leave */
+  var BONUS_EVERY = 5, BONUS_SHIPS = 8, BONUS_GAP = 7.5, BONUS_SPEED = 44, BONUS_LAUNCH = 5.2, BONUS_HIT = 100;
+  var BONUS_KINDS = ["blue", "purple", "red", "blue", "flag"];
+  var BONUS_PATHS = [
+    [[-8, 24], [20, 36], [42, 64], [60, 90], [78, 96], [88, 80], [80, 62], [64, 62], [58, 78], [70, 98], [95, 104], [112, 96]],
+    [[108, 24], [80, 36], [58, 64], [40, 90], [22, 96], [12, 80], [20, 62], [36, 62], [42, 78], [30, 98], [5, 104], [-12, 96]],
+    [[-8, 50], [15, 40], [30, 62], [45, 40], [60, 62], [75, 40], [90, 62], [112, 50]],
+    [[50, -8], [50, 30], [52, 70], [40, 92], [25, 85], [22, 65], [35, 55], [52, 62], [60, 85], [72, 104], [85, 90], [96, 60], [112, 40]],
+    [[108, 30], [80, 45], [60, 80], [45, 100], [25, 95], [12, 70], [18, 45], [35, 30], [50, 24], [-10, 20]]
+  ].map(buildPath);
+  /* a smooth curve through the points, sampled so a ship can be placed by distance along it */
+  function buildPath(pts){
+    var out = [], cum = [0], i, k;
+    function cr(a, b, c, d, t){ var t2 = t * t, t3 = t2 * t; return 0.5 * (2 * b + (c - a) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (3 * b - a - 3 * c + d) * t3); }
+    for(i = 0; i < pts.length - 1; i++){
+      var p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+      for(k = 0; k < 16; k++) out.push({x:cr(p0[0], p1[0], p2[0], p3[0], k / 16), y:cr(p0[1], p1[1], p2[1], p3[1], k / 16)});
+    }
+    out.push({x:pts[pts.length - 1][0], y:pts[pts.length - 1][1]});
+    for(i = 1; i < out.length; i++) cum.push(cum[i - 1] + Math.hypot(out[i].x - out[i - 1].x, out[i].y - out[i - 1].y));
+    return {p:out, cum:cum, total:cum[cum.length - 1]};
+  }
+  function pathAt(path, d){
+    var c = path.cum, lo = 0, hi = c.length - 1;
+    if(d <= 0) return path.p[0];
+    if(d >= path.total) return path.p[hi];
+    while(hi - lo > 1){ var m = (lo + hi) >> 1; if(c[m] <= d) lo = m; else hi = m; }
+    var f = (d - c[lo]) / (c[hi] - c[lo] || 1), a = path.p[lo], b = path.p[hi];
+    return {x:a.x + (b.x - a.x) * f, y:a.y + (b.y - a.y) * f};
+  }
   var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var stage = document.getElementById("wStage");
@@ -11322,7 +11356,7 @@ window.ARCADE = (function(){
   function newGame(){
     var st = {phase:"ready", score:0, lives:cfg.lives, wave:1, t:0, ship:{x:50, inv:0}, target:null, firing:false, fireCd:0,
               shots:[], bombs:[], sparks:[], rings:[], pops:[], banner:null, pause:0, nextExtra:EXTRA_AT, diveCd:2.5, kills:0,
-              aliens:null, entering:0, dual:false, capture:null, rescue:null};
+              aliens:null, entering:0, dual:false, capture:null, rescue:null, bonus:null, bonusRounds:0};
     return st;
   }
   function startWave(){
@@ -11330,6 +11364,59 @@ window.ARCADE = (function(){
     g.entering = 1.2;
     g.diveCd = 2.6;
     g.aliens.forEach(function(a){ var p = slotPos(a); a.x = p.x; a.y = p.y - 60; });
+  }
+  function bonusDue(){ return g.wave >= BONUS_EVERY && g.wave % BONUS_EVERY === 0; }
+  function startBonus(){
+    g.bonusRounds++;
+    g.aliens = []; g.bombs = []; g.shots = [];
+    var B = {t:0, hits:0, total:BONUS_PATHS.length * BONUS_SHIPS, worth:Math.min(3000, 1000 + 500 * (g.bonusRounds - 1)), groups:[]};
+    BONUS_PATHS.forEach(function(path, k){
+      var grp = {path:path, start:0.8 + k * BONUS_LAUNCH, ships:[], shot:0, escaped:0};
+      for(var j = 0; j < BONUS_SHIPS; j++) grp.ships.push({kind:BONUS_KINDS[k], state:"dive", x:-20, y:-20, vx:0, vy:0, flap:Math.random() * 6, alive:true, out:false, on:false});
+      B.groups.push(grp);
+    });
+    g.bonus = B; g.phase = "bonus";
+  }
+  /* each group flies its path once, nose to tail, and whatever is left leaves at the far end */
+  function moveBonus(dt){
+    var B = g.bonus, sp = BONUS_SPEED * Math.min(1.3, waveMult()), busy = false;
+    B.t += dt;
+    B.groups.forEach(function(grp){
+      grp.ships.forEach(function(sh, j){
+        if(!sh.alive || sh.out) return;
+        var d = (B.t - grp.start) * sp - j * BONUS_GAP;
+        busy = true;
+        if(d < 0) return;
+        if(d > grp.path.total){ sh.out = true; sh.on = false; grp.escaped++; return; }
+        var at = pathAt(grp.path, d);
+        if(sh.on){ sh.vx = (at.x - sh.x) / dt; sh.vy = (at.y - sh.y) / dt; }
+        sh.x = at.x; sh.y = at.y; sh.flap += dt; sh.on = true;
+      });
+    });
+    if(!busy){
+      g.phase = "bonusEnd"; g.pause = 2.6;
+      g.banner = {text:B.hits === B.total ? "Perfect!" : "Hits " + B.hits + " of " + B.total, sub:"back to the formation", t:2.6};
+    }
+  }
+  function bonusHit(b){
+    var B = g.bonus;
+    for(var k = 0; k < B.groups.length; k++){
+      var grp = B.groups[k];
+      for(var j = 0; j < grp.ships.length; j++){
+        var sh = grp.ships[j], r = KINDS[sh.kind].r;
+        if(!sh.alive || !sh.on || Math.abs(sh.x - b.x) > r + 0.5 || Math.abs(sh.y - b.y) > r + 1) continue;
+        sh.alive = false; grp.shot++; B.hits++; g.kills++;
+        g.score += BONUS_HIT; pop(sh.x, sh.y - 4, String(BONUS_HIT)); spark(sh.x, sh.y, 12, KINDS[sh.kind].col);
+        /* the last of a group you shot down entirely pays the group bonus */
+        if(grp.shot === grp.ships.length){
+          g.score += B.worth; pop(sh.x, sh.y - 10, B.worth.toLocaleString() + "!");
+          g.rings.push({x:sh.x, y:sh.y, t:0, c:PAL.gold}); flash = 0.6;
+        }
+        afterScore();
+        return true;
+      }
+    }
+    return false;
   }
   function diveEvery(){
     var left = g.aliens.length, base = Math.max(0.7, 4.2 - cfg.dive * 0.6) / waveMult();
@@ -11592,7 +11679,24 @@ window.ARCADE = (function(){
       } else moveDiver(a, dt);
     }
 
-    if(g.phase === "cleared"){ g.pause -= dt; if(g.pause <= 0){ g.wave++; popStat("wWave"); g.phase = "playing"; startWave(); syncHUD(); } return; }
+    if(g.phase === "cleared"){
+      g.pause -= dt;
+      if(g.pause <= 0){
+        if(bonusDue()) startBonus();
+        else { g.wave++; popStat("wWave"); g.phase = "playing"; startWave(); }
+        syncHUD();
+      }
+      return;
+    }
+    if(g.phase === "bonus") moveBonus(dt);
+    else if(g.phase === "bonusEnd"){
+      g.pause -= dt;
+      if(g.pause <= 0){
+        g.bonus = null; g.wave++; popStat("wWave"); g.phase = "playing"; startWave();
+        g.banner = {text:"Wave " + g.wave, sub:"they come faster", t:1.6};
+        syncHUD();
+      }
+    }
     if(g.phase === "dying"){ g.pause -= dt; if(g.pause <= 0) respawn(); }
     if(g.phase === "captured" && g.capture){
       /* hauled up the beam to sit above the flagship */
@@ -11608,7 +11712,7 @@ window.ARCADE = (function(){
       g.rescue.t += dt;
       var rf = Math.min(1, g.rescue.t / DOCK_TIME), ex = clamp(s.x + 2 * DUAL_DX, 5, W - 5);
       g.rescue.x = g.rescue.sx + (ex - g.rescue.sx) * rf; g.rescue.y = g.rescue.sy + (SHIP_Y - g.rescue.sy) * rf;
-      if(rf >= 1 && g.phase === "playing"){
+      if(rf >= 1 && (g.phase === "playing" || g.phase === "bonus" || g.phase === "bonusEnd")){
         g.rescue = null; g.dual = true;
         s.x = clamp(s.x + DUAL_DX, 5 + DUAL_DX, W - 5 - DUAL_DX);
         if(drag){ drag.sx = s.x; drag.fx = drag.lx; } g.target = null;
@@ -11616,7 +11720,7 @@ window.ARCADE = (function(){
       }
     }
 
-    var playing = g.phase === "playing";
+    var playing = g.phase === "playing" || g.phase === "bonus" || g.phase === "bonusEnd";      /* nothing shoots back in a bonus round */
     if(playing){
       if(s.inv > 0) s.inv -= dt;
       if(keyL || keyR){ g.target = null; s.x += ((keyR ? 1 : 0) - (keyL ? 1 : 0)) * KEY_SPEED * dt; }
@@ -11666,6 +11770,7 @@ window.ARCADE = (function(){
           }
           if(Math.abs(al.x - b.x) <= KINDS[al.kind].r + 0.5 && Math.abs(al.y - b.y) <= KINDS[al.kind].r + 1){ alienDown(q); gone = true; break; }
         }
+        if(!gone && g.bonus && g.phase === "bonus") gone = bonusHit(b);
       }
       if(gone) g.shots.splice(i, 1);
     }
@@ -11693,7 +11798,7 @@ window.ARCADE = (function(){
     }
     if(g.phase === "playing" && g.aliens.length === 0){
       g.phase = "cleared"; g.pause = 2; g.bombs = [];
-      g.banner = {text:"Wave " + (g.wave + 1), sub:"they come faster", t:2};
+      g.banner = bonusDue() ? {text:"Bonus round", sub:"shoot a whole group for a bonus", t:2} : {text:"Wave " + (g.wave + 1), sub:"they come faster", t:2};
     }
   }
 
@@ -11781,6 +11886,7 @@ window.ARCADE = (function(){
     ctx.globalAlpha = 1;
     if(g.aliens){
       for(i = 0; i < g.aliens.length; i++) if(g.aliens[i].state === "beam") drawBeam(g.aliens[i]);
+      if(g.bonus) g.bonus.groups.forEach(function(grp){ grp.ships.forEach(function(sh){ if(sh.alive && sh.on) drawAlien(sh); }); });
       for(i = 0; i < g.aliens.length; i++){
         drawAlien(g.aliens[i]);
         if(g.aliens[i].captive) drawCaptive(g.aliens[i].x, g.aliens[i].y - 6, 0);
